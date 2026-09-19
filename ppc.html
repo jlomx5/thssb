@@ -3,35 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THSSB 360° – Dashboard de Producción, Pintura & Sellos Cortafuego</title>
+<title>CONVECSA ERP 360° – Control Especializado Pintura & SCF THSSB</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* PALETA MODERNA, VIBRANTE Y AMIGABLE (SaaS UI MODERNO) */
-  --bg-app: #F3F6FA;
-  --bg-card: #FFFFFF;
-  --border-card: #EAEFF5;
+  /* PALETA CORPORATIVA OFICIAL CONVECSA S.A.C. */
+  --c-azul-marino: #0052CC;    /* Títulos principales, encabezados y botones primarios */
+  --c-azul-real: #0096E1;      /* Cabeceras de tablas (th), bordes activos y acentos */
+  --c-azul-cian: #8CD2F5;      /* Separadores de ítem y bordes de preview */
+  --c-celeste-claro: #E3F2FD;  /* Banner de trazabilidad, caja de cálculo y subtotales */
+  --c-gris-suave: #F2F2F2;     /* Filas alternas (zebra) y fondos sutiles */
   
-  --text-main: #1E293B;
-  --text-muted: #64748B;
+  --bg-app: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --border-card: #E2E8F0;
+  
+  --text-main: #0F172A;
+  --text-muted: #475569;
   --text-light: #94A3B8;
   
-  /* Colores Vivos y Amigables */
-  --c-indigo: #6366F1;
-  --c-violet: #8B5CF6;
-  --c-purple: #7C3AED;
-  --c-sky: #0EA5E9;
-  --c-cyan: #06B6D4;
-  --c-emerald: #10B981;
-  --c-amber: #F59E0B;
-  --c-rose: #F43F5E;
-  --c-red: #EF4444;
+  --status-green: #059669;
+  --status-green-bg: #ECFDF5;
+  --status-red: #DC2626;
+  --status-red-bg: #FEF2F2;
   
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.03);
-  --shadow-card: 0 10px 30px rgba(99, 102, 241, 0.05), 0 2px 8px rgba(0, 0, 0, 0.03);
-  --shadow-hover: 0 16px 36px rgba(99, 102, 241, 0.10);
-  --radius-card: 20px;
+  --radius-card: 18px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,7 +46,7 @@ body {
 /* TOPBAR */
 .topbar {
   background: #FFFFFF;
-  border-bottom: 1px solid var(--border-card);
+  border-bottom: 2px solid var(--c-azul-marino);
   padding: 10px 28px;
   display: flex;
   align-items: center;
@@ -58,7 +55,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.06);
 }
 .brand-pill {
   display: flex;
@@ -68,35 +65,35 @@ body {
 .brand-icon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--c-indigo), var(--c-violet));
+  background: var(--c-azul-marino);
   color: #FFFFFF;
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-size: 16px;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
 }
 .brand-title {
   font-weight: 800;
   font-size: 15px;
-  color: var(--text-main);
+  color: var(--c-azul-marino);
   letter-spacing: -0.3px;
 }
 .session-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--bg-app);
-  border: 1px solid var(--border-card);
+  background: var(--c-celeste-claro);
+  border: 1px solid var(--c-azul-cian);
   padding: 6px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 .session-wrap select {
   background: transparent;
   border: none;
-  color: var(--c-purple);
+  color: var(--c-azul-marino);
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;
@@ -110,12 +107,12 @@ body {
   font-weight: 700;
   text-transform: uppercase;
 }
-.role-admin { background: #FEE2E2; color: #DC2626; }
-.role-residente { background: #E0E7FF; color: var(--c-indigo); }
-.role-capataz { background: #FEF3C7; color: #D97706; }
+.role-admin { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
+.role-residente { background: #FFFFFF; color: var(--c-azul-marino); border: 1px solid var(--c-azul-cian); }
+.role-capataz { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
 
 /* LAYOUT */
-.app-layout { display: flex; flex: 1; }
+.app-layout { display: flex; flex: 1; min-height: calc(100vh - 64px); }
 .sidebar {
   width: 250px;
   background: #FFFFFF;
@@ -129,7 +126,7 @@ body {
 .nav-section-title {
   font-size: 11px;
   font-weight: 800;
-  color: var(--text-light);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 10px 12px 4px;
@@ -139,7 +136,7 @@ body {
   align-items: center;
   gap: 12px;
   padding: 11px 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 700;
@@ -148,14 +145,13 @@ body {
   transition: all 0.2s ease;
 }
 .nav-item:hover {
-  background: #F1F5F9;
-  color: var(--c-indigo);
-  transform: translateX(2px);
+  background: var(--c-gris-suave);
+  color: var(--c-azul-marino);
 }
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.08));
-  color: var(--c-indigo);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: var(--c-celeste-claro);
+  color: var(--c-azul-marino);
+  border-left: 4px solid var(--c-azul-marino);
 }
 .nav-badge {
   margin-left: auto;
@@ -164,8 +160,8 @@ body {
   padding: 3px 8px;
   border-radius: 8px;
 }
-.nav-badge.pt { background: #EDE9FE; color: var(--c-purple); }
-.nav-badge.scf { background: #FFE4E6; color: var(--c-rose); }
+.nav-badge.pt { background: #E0E7FF; color: var(--c-azul-marino); }
+.nav-badge.scf { background: #FEE2E2; color: #DC2626; }
 
 .main-content {
   flex: 1;
@@ -176,10 +172,10 @@ body {
   overflow-y: auto;
 }
 
-/* BOTONES VIBRANTES */
+/* BOTONES CONVECSA */
 .btn {
   padding: 10px 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;
@@ -188,27 +184,27 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
 }
 .btn-primary {
-  background: linear-gradient(135deg, var(--c-indigo), var(--c-purple));
+  background: var(--c-azul-marino);
   color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
 }
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  background: #0043A8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 82, 204, 0.35);
 }
 .btn-secondary {
   background: #FFFFFF;
-  border: 1px solid var(--border-card);
+  border: 1.5px solid var(--border-card);
   color: var(--text-muted);
-  box-shadow: var(--shadow-sm);
 }
 .btn-secondary:hover {
-  background: #F8FAFC;
-  color: var(--text-main);
-  border-color: #CBD5E1;
+  background: var(--c-gris-suave);
+  color: var(--c-azul-marino);
+  border-color: var(--c-azul-cian);
 }
 
 /* CARDS KPI SUPERIORES */
@@ -221,18 +217,13 @@ body {
   background: var(--bg-card);
   border-radius: var(--radius-card);
   border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 20px rgba(0, 82, 204, 0.04);
   padding: 24px;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.kpi-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
 }
 .kpi-card::before {
   content: '';
@@ -242,9 +233,9 @@ body {
   width: 100%;
   height: 4px;
 }
-.kpi-card.c-rose::before { background: linear-gradient(90deg, #F43F5E, #FB7185); }
-.kpi-card.c-amber::before { background: linear-gradient(90deg, #F59E0B, #FBBF24); }
-.kpi-card.c-emerald::before { background: linear-gradient(90deg, #10B981, #34D399); }
+.kpi-card.c-rose::before { background: var(--status-red); }
+.kpi-card.c-amber::before { background: var(--c-azul-real); }
+.kpi-card.c-emerald::before { background: var(--c-azul-marino); }
 
 .kpi-header {
   display: flex;
@@ -252,7 +243,7 @@ body {
   gap: 8px;
   font-size: 11px;
   font-weight: 800;
-  color: var(--text-muted);
+  color: var(--c-azul-marino);
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
@@ -263,15 +254,12 @@ body {
   margin: 12px 0 6px;
 }
 .kpi-number {
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 900;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
   line-height: 1;
+  color: var(--c-azul-marino);
 }
-.kpi-card.c-rose .kpi-number { color: #E11D48; }
-.kpi-card.c-amber .kpi-number { color: #D97706; }
-.kpi-card.c-emerald .kpi-number { color: #059669; }
-
 .kpi-meta {
   display: flex;
   align-items: center;
@@ -286,10 +274,9 @@ body {
   font-size: 11px;
   font-weight: 800;
 }
-.pill-status.bad { background: #FFE4E6; color: #E11D48; }
+.pill-status.bad { background: #FEE2E2; color: #DC2626; }
 .pill-status.ok { background: #D1FAE5; color: #059669; }
 
-/* VELOCÍMETRO CANVAS */
 .gauge-box {
   width: 110px;
   height: 60px;
@@ -298,7 +285,7 @@ body {
   top: 36px;
 }
 
-/* CARDS DE GRÁFICOS */
+/* GRÁFICOS */
 .charts-grid-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -313,14 +300,11 @@ body {
   background: var(--bg-card);
   border-radius: var(--radius-card);
   border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 16px rgba(0, 82, 204, 0.03);
   padding: 22px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s;
 }
-.card-box:hover { box-shadow: var(--shadow-hover); }
-
 .box-header {
   display: flex;
   align-items: center;
@@ -333,13 +317,13 @@ body {
   gap: 8px;
   font-size: 13px;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--c-azul-marino);
 }
 .box-title::before {
   content: '';
   width: 4px;
   height: 14px;
-  background: var(--c-indigo);
+  background: var(--c-azul-marino);
   border-radius: 4px;
 }
 .badge-pill {
@@ -348,20 +332,19 @@ body {
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
-.badge-pill.blue { background: #EFF6FF; color: #2563EB; }
-.badge-pill.rose { background: #FFF1F2; color: #E11D48; }
+.badge-pill.blue { background: var(--c-celeste-claro); color: var(--c-azul-marino); }
+.badge-pill.rose { background: #FEE2E2; color: #DC2626; }
 .badge-pill.green { background: #ECFDF5; color: #059669; }
 
 .chart-holder { position: relative; height: 210px; width: 100%; }
 
-/* TABLA DE AUDITORÍA Y TRAZABILIDAD */
+/* TABLA AUDITORÍA */
 .audit-section {
   background: var(--bg-card);
   border-radius: var(--radius-card);
   border: 1px solid var(--border-card);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 16px rgba(0, 82, 204, 0.03);
   overflow: hidden;
 }
 .audit-header {
@@ -369,20 +352,20 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-card);
+  border-bottom: 2px solid var(--c-celeste-claro);
 }
 .audit-title {
   font-weight: 800;
   font-size: 14px;
-  color: var(--text-main);
+  color: var(--c-azul-marino);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .search-box {
-  background: #F8FAFC;
-  border: 1px solid var(--border-card);
-  border-radius: 10px;
+  background: var(--bg-app);
+  border: 1.5px solid var(--border-card);
+  border-radius: 8px;
   padding: 8px 14px;
   font-size: 12px;
   outline: none;
@@ -392,28 +375,30 @@ body {
   transition: all 0.2s;
 }
 .search-box:focus {
-  border-color: var(--c-indigo);
+  border-color: var(--c-azul-real);
   background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 150, 225, 0.15);
 }
 
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th {
-  background: #F8FAFC;
-  color: var(--text-muted);
+  background: var(--c-azul-real);
+  color: #FFFFFF;
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   padding: 12px 18px;
-  border-bottom: 1px solid var(--border-card);
+  border: none;
 }
 td {
   padding: 14px 18px;
   border-bottom: 1px solid var(--border-card);
   font-size: 12.5px;
 }
-tbody tr:hover { background: #F8FAFC; }
+tbody tr:nth-child(even) { background-color: var(--c-gris-suave); }
+tbody tr:hover { background-color: var(--c-celeste-claro); }
+
 .badge-lean {
   padding: 4px 10px;
   border-radius: 20px;
@@ -424,25 +409,25 @@ tbody tr:hover { background: #F8FAFC; }
   gap: 5px;
 }
 .badge-lean.ganancia { background: #D1FAE5; color: #059669; }
-.badge-lean.perdida { background: #FFE4E6; color: #E11D48; }
+.badge-lean.perdida { background: #FEE2E2; color: #DC2626; }
 
-.user-name { font-weight: 700; color: var(--text-main); display: block; }
+.user-name { font-weight: 700; color: var(--c-azul-marino); display: block; }
 .user-time { font-size: 11px; color: var(--text-light); font-family: monospace; }
 
-/* MODAL DE REGISTRO */
+/* MODAL DE REGISTRO CONVECSA */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px;
+  position: fixed; inset: 0; background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(5px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px;
 }
 .modal-overlay.open { display: flex; }
 .modal-card {
-  background: #FFFFFF; border-radius: 24px; width: 100%; max-width: 860px; max-height: 90vh;
-  overflow-y: auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border: 1px solid #E2E8F0; display: flex; flex-direction: column;
+  background: #FFFFFF; border-radius: 20px; width: 100%; max-width: 860px; max-height: 90vh;
+  overflow-y: auto; box-shadow: 0 20px 50px rgba(0, 82, 204, 0.18);
+  border: 1px solid var(--border-card); display: flex; flex-direction: column;
 }
 .modal-head {
   padding: 20px 28px;
-  border-bottom: 1px solid var(--border-card);
+  border-bottom: 2px solid var(--c-celeste-claro);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -450,26 +435,40 @@ tbody tr:hover { background: #F8FAFC; }
 .modal-head h3 {
   font-size: 16px;
   font-weight: 800;
-  color: var(--text-main);
+  color: var(--c-azul-marino);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; }
 
+/* Banner de Firma */
+.banner-trazabilidad {
+  background: var(--c-celeste-claro);
+  border: 1.5px solid var(--c-azul-cian);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--c-azul-marino);
+}
+.banner-trazabilidad span {
+  color: var(--c-azul-marino);
+  font-weight: 800;
+}
+
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .form-grp { display: flex; flex-direction: column; gap: 6px; }
 .form-grp label {
   font-size: 11px;
   font-weight: 800;
-  color: var(--text-muted);
+  color: var(--c-azul-marino);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 .form-grp input, .form-grp select {
-  background: #F8FAFC;
-  border: 1.5px solid var(--border-card);
-  border-radius: 12px;
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 10px;
   padding: 10px 14px;
   color: var(--text-main);
   font-size: 12.5px;
@@ -479,30 +478,40 @@ tbody tr:hover { background: #F8FAFC; }
   transition: all 0.2s;
 }
 .form-grp input:focus, .form-grp select:focus {
-  border-color: var(--c-indigo);
-  background: #FFFFFF;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  border-color: var(--c-azul-real);
+  box-shadow: 0 0 0 3px rgba(0, 150, 225, 0.15);
 }
 
+/* Caja de cálculo Lean */
 .calc-preview {
-  background: linear-gradient(135deg, #F8FAFC, #EFF6FF);
-  border: 1.5px solid #DBEAFE;
-  border-radius: 16px;
+  background: var(--c-celeste-claro);
+  border: 1.5px solid var(--c-azul-cian);
+  border-radius: 14px;
   padding: 16px 20px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   text-align: center;
 }
-.calc-preview .cp-label { font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-.calc-preview .cp-val { font-size: 20px; font-weight: 900; color: var(--c-indigo); margin-top: 3px; }
+.calc-preview .cp-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--c-azul-marino);
+  text-transform: uppercase;
+}
+.calc-preview .cp-val {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-azul-marino);
+  margin-top: 3px;
+}
 
 /* TOAST */
 .toast-bar {
   position: fixed; bottom: 24px; right: 24px; background: #FFFFFF;
-  border: 1px solid var(--border-card); box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-  color: var(--text-main); padding: 14px 22px; border-radius: 14px;
-  display: none; font-weight: 700; font-size: 13px; z-index: 300;
+  border: 2px solid var(--c-azul-marino); box-shadow: 0 10px 30px rgba(0, 82, 204, 0.15);
+  color: var(--c-azul-marino); padding: 14px 22px; border-radius: 12px;
+  display: none; font-weight: 800; font-size: 13px; z-index: 300;
   align-items: center; gap: 10px;
 }
 </style>
@@ -511,16 +520,16 @@ tbody tr:hover { background: #F8FAFC; }
 
 <header class="topbar">
   <div class="brand-pill">
-    <div class="brand-icon">✨</div>
+    <div class="brand-icon">C</div>
     <div>
-      <div class="brand-title">THSSB 360° · Control de Producción Lean</div>
-      <div style="font-size:11px; color:var(--text-light); font-weight:600;">Torre Hospitalaria San Borja · 2026</div>
+      <div class="brand-title">CONVECSA S.A.C. · CONTROL LEAN THSSB</div>
+      <div style="font-size:11px; color:var(--text-muted); font-weight:600;">Torre Hospitalaria San Borja · 2026</div>
     </div>
   </div>
 
   <div style="display:flex; align-items:center; gap:14px;">
     <div class="session-wrap">
-      <span style="font-size:10px; color:var(--text-light); font-weight:800;">USUARIO:</span>
+      <span style="font-size:10px; color:var(--c-azul-marino); font-weight:800;">USUARIO:</span>
       <select id="userSession" onchange="cambiarUsuario()">
         <option value="jorosco@convecsa.pe|SUPER_ADMIN|Jorge Orosco">Jorge Orosco (Super Admin)</option>
         <option value="residente@convecsa.pe|RESIDENTE|Ing. Residente">Ing. Residente (Control Obra)</option>
@@ -535,7 +544,7 @@ tbody tr:hover { background: #F8FAFC; }
 <div class="app-layout">
   
   <aside class="sidebar">
-    <div class="nav-section-title">Vistas de Control</div>
+    <div class="nav-section-title">Especialidades B2B</div>
     <a class="nav-item active" id="navConsolidado" onclick="cambiarModulo('CONSOLIDADO')">
       <span>📊</span> Consolidado Obra
     </a>
@@ -548,7 +557,7 @@ tbody tr:hover { background: #F8FAFC; }
       <span class="nav-badge scf">ml/und</span>
     </a>
 
-    <div class="nav-section-title" style="margin-top:16px;">Acciones Rápidas</div>
+    <div class="nav-section-title" style="margin-top:16px;">Operaciones</div>
     <a class="nav-item" onclick="abrirModal()"><span>➕</span> Registrar Avance</a>
     <a class="nav-item" onclick="sincronizarConSheets()"><span>🔄</span> Sincronizar Sheets</a>
     <a class="nav-item" onclick="generarRDO()"><span>📄</span> Descargar RDO (PDF)</a>
@@ -559,7 +568,7 @@ tbody tr:hover { background: #F8FAFC; }
     
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <div>
-        <h1 id="lblTituloModulo" style="font-size:22px; font-weight:900; letter-spacing:-0.5px; color:var(--text-main);">
+        <h1 id="lblTituloModulo" style="font-size:22px; font-weight:900; letter-spacing:-0.5px; color:var(--c-azul-marino);">
           Dashboard Ejecutivo de Productividad
         </h1>
         <p style="color:var(--text-muted); font-size:12.5px; margin-top:2px;">
@@ -593,7 +602,7 @@ tbody tr:hover { background: #F8FAFC; }
           <span>⏱️</span> HH PERDIDAS ACUMULADO
         </div>
         <div class="kpi-val-row">
-          <div class="kpi-number" id="kpiHHPerdidas">40.55<span style="font-size:22px; font-weight:700;"> hrs</span></div>
+          <div class="kpi-number" id="kpiHHPerdidas">40.55<span style="font-size:20px; font-weight:700;"> hrs</span></div>
         </div>
         <div class="kpi-meta" id="kpiImpactoSoles">
           S/. 5,778 impacto estimado (S/. 142.50/h)
@@ -609,7 +618,7 @@ tbody tr:hover { background: #F8FAFC; }
         </div>
         <div class="kpi-meta">
           <span id="kpiSubSemanal">Todas las semanas</span>
-          <span style="color:var(--c-emerald); font-weight:800; margin-left:auto;" id="kpiGenteHoy">8 operarios hoy</span>
+          <span style="color:var(--status-green); font-weight:800; margin-left:auto;" id="kpiGenteHoy">8 operarios hoy</span>
         </div>
       </div>
     </section>
@@ -642,7 +651,7 @@ tbody tr:hover { background: #F8FAFC; }
       <div class="card-box">
         <div class="box-header">
           <div class="box-title">HH Ganadas vs Reales · Semana</div>
-          <span class="badge-pill green">SEMANAL</span>
+          <span class="badge-pill blue">SEMANAL</span>
         </div>
         <div class="chart-holder">
           <canvas id="chartHHComparativo"></canvas>
@@ -703,7 +712,7 @@ tbody tr:hover { background: #F8FAFC; }
   </main>
 </div>
 
-<!-- MODAL SMART CAPTURE -->
+<!-- MODAL SMART CAPTURE CONVECSA -->
 <div class="modal-overlay" id="modalCaptura">
   <div class="modal-card">
     <div class="modal-head">
@@ -712,8 +721,10 @@ tbody tr:hover { background: #F8FAFC; }
     </div>
 
     <div class="modal-body">
-      <div style="background:#F1F5F9; border:1px solid #E2E8F0; border-radius:12px; padding:12px 16px; font-size:12px; color:var(--text-main);">
-        <b>Firma de Trazabilidad:</b> Registrado bajo sesión de <span id="lblUsuarioFirma" style="color:var(--c-indigo); font-weight:800;">Jorge Orosco</span> con estampa horaria de servidor.
+      
+      <!-- Banner de Firma con paleta CONVECSA -->
+      <div class="banner-trazabilidad">
+        <b>Firma de Trazabilidad:</b> Registrado bajo sesión de <span id="lblUsuarioFirma">Jorge Orosco (SUPER_ADMIN)</span> con estampa horaria de servidor.
       </div>
 
       <div class="grid-3">
@@ -788,28 +799,31 @@ tbody tr:hover { background: #F8FAFC; }
         </div>
       </div>
 
+      <!-- Preview de Cálculo Lean con Azul Marino y Celeste Claro -->
       <div class="calc-preview">
         <div>
           <div class="cp-label">Rend. Target</div>
-          <div class="cp-val" id="dispRendOpt">52.00</div>
+          <div class="cp-val" id="dispRendOpt">91.0 m²/d</div>
         </div>
         <div>
           <div class="cp-label">HH Ganadas</div>
-          <div class="cp-val" id="dispHHGanadas">3.46 hrs</div>
+          <div class="cp-val" id="dispHHGanadas">8.41 hrs</div>
         </div>
         <div>
           <div class="cp-label">Eficiencia</div>
-          <div class="cp-val" id="dispEficiencia" style="color:var(--c-emerald);">173.1%</div>
+          <div class="cp-val" id="dispEficiencia" style="color:var(--status-green);">420.3%</div>
         </div>
         <div>
           <div class="cp-label">Estado</div>
-          <div class="cp-val" id="dispEstado" style="color:var(--c-emerald); font-size:16px;">GANANCIA</div>
+          <div class="cp-val" id="dispEstado" style="color:var(--status-green); font-size:18px;">GANANCIA</div>
         </div>
       </div>
 
+      <!-- Botón en Azul Marino Oficial CONVECSA (#0052CC) -->
       <button class="btn btn-primary" style="width:100%; padding:14px; font-size:13px; justify-content:center; margin-top:6px;" onclick="guardarRegistro()">
         💾 Firmar y Guardar Registro en Base de Datos Central
       </button>
+
     </div>
   </div>
 </div>
@@ -903,7 +917,7 @@ function cambiarUsuario() {
   const b = document.getElementById('badgeRol');
   b.innerText = val[1].replace('_', ' ');
   b.className = "badge-user " + (val[1] === "SUPER_ADMIN" ? "role-admin" : (val[1] === "RESIDENTE" ? "role-residente" : "role-capataz"));
-  document.getElementById('lblUsuarioFirma').innerText = val[2] + " (" + val[1] + ")";
+  document.getElementById('lblUsuarioFirma').innerText = `${val[2]} (${val[1]})`;
   renderizarTabla();
 }
 
@@ -979,9 +993,9 @@ function drawGauge(pct) {
 
   const angulo = Math.PI + (Math.min(pct, 150) / 150) * Math.PI;
   const gr = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
-  gr.addColorStop(0, '#EF4444');
-  gr.addColorStop(0.5, '#F59E0B');
-  gr.addColorStop(1, '#10B981');
+  gr.addColorStop(0, '#DC2626');
+  gr.addColorStop(0.5, '#0096E1');
+  gr.addColorStop(1, '#0052CC');
 
   ctx.beginPath();
   ctx.arc(cx, cy, r, Math.PI, angulo);
@@ -989,7 +1003,7 @@ function drawGauge(pct) {
   ctx.lineWidth = lw;
   ctx.stroke();
 
-  ctx.fillStyle = pct < 100 ? '#EF4444' : '#10B981';
+  ctx.fillStyle = pct < 100 ? '#DC2626' : '#0052CC';
   ctx.font = 'bold 11px Plus Jakarta Sans';
   ctx.textAlign = 'center';
   ctx.fillText(pct.toFixed(1) + '%', cx, cy - 8);
@@ -1003,8 +1017,8 @@ function renderizarTabla() {
   datos.forEach(r => {
     const tr = document.createElement('tr');
     const badgeEsp = r.modulo === "PINTURA"
-      ? `<span style="background:#EDE9FE; color:#7C3AED; padding:2px 8px; border-radius:6px; font-weight:800; font-size:10px;">PINTURA</span>`
-      : `<span style="background:#FFE4E6; color:#E11D48; padding:2px 8px; border-radius:6px; font-weight:800; font-size:10px;">SCF</span>`;
+      ? `<span style="background:var(--c-celeste-claro); color:var(--c-azul-marino); padding:2px 8px; border-radius:6px; font-weight:800; font-size:10px;">PINTURA</span>`
+      : `<span style="background:#FEE2E2; color:#DC2626; padding:2px 8px; border-radius:6px; font-weight:800; font-size:10px;">SCF</span>`;
     
     const badgeEstado = r.est === "GANANCIA"
       ? `<span class="badge-lean ganancia">● Ganancia</span>`
@@ -1016,7 +1030,7 @@ function renderizarTabla() {
     }
 
     tr.innerHTML = `
-      <td><span style="font-family:monospace; font-weight:800; color:var(--c-indigo);">${r.id}</span></td>
+      <td><span style="font-family:monospace; font-weight:800; color:var(--c-azul-marino);">${r.id}</span></td>
       <td>
         <span class="user-name">${r.usuario}</span>
         <span class="user-time">⏱️ ${r.horaExacta.split(' ')[1]} · ${r.rol}</span>
@@ -1027,7 +1041,7 @@ function renderizarTabla() {
       <td>${r.sub}</td>
       <td style="text-align:right; font-weight:800;">${r.metrado.toFixed(2)} ${r.unidad}</td>
       <td style="text-align:right; font-family:monospace;">${r.hhReal.toFixed(2)} h</td>
-      <td style="text-align:center; font-weight:900; color:${r.ef >= 100 ? '#059669' : '#E11D48'};">${r.ef}%</td>
+      <td style="text-align:center; font-weight:900; color:${r.ef >= 100 ? '#059669' : '#DC2626'};">${r.ef}%</td>
       <td>${badgeEstado}</td>
       <td>${btnAccion}</td>
     `;
@@ -1045,8 +1059,9 @@ function filtrarTabla() {
 
 function inicializarTodosLosGraficos() {
   Chart.defaults.font.family = 'Plus Jakarta Sans';
-  Chart.defaults.color = '#64748B';
+  Chart.defaults.color = '#475569';
 
+  // 1. Evolución por Semana
   const ctxEvol = document.getElementById('chartEvolucionSem').getContext('2d');
   chartEvolucionSem = new Chart(ctxEvol, {
     type: 'line',
@@ -1056,11 +1071,11 @@ function inicializarTodosLosGraficos() {
         {
           label: 'Eficiencia %',
           data: [66.5, 66.7, 58.7],
-          borderColor: '#6366F1',
-          backgroundColor: 'rgba(99, 102, 241, 0.12)',
+          borderColor: '#0052CC',
+          backgroundColor: 'rgba(0, 82, 204, 0.08)',
           borderWidth: 3.5,
           pointRadius: 6,
-          pointBackgroundColor: '#6366F1',
+          pointBackgroundColor: '#0052CC',
           pointBorderColor: '#FFFFFF',
           pointBorderWidth: 2,
           fill: true,
@@ -1069,7 +1084,7 @@ function inicializarTodosLosGraficos() {
         {
           label: 'Meta 100%',
           data: [100, 100, 100],
-          borderColor: '#10B981',
+          borderColor: '#0096E1',
           borderWidth: 2,
           borderDash: [6, 4],
           pointRadius: 0,
@@ -1087,6 +1102,7 @@ function inicializarTodosLosGraficos() {
     }
   });
 
+  // 2. Eficiencia por Elemento
   const ctxElem = document.getElementById('chartPorElemento').getContext('2d');
   chartPorElemento = new Chart(ctxElem, {
     type: 'bar',
@@ -1095,7 +1111,12 @@ function inicializarTodosLosGraficos() {
       datasets: [{
         label: 'Eficiencia %',
         data: [136.0, 48.0, 48.5, 160.0],
-        backgroundColor: ['#10B981', '#EF4444', '#EF4444', '#10B981'],
+        backgroundColor: [
+          '#0052CC', // Muro (Cumple)
+          '#DC2626', // Cieloraso (Pérdida)
+          '#DC2626', // Plenum (Pérdida)
+          '#0096E1'  // Columnas (Cumple)
+        ],
         borderRadius: 8,
         borderSkipped: false
       }]
@@ -1111,14 +1132,15 @@ function inicializarTodosLosGraficos() {
     }
   });
 
+  // 3. HH Ganadas vs Reales
   const ctxComp = document.getElementById('chartHHComparativo').getContext('2d');
   chartHHComparativo = new Chart(ctxComp, {
     type: 'bar',
     data: {
       labels: ['Semana 3', 'Semana 4', 'Semana 7'],
       datasets: [
-        { label: 'HH Ganadas', data: [15.2, 2.1, 27.4], backgroundColor: '#818CF8', borderRadius: 8 },
-        { label: 'HH Reales', data: [22.8, 3.1, 46.7], backgroundColor: '#F87171', borderRadius: 8 }
+        { label: 'HH Ganadas', data: [15.2, 2.1, 27.4], backgroundColor: '#0052CC', borderRadius: 8 },
+        { label: 'HH Reales', data: [22.8, 3.1, 46.7], backgroundColor: '#8CD2F5', borderRadius: 8 }
       ]
     },
     options: {
@@ -1131,6 +1153,7 @@ function inicializarTodosLosGraficos() {
     }
   });
 
+  // 4. Distribución por Nivel
   const ctxNiv = document.getElementById('chartPorNivel').getContext('2d');
   chartPorNivel = new Chart(ctxNiv, {
     type: 'doughnut',
@@ -1138,7 +1161,7 @@ function inicializarTodosLosGraficos() {
       labels: ['S1', 'P1', 'P2', 'P4', 'P3'],
       datasets: [{
         data: [12, 18, 52, 14, 26],
-        backgroundColor: ['#6366F1', '#38BDF8', '#10B981', '#F59E0B', '#EF4444'],
+        backgroundColor: ['#0052CC', '#0096E1', '#8CD2F5', '#E3F2FD', '#003380'],
         borderWidth: 3,
         borderColor: '#FFFFFF',
         hoverOffset: 6
@@ -1152,6 +1175,7 @@ function inicializarTodosLosGraficos() {
     }
   });
 
+  // 5. Estado de Actividades
   const ctxEst = document.getElementById('chartEstadoActs').getContext('2d');
   chartEstadoActs = new Chart(ctxEst, {
     type: 'doughnut',
@@ -1159,7 +1183,7 @@ function inicializarTodosLosGraficos() {
       labels: ['Pérdida', 'Ganancia'],
       datasets: [{
         data: [27, 19],
-        backgroundColor: ['#EF4444', '#10B981'],
+        backgroundColor: ['#DC2626', '#0052CC'],
         borderWidth: 3,
         borderColor: '#FFFFFF'
       }]
@@ -1183,6 +1207,9 @@ function actualizarGraficos() {
   document.getElementById('badgeTotalActs').innerText = `${datos.length} ACTIVIDADES`;
 }
 
+// =========================================================================
+// MODAL DE REGISTRO
+// =========================================================================
 function abrirModal() {
   if (MODULO_ACTIVO === "SCF") {
     document.getElementById('mEspecialidad').value = "SCF";
@@ -1233,11 +1260,11 @@ function recalcularModal() {
   document.getElementById('dispRendOpt').innerText = `${rendOpt.toFixed(1)} ${unidad}`;
   document.getElementById('dispHHGanadas').innerText = `${hhGan.toFixed(2)} hrs`;
   document.getElementById('dispEficiencia').innerText = `${ef.toFixed(1)}%`;
-  document.getElementById('dispEficiencia').style.color = ef >= 100 ? "var(--c-emerald)" : "var(--c-rose)";
+  document.getElementById('dispEficiencia').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
 
   const eEl = document.getElementById('dispEstado');
   eEl.innerText = est;
-  eEl.style.color = ef >= 100 ? "var(--c-emerald)" : "var(--c-rose)";
+  eEl.style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
 }
 
 function guardarRegistro() {
@@ -1329,7 +1356,7 @@ function UtilitiesFormat(d) {
 function auditarFila(id) {
   const it = LOG_REGISTROS.find(r => r.id === id);
   if (!it) return;
-  alert(`AUDITORÍA EJECUTIVA:\n\nID: ${it.id}\nEspecialidad: ${it.modulo}\nHora Exacta: ${it.horaExacta}\nFirmado por: ${it.usuario} (${it.rol})\nOperario: ${it.trabajador}\nFrente: ${it.nivel} - ${it.elemento}\nMetrado: ${it.metrado} ${it.unidad}\nEficiencia: ${it.ef}%\nRestricción: ${it.restr}\nObservación: ${it.obs}`);
+  alert(`AUDITORÍA EJECUTIVA CONVECSA:\n\nID: ${it.id}\nEspecialidad: ${it.modulo}\nHora Exacta: ${it.horaExacta}\nFirmado por: ${it.usuario} (${it.rol})\nOperario: ${it.trabajador}\nFrente: ${it.nivel} - ${it.elemento}\nMetrado: ${it.metrado} ${it.unidad}\nEficiencia: ${it.ef}%\nRestricción: ${it.restr}\nObservación: ${it.obs}`);
 }
 
 function sincronizarConSheets() {
