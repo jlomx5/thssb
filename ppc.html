@@ -1,68 +1,59 @@
 /**
- * CONVECSA ERP 360° - BACKEND MULTI-HOJA THSSB
- * Enrutamiento automático a:
- * 1. REGISTRO_DIARIO_PINTURA
- * 2. REGISTRO_DIARIO_SCF
+ * CONVECSA ERP 360° - BACKEND CENTRAL THSSB
+ * Conector bidireccional entre GitHub Pages (ppc.html) y Google Sheets
  */
 
+// 1. RECEPCIÓN DE DATOS DESDE EL TELÉFONO / WEB (POST)
 function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
-    lock.waitLock(15000);
+    lock.waitLock(10000);
     const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName('REGISTRO_DIARIO');
     
-    // Parseo de los datos enviados desde ppc.html
-    const data = JSON.parse(e.postData.contents);
-    const modulo = (data.modulo || "PINTURA").toUpperCase();
-    
-    // 1. Determinar el nombre de la hoja según la partida
-    const nombreHoja = modulo === "SCF" ? "REGISTRO_DIARIO_SCF" : "REGISTRO_DIARIO_PINTURA";
-    let sheet = ss.getSheetByName(nombreHoja);
-    
-    // Si la hoja no existe, se crea con sus cabeceras corporativas CONVECSA
+    // Si la hoja no existe, la crea automáticamente con sus cabeceras
     if (!sheet) {
-      sheet = ss.insertSheet(nombreHoja);
+      sheet = ss.insertSheet('REGISTRO_DIARIO');
       sheet.appendRow([
-        "ID_REGISTRO", "TIMESTAMP_EXACTO", "FECHA_OBRA", "PARTIDA", "USUARIO_REGISTRA", 
-        "OPERARIO_CAMPO", "NIVEL_THSSB", "ELEMENTO", "SUBPROCESO", "METRADO_EJECUTADO", 
-        "UNIDAD", "HH_REALES", "REND_OPTIMO_TARGET", "HH_GANADAS", "EFICIENCIA_PCT", 
-        "ESTADO_LEAN", "RESTRICCION_CAUSA", "DETALLE_UBICACION"
+        "ID", "TIMESTAMP_REGISTRO", "FECHA_OBRA", "MODULO", "USUARIO_REGISTRA", 
+        "TRABAJADOR_CAMPO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO_EJECUTADO", 
+        "UNIDAD", "HH_REALES", "REND_OPTIMO", "HH_GANADAS", "EFICIENCIA_PCT", 
+        "ESTADO", "RESTRICCION", "OBSERVACION"
       ]);
       sheet.getRange("A1:R1").setBackground("#0052CC").setFontColor("#FFFFFF").setFontWeight("bold");
-      sheet.setFrozenRows(1);
     }
 
-    // 2. Extracción y normalización de variables
+    const data = JSON.parse(e.postData.contents);
     const timestampExacto = Utilities.formatDate(new Date(), "GMT-5", "yyyy-MM-dd HH:mm:ss");
     const fechaObra = data.fecha || Utilities.formatDate(new Date(), "GMT-5", "yyyy-MM-dd");
+    const modulo = data.modulo || "PINTURA";
     const usuarioEmail = data.usuarioEmail || "jorosco@convecsa.pe";
-    const operario = data.trabajador || "No asignado";
+    const trabajador = data.trabajador || "No asignado";
     const nivel = data.nivel || "P1";
     const elemento = data.elemento || "MURO";
     const subproceso = data.subproceso || "";
     const metrado = Number(data.metrado) || 0.0;
     const hhReal = Number(data.hhReal) || 1.0;
-    const rendOpt = Number(data.rendOpt) || (modulo === "SCF" ? 43.0 : 52.0);
+    const rendOpt = Number(data.rendOpt) || 52.0;
     const causa = data.causa || "Ninguna";
     const obs = data.detalle || "";
 
-    // Base de cálculo Lean (Cuadrilla estándar = 17 HH por jornada)
+    // Base de cálculo Lean (Cuadrilla típica = 17 HH de jornada)
     const hhGanadas = metrado * (17.0 / rendOpt);
     const eficiencia = hhReal > 0 ? (hhGanadas / hhReal) * 100 : 0;
     const estado = eficiencia >= 100 ? "GANANCIA" : "PERDIDA";
 
     const lastRow = sheet.getLastRow() + 1;
-    const idRegistro = (modulo === "SCF" ? "SCF-" : "PIN-") + Utilities.formatDate(new Date(), "GMT-5", "yyyyMMdd") + "-" + lastRow;
+    const idRegistro = "REG-" + Utilities.formatDate(new Date(), "GMT-5", "yyyyMMdd") + "-" + lastRow;
     const unidad = modulo === "PINTURA" ? "m²" : (subproceso.includes("ml") || elemento === "JUNTAS" ? "ml" : "und");
 
-    // 3. Inserción de fila en la hoja correspondiente
     sheet.appendRow([
       idRegistro,
       timestampExacto,
       fechaObra,
       modulo,
       usuarioEmail,
-      operario,
+      trabajador,
       nivel,
       elemento,
       subproceso,
@@ -82,64 +73,58 @@ function doPost(e) {
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "ok",
-      hojaDestino: nombreHoja,
       id: idRegistro,
       timestamp: timestampExacto
     })).setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {
     lock.releaseLock();
-    return ContentService.createTextOutput(JSON.stringify({ 
-      status: "error", 
-      message: err.toString() 
-    })).setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-// LECTURA CONSOLIDADA PARA EL DASHBOARD (GET)
+// 2. ENVÍO DE DATOS AL DASHBOARD (GET)
 function doGet(e) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const hojas = ["REGISTRO_DIARIO_PINTURA", "REGISTRO_DIARIO_SCF"];
-  let todosLosRegistros = [];
+  const sheet = ss.getSheetByName('REGISTRO_DIARIO');
+  if (!sheet) {
+    return ContentService.createTextOutput(JSON.stringify({ registros: [] }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 
-  hojas.forEach(nombre => {
-    const sh = ss.getSheetByName(nombre);
-    if (!sh) return;
-    
-    const rows = sh.getDataRange().getValues();
-    for (let i = 1; i < rows.length; i++) {
-      const r = rows[i];
-      if (!r[0]) continue;
-      
-      const fechaFila = r[2] instanceof Date ? Utilities.formatDate(r[2], "GMT-5", "yyyy-MM-dd") : String(r[2]).split("T")[0];
+  const rows = sheet.getDataRange().getValues();
+  let registrosJson = [];
 
-      todosLosRegistros.push({
-        id: r[0],
-        horaExacta: r[1],
-        fecha: fechaFila,
-        modulo: r[3],
-        usuario: r[4],
-        rol: String(r[4]).includes("jorosco") ? "SUPER_ADMIN" : "CAPATAZ",
-        trabajador: r[5],
-        nivel: r[6],
-        elemento: r[7],
-        sub: r[8],
-        metrado: Number(r[9]),
-        unidad: r[10],
-        hhReal: Number(r[11]),
-        rendOpt: Number(r[12]),
-        hhGan: Number(r[13]),
-        ef: (Number(r[14]) * 100).toFixed(1),
-        est: r[15],
-        restr: r[16],
-        obs: r[17]
-      });
-    }
-  });
+  for (let i = 1; i < rows.length; i++) {
+    const r = rows[i];
+    if (!r[0]) continue;
 
-  // Ordenar cronológicamente descendente (los más recientes primero)
-  todosLosRegistros.sort((a, b) => new Date(b.horaExacta) - new Date(a.horaExacta));
+    const fechaFila = r[2] instanceof Date ? Utilities.formatDate(r[2], "GMT-5", "yyyy-MM-dd") : String(r[2]).split("T")[0];
 
-  return ContentService.createTextOutput(JSON.stringify({ registros: todosLosRegistros }))
+    registrosJson.unshift({
+      id: r[0],
+      horaExacta: r[1],
+      fecha: fechaFila,
+      modulo: r[3],
+      usuario: r[4],
+      rol: r[4].includes("jorosco") ? "SUPER_ADMIN" : "CAPATAZ",
+      trabajador: r[5],
+      nivel: r[6],
+      elemento: r[7],
+      sub: r[8],
+      metrado: Number(r[9]),
+      unidad: r[10],
+      hhReal: Number(r[11]),
+      rendOpt: Number(r[12]),
+      hhGan: Number(r[13]),
+      ef: (Number(r[14]) * 100).toFixed(1),
+      est: r[15],
+      restr: r[16],
+      obs: r[17]
+    });
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ registros: registrosJson }))
     .setMimeType(ContentService.MimeType.JSON);
 }
