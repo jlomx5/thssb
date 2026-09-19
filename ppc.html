@@ -3,110 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CONVECSA ERP 360° – Sistema de Control Diario THSSB</title>
+<title>CONVECSA ERP 360° – Control de Producción & RDO THSSB</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-main: #070d18;
-  --bg-sidebar: #0b1526;
-  --bg-surface: #0f1c33;
-  --bg-card: #13223d;
-  --border-color: rgba(255, 255, 255, 0.09);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --convecsa-orange: #ff7a00;
-  --convecsa-blue: #005691;
-  --convecsa-cyan: #00bcd4;
-  --status-green: #10b981;
-  --status-amber: #f59e0b;
-  --status-red: #ef4444;
+  /* PALETA CORPORATIVA OFICIAL CONVECSA S.A.C. (MODO CLARO) */
+  --c-azul-marino: #0052CC;    /* Títulos principales y encabezados */
+  --c-azul-real: #0096E1;      /* Cabeceras de tablas (th) y acentos primarios */
+  --c-azul-cian: #8CD2F5;      /* Separadores de ítem y bordes de acento */
+  --c-celeste-claro: #E3F2FD;  /* Subtotales, fondos destacados y badges suaves */
+  --c-gris-suave: #F2F2F2;     /* Filas alternas (zebra) y fondos secundarios */
+  
+  --bg-app: #F8FAFC;           /* Fondo general de la plataforma */
+  --bg-card: #FFFFFF;          /* Fondo de tarjetas limpias */
+  --border-light: #E2E8F0;      /* Líneas de separación sutiles */
+  
+  --text-dark: #0F172A;        /* Texto principal */
+  --text-muted: #475569;       /* Texto secundario legible */
+  
+  --status-green: #059669;     /* Ganancia / Óptimo */
+  --status-green-bg: #ECFDF5;
+  --status-red: #DC2626;       /* Restricción / Pérdida */
+  --status-red-bg: #FEF2F2;
+  --status-amber: #D97706;     /* Advertencia */
+  --status-amber-bg: #FFFBEB;
 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: var(--bg-main);
-  color: var(--text-primary);
+  background-color: var(--bg-app);
+  color: var(--text-dark);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   font-size: 13px;
+  -webkit-font-smoothing: antialiased;
 }
-/* TOPBAR */
+
+/* TOPBAR CORPORATIVA */
 .topbar {
-  background: var(--bg-sidebar);
-  border-bottom: 1px solid var(--border-color);
-  padding: 8px 20px;
+  background: #FFFFFF;
+  border-bottom: 2px solid var(--c-azul-marino);
+  padding: 8px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 54px;
+  height: 60px;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.08);
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 .brand-pill {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(255, 122, 0, 0.15);
-  border: 1px solid rgba(255, 122, 0, 0.3);
-  padding: 4px 10px;
+  gap: 10px;
+  background: var(--c-celeste-claro);
+  border: 1px solid var(--c-azul-cian);
+  padding: 6px 14px;
   border-radius: 8px;
 }
 .brand-icon {
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #ff7a00, #d95d00);
+  width: 28px;
+  height: 28px;
+  background: var(--c-azul-marino);
+  color: #FFFFFF;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  font-size: 11px;
+  font-size: 13px;
+}
+.brand-title {
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--c-azul-marino);
+  letter-spacing: 0.3px;
 }
 .session-selector {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
-  padding: 4px 12px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  padding: 5px 12px;
   border-radius: 8px;
 }
 .session-selector select {
   background: transparent;
   border: none;
-  color: var(--text-primary);
+  color: var(--c-azul-marino);
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;
   outline: none;
   cursor: pointer;
 }
-.session-selector select option { background: var(--bg-surface); }
 .badge-role {
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
 }
-.role-admin { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
-.role-residente { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
-.role-capataz { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.3); }
+.role-admin { background: #FEE2E2; color: #B91C1C; border: 1px solid #FCA5A5; }
+.role-residente { background: var(--c-celeste-claro); color: var(--c-azul-marino); border: 1px solid var(--c-azul-cian); }
+.role-capataz { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
 
-/* LAYOUT */
-.app-layout { display: flex; flex: 1; }
+/* LAYOUT PRINCIPAL */
+.app-layout {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 60px);
+}
 .sidebar {
-  width: 230px;
-  background: var(--bg-sidebar);
-  border-right: 1px solid var(--border-color);
-  padding: 16px 10px;
+  width: 240px;
+  background: #FFFFFF;
+  border-right: 1px solid var(--border-light);
+  padding: 20px 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  flex-shrink: 0;
+}
+.nav-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 10px 4px;
 }
 .nav-item {
   display: flex;
@@ -114,36 +148,43 @@ body {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 8px;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   text-decoration: none;
   font-weight: 600;
   font-size: 12px;
   cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-item:hover {
+  background: var(--c-gris-suave);
+  color: var(--c-azul-marino);
 }
 .nav-item.active {
-  background: linear-gradient(90deg, rgba(255, 122, 0, 0.2), rgba(255, 122, 0, 0.04));
-  border-left: 3px solid var(--convecsa-orange);
-  color: var(--text-primary);
+  background: var(--c-celeste-claro);
+  border-left: 4px solid var(--c-azul-marino);
+  color: var(--c-azul-marino);
+  font-weight: 700;
 }
 .main-content {
   flex: 1;
-  padding: 22px 26px;
+  padding: 24px 28px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
   overflow-y: auto;
 }
 
-/* SECCIÓN HOY EN OBRA */
+/* SECCIÓN HOY EN OBRA (HERO CARD) */
 .today-bar {
-  background: linear-gradient(135deg, #0c1729, #132442);
-  border: 1px solid rgba(0, 188, 212, 0.3);
-  border-radius: 14px;
-  padding: 18px 22px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-top: 4px solid var(--c-azul-marino);
+  border-radius: 12px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.05);
 }
 .today-header {
   display: flex;
@@ -151,19 +192,19 @@ body {
   align-items: center;
 }
 .today-header h2 {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
-  color: #fff;
+  color: var(--c-azul-marino);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 .live-dot {
-  width: 8px;
-  height: 8px;
-  background: #10b981;
+  width: 9px;
+  height: 9px;
+  background: var(--status-green);
   border-radius: 50%;
-  box-shadow: 0 0 10px #10b981;
+  box-shadow: 0 0 8px rgba(5, 150, 105, 0.6);
 }
 .today-kpis {
   display: grid;
@@ -171,56 +212,35 @@ body {
   gap: 14px;
 }
 .t-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--c-gris-suave);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
-  padding: 12px 14px;
+  padding: 14px 16px;
 }
-.t-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; }
-.t-val { font-size: 22px; font-weight: 800; color: #fff; margin-top: 3px; }
-.t-sub { font-size: 11px; color: var(--convecsa-cyan); margin-top: 2px; }
-
-/* TABLA DE AUDITORÍA Y TRAZABILIDAD */
-.audit-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  overflow: hidden;
-}
-.audit-card-head {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-table { width: 100%; border-collapse: collapse; text-align: left; }
-th {
-  background: rgba(255, 255, 255, 0.02);
-  padding: 10px 14px;
+.t-label {
   font-size: 10px;
-  font-weight: 700;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--border-color);
+  font-weight: 800;
+  letter-spacing: 0.5px;
 }
-td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); font-size: 12px; }
-tr:hover td { background: rgba(255, 255, 255, 0.02); }
-.badge-state {
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 700;
-  display: inline-block;
+.t-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--c-azul-marino);
+  margin-top: 4px;
+  letter-spacing: -0.5px;
 }
-.badge-state.ganancia { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-.badge-state.perdida { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-.user-tag { font-size: 11px; color: #cbd5e1; font-weight: 600; display: block; }
-.time-tag { font-size: 10px; color: var(--text-muted); font-family: monospace; }
+.t-sub {
+  font-size: 11px;
+  color: var(--c-azul-real);
+  font-weight: 600;
+  margin-top: 2px;
+}
 
-/* BOTONES Y MODAL */
+/* BOTONES */
 .btn {
-  padding: 9px 16px;
+  padding: 9px 18px;
   border-radius: 8px;
   font-family: inherit;
   font-size: 12px;
@@ -229,54 +249,267 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  transition: all 0.2s ease;
 }
-.btn-orange {
-  background: linear-gradient(135deg, #ff7a00, #ea580c);
-  color: white;
-  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.3);
+.btn-marine {
+  background: var(--c-azul-marino);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.25);
 }
-.btn-secondary { background: var(--bg-surface); border: 1px solid var(--border-color); color: #fff; }
+.btn-marine:hover {
+  background: #0043a8;
+  transform: translateY(-1px);
+}
+.btn-royal {
+  background: var(--c-azul-real);
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(0, 150, 225, 0.25);
+}
+.btn-royal:hover {
+  background: #0082c4;
+}
+.btn-secondary {
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  color: var(--text-muted);
+}
+.btn-secondary:hover {
+  background: var(--c-gris-suave);
+  color: var(--c-azul-marino);
+}
 
-/* MODAL */
+/* GRÁFICOS INTERACTIVOS */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 20px;
+}
+.chart-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.chart-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--c-azul-marino);
+  margin-bottom: 12px;
+}
+.chart-wrapper {
+  position: relative;
+  height: 230px;
+  width: 100%;
+}
+
+/* TABLA DE AUDITORÍA (PALETA CONVECSA) */
+.audit-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+.audit-card-head {
+  padding: 16px 22px;
+  background: #FFFFFF;
+  border-bottom: 2px solid var(--c-celeste-claro);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.audit-card-head h3 {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--c-azul-marino);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+/* Cabeceras con Azul Real #0096E1 */
+th {
+  background: var(--c-azul-real);
+  color: #FFFFFF;
+  padding: 11px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+}
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 12px;
+}
+/* Filas alternas tipo zebra con Gris Suave #F2F2F2 */
+tbody tr:nth-child(even) {
+  background-color: var(--c-gris-suave);
+}
+tbody tr:hover {
+  background-color: var(--c-celeste-claro);
+}
+
+/* Separador de Sección / Nivel con Azul Cian #8CD2F5 */
+.tr-section-header td {
+  background-color: var(--c-azul-cian);
+  color: var(--c-azul-marino);
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 6px 14px;
+  border: none;
+}
+
+/* Fila de subtotales con Celeste Claro #E3F2FD */
+.tr-subtotal td {
+  background-color: var(--c-celeste-claro);
+  color: var(--c-azul-marino);
+  font-weight: 800;
+  border-top: 1.5px solid var(--c-azul-cian);
+  border-bottom: 1.5px solid var(--c-azul-cian);
+}
+
+.badge-state {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  display: inline-block;
+}
+.badge-state.ganancia {
+  background: var(--status-green-bg);
+  color: var(--status-green);
+  border: 1px solid #A7F3D0;
+}
+.badge-state.perdida {
+  background: var(--status-red-bg);
+  color: var(--status-red);
+  border: 1px solid #FECACA;
+}
+
+.user-tag { font-weight: 700; color: var(--c-azul-marino); }
+.time-tag { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+
+/* MODAL DE INGRESO */
 .modal-bg {
-  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 15px;
+  position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px;
 }
 .modal-bg.open { display: flex; }
 .modal {
-  background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px;
-  width: 100%; max-width: 820px; max-height: 90vh; overflow-y: auto; padding: 22px;
+  background: #FFFFFF;
+  border-radius: 14px;
+  border-top: 5px solid var(--c-azul-marino);
+  width: 100%;
+  max-width: 840px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 82, 204, 0.2);
+  display: flex;
+  flex-direction: column;
 }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
-.f-group { display: flex; flex-direction: column; gap: 5px; }
-.f-group label { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--c-azul-marino);
+}
+.modal-body {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.f-group { display: flex; flex-direction: column; gap: 6px; }
+.f-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-azul-marino);
+  text-transform: uppercase;
+}
 .f-group input, .f-group select {
-  background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 6px;
-  padding: 8px 10px; color: #fff; font-size: 12px; outline: none; font-family: inherit;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-light);
+  border-radius: 7px;
+  padding: 9px 12px;
+  color: var(--text-dark);
+  font-size: 12px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
 }
+.f-group input:focus, .f-group select:focus {
+  border-color: var(--c-azul-real);
+  background: #FFFFFF;
+}
+
+/* BANNER DE EVALUACIÓN DINÁMICA LEAN */
+.calc-banner {
+  background: var(--c-celeste-claro);
+  border: 1.5px solid var(--c-azul-cian);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  text-align: center;
+}
+.calc-item .c-label {
+  font-size: 10px;
+  color: var(--c-azul-marino);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.calc-item .c-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--c-azul-marino);
+  margin-top: 2px;
+}
+
+/* TOAST */
 .toast {
-  position: fixed; bottom: 20px; right: 20px; background: #0f1c33; border: 1px solid #10b981;
-  color: #fff; padding: 12px 18px; border-radius: 8px; display: none; z-index: 300;
+  position: fixed; bottom: 24px; right: 24px; background: #FFFFFF;
+  border: 2px solid var(--c-azul-real); color: var(--c-azul-marino);
+  padding: 14px 20px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0, 82, 204, 0.15);
+  display: none; font-weight: 700; font-size: 13px; z-index: 300;
 }
 </style>
 </head>
 <body>
 
+<!-- TOPBAR CORPORATIVA -->
 <header class="topbar">
-  <div style="display:flex; align-items:center; gap:16px;">
+  <div class="topbar-left">
     <div class="brand-pill">
       <div class="brand-icon">C</div>
-      <div style="font-weight:800; font-size:12px;">CONVECSA ERP 360°</div>
+      <div class="brand-title">CONVECSA S.A.C. · ERP 360°</div>
     </div>
-    <div style="font-size:12px; color:var(--text-muted);">Torre Hospitalaria San Borja (THSSB)</div>
+    <span style="font-size:12px; color:var(--text-muted); font-weight:600;">Proyecto: Torre Hospitalaria San Borja (THSSB)</span>
   </div>
 
-  <!-- CONTROL DE USUARIO Y MATRIZ DE PERMISOS -->
+  <!-- CONTROL DE USUARIO Y PERMISOS -->
   <div style="display:flex; align-items:center; gap:12px;">
     <div class="session-selector">
-      <span style="font-size:10px; color:var(--text-muted); font-weight:700;">USUARIO ACTIVO:</span>
+      <span style="font-size:10px; color:var(--text-muted); font-weight:800;">USUARIO:</span>
       <select id="userSession" onchange="cambiarSesionUsuario()">
         <option value="jorosco@convecsa.pe|SUPER_ADMIN|Jorge Orosco">Jorge Orosco (Super Admin)</option>
         <option value="residente@convecsa.pe|RESIDENTE|Ing. Residente">Ing. Residente (Control Obra)</option>
@@ -289,29 +522,35 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
 </header>
 
 <div class="app-layout">
+  
+  <!-- BARRA LATERAL -->
   <aside class="sidebar">
-    <div style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; padding:6px 10px;">Módulos Lean</div>
+    <div class="nav-section-title">Control C-Level</div>
     <a class="nav-item active"><span>📊</span> Control Diario Hoy</a>
-    <a class="nav-item" onclick="abrirModal()"><span>➕</span> Ingresar Avance</a>
+    <a class="nav-item" onclick="abrirModal()"><span>✍️</span> Registrar Avance</a>
     <a class="nav-item" onclick="sincronizarConServidor()"><span>🔄</span> Sincronizar Sheets</a>
     <a class="nav-item" onclick="generarRDO()"><span>📄</span> Emitir RDO (PDF)</a>
-    <a class="nav-item" onclick="window.open('https://drive.google.com/drive/folders/1Kxgczr_6wAqmYmUnDSi43GZMU2aErR3_', '_blank')"><span>📁</span> Carpeta PPC</a>
+    <a class="nav-item" onclick="window.open('https://drive.google.com/drive/folders/1Kxgczr_6wAqmYmUnDSi43GZMU2aErR3_', '_blank')"><span>📁</span> Carpeta PPC (Drive)</a>
   </aside>
 
+  <!-- CONTENIDO PRINCIPAL -->
   <main class="main-content">
     
     <!-- SECCIÓN HOY EN OBRA -->
     <section class="today-bar">
       <div class="today-header">
         <h2><span class="live-dot"></span> ESTADO OPERATIVO DE HOY (<span id="txtFechaHoy">2026-09-19</span>)</h2>
-        <button class="btn btn-orange" onclick="abrirModal()">➕ Registrar Avance de Frente</button>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary" onclick="sincronizarConServidor()">🔄 Actualizar</button>
+          <button class="btn btn-marine" onclick="abrirModal()">➕ Nuevo Registro de Campo</button>
+        </div>
       </div>
 
       <div class="today-kpis">
         <div class="t-card">
-          <div class="t-label">👷 Personal Activo Hoy</div>
+          <div class="t-label">👷 Personal en Obra Hoy</div>
           <div class="t-val" id="kpiGenteHoy">0 operarios</div>
-          <div class="t-sub" id="kpiCuadrillasHoy">0 cuadrillas asignadas</div>
+          <div class="t-sub" id="kpiCuadrillasHoy">0 cuadrillas activas</div>
         </div>
 
         <div class="t-card">
@@ -321,35 +560,58 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
         </div>
 
         <div class="t-card">
-          <div class="t-label">🎯 Eficiencia del Día</div>
+          <div class="t-label">🎯 Eficiencia Media de Hoy</div>
           <div class="t-val" id="kpiEficienciaHoy">0.0%</div>
           <div class="t-sub">HH Ganadas vs HH Reales</div>
         </div>
 
         <div class="t-card">
           <div class="t-label">⚠️ Restricciones Reportadas</div>
-          <div class="t-val" id="kpiAlertasHoy" style="color:#fca5a5;">0</div>
-          <div class="t-sub">Alertas registradas en campo</div>
+          <div class="t-val" id="kpiAlertasHoy" style="color:var(--status-red);">0</div>
+          <div class="t-sub">Alertas críticas registradas</div>
         </div>
       </div>
     </section>
 
-    <!-- TABLA DE TRAZABILIDAD Y AUDITORÍA -->
+    <!-- GRÁFICOS LEAN -->
+    <section class="charts-grid">
+      <div class="chart-box">
+        <div class="chart-title">
+          <span>Ejecución Presupuestaria de HH por Frente</span>
+          <span style="font-size:11px; color:var(--text-muted); font-weight:600;">HH Ganadas vs HH Reales</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartPresupuesto"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-title">
+          <span>Desglose de Productividad (Turno)</span>
+          <span style="font-size:11px; color:var(--text-muted); font-weight:600;">Balance Last Planner</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartDesglose"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLA DE AUDITORÍA CON PALETA OFICIAL -->
     <section class="audit-card">
       <div class="audit-card-head">
-        <div style="font-weight:800; font-size:13px;">📋 Log de Auditoría: Quién ingresó el dato y Hora Exacta</div>
-        <button class="btn btn-secondary" onclick="sincronizarConServidor()">🔄 Actualizar desde Google Sheets</button>
+        <h3>📋 Registro de Campo y Trazabilidad Minuto a Minuto</h3>
+        <input type="text" id="filtroTabla" placeholder="🔍 Filtrar operario, nivel o frente..." onkeyup="filtrarTabla()" style="padding:6px 12px; border:1px solid var(--border-light); border-radius:6px; font-size:12px; outline:none; width:240px;">
       </div>
       <div style="overflow-x:auto;">
-        <table>
+        <table id="tablaAuditoria">
           <thead>
             <tr>
-              <th>ID / Fecha Obra</th>
+              <th>ID / Fecha</th>
               <th>Auditoría (Hora & Usuario)</th>
               <th>Operario en Campo</th>
-              <th>Frente & Nivel</th>
+              <th>Frente / Nivel</th>
               <th>Subproceso</th>
-              <th style="text-align:right;">Metrado</th>
+              <th style="text-align:right;">Metrado Real</th>
               <th style="text-align:right;">HH Real</th>
               <th style="text-align:center;">Eficiencia</th>
               <th>Estado</th>
@@ -365,100 +627,124 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
   </main>
 </div>
 
-<!-- MODAL DE CAPTURA CON IDENTIFICACIÓN DEL USUARIO -->
+<!-- MODAL REGISTRO DE CAMPO -->
 <div class="modal-bg" id="modalCaptura">
   <div class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-      <h3 style="font-size:15px; font-weight:800;">📝 Nuevo Registro de Producción con Firma Digital</h3>
-      <button onclick="cerrarModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+    <div class="modal-header">
+      <h3>📝 Registro Inteligente de Avance con Firma de Usuario</h3>
+      <button onclick="cerrarModal()" style="background:none; border:none; color:var(--text-muted); font-size:18px; cursor:pointer;">✕</button>
     </div>
 
-    <!-- FIRMA DIGITAL AUTOMÁTICA -->
-    <div style="background:rgba(255,122,0,0.08); border:1px solid rgba(255,122,0,0.3); border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px;">
-      <b>Firma de Registro:</b> Este dato quedará estampado a nombre de <span id="lblFirmaUsuario" style="color:var(--convecsa-orange); font-weight:700;">Jorge Orosco</span> con fecha y hora exacta de servidor.
+    <div class="modal-body">
+      
+      <!-- Banner de firma y auditoría -->
+      <div style="background:var(--c-celeste-claro); border:1px solid var(--c-azul-cian); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--c-azul-marino);">
+        <b>Firma de Auditoría:</b> Este avance quedará registrado a nombre de <span id="lblFirmaUsuario" style="font-weight:800;">Jorge Orosco</span> con estampa de hora exacta de servidor.
+      </div>
+
+      <div class="grid-3">
+        <div class="f-group">
+          <label>Operario / Cuadrilla:</label>
+          <select id="mTrabajador">
+            <option value="VASQUEZ CULQUE FELIX ENRIQUE">VASQUEZ CULQUE FELIX ENRIQUE</option>
+            <option value="VASQUEZ MARTINEZ GUILLERMO CESAR">VASQUEZ MARTINEZ GUILLERMO CESAR</option>
+            <option value="DELGADO RIVAS LUIS MARTÍN">DELGADO RIVAS LUIS MARTÍN</option>
+            <option value="AREVALO GUERRERO RAUL">AREVALO GUERRERO RAUL</option>
+            <option value="BERMUDEZ MARIN DARWIN ENMANUEL">BERMUDEZ MARIN DARWIN ENMANUEL</option>
+            <option value="VELASQUEZ MUÑOZ YORFRAN JOSE">VELASQUEZ MUÑOZ YORFRAN JOSE</option>
+            <option value="BARDALES CHUFANDAMA MAURO">BARDALES CHUFANDAMA MAURO</option>
+          </select>
+        </div>
+
+        <div class="f-group">
+          <label>Nivel / Piso:</label>
+          <select id="mNivel">
+            <option value="S2">Sótano 2</option>
+            <option value="S1">Sótano 1</option>
+            <option value="P1">Piso 1</option>
+            <option value="P2" selected>Piso 2</option>
+            <option value="P3">Piso 3</option>
+            <option value="P4">Piso 4</option>
+          </select>
+        </div>
+
+        <div class="f-group">
+          <label>Elemento:</label>
+          <select id="mElemento">
+            <option value="MURO">Muro Interior</option>
+            <option value="CIELORASO">Cielorraso</option>
+            <option value="PLENUM">Plenum</option>
+            <option value="COLUMNAS">Columnas</option>
+            <option value="JUNTAS">Juntas Cortafuego (SCF)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="f-group">
+          <label>Subproceso / Rendimiento:</label>
+          <select id="mSubproceso" onchange="actualizarCalculoModal()">
+            <option value="LIJADO IMPRIMADO|91.0">Lijado e Imprimado (Ópt: 91 m²/d)</option>
+            <option value="EMPASTE 1RA MANO|52.0">Empaste 1ra Mano (Ópt: 52 m²/d)</option>
+            <option value="EMPASTE 2DA MANO|52.0">Empaste 2da Mano (Ópt: 52 m²/d)</option>
+            <option value="PINTURA 1RA MANO|182.0">Pintura 1ra Mano (Ópt: 182 m²/d)</option>
+            <option value="PINTURA 2DA MANO|46.0">Pintura 2da Mano (Ópt: 46 m²/d)</option>
+            <option value="JUNTAS SCF|43.0">Juntas Cortafuego (Ópt: 43 ml/d)</option>
+          </select>
+        </div>
+
+        <div class="f-group">
+          <label>Metrado Ejecutado (m² / ml):</label>
+          <input type="number" id="mMetrado" step="0.1" value="45.0" oninput="actualizarCalculoModal()">
+        </div>
+
+        <div class="f-group">
+          <label>Horas Reales Invertidas (HH):</label>
+          <input type="number" id="mHHReal" step="0.5" value="2.0" oninput="actualizarCalculoModal()">
+        </div>
+      </div>
+
+      <!-- Banner de Evaluación Lean Dinámica -->
+      <div class="calc-banner">
+        <div class="calc-item">
+          <div class="c-label">Rend. Óptimo</div>
+          <div class="c-val" id="dispRendOpt">52.00 m²/d</div>
+        </div>
+        <div class="calc-item">
+          <div class="c-label">HH Ganadas</div>
+          <div class="c-val" id="dispHHGanadas" style="color:var(--c-azul-real);">3.46 hrs</div>
+        </div>
+        <div class="calc-item">
+          <div class="c-label">Eficiencia Lean</div>
+          <div class="c-val" id="dispEficiencia" style="color:var(--status-green);">173.1%</div>
+        </div>
+        <div class="calc-item">
+          <div class="c-label">Estado</div>
+          <div class="c-val" id="dispEstado" style="color:var(--status-green); font-size:16px;">GANANCIA</div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="f-group" style="grid-column: span 1;">
+          <label>Causa Raíz de Restricción:</label>
+          <select id="mCausa">
+            <option value="Ninguna">Ninguna (Ritmo óptimo)</option>
+            <option value="Demora Andamios">Demora en andamios (San José)</option>
+            <option value="Frente No Liberado">Frente no liberado / Losa sin picar</option>
+            <option value="Interferencia MEP">Interferencia con instalaciones</option>
+          </select>
+        </div>
+        <div class="f-group" style="grid-column: span 2;">
+          <label>Ubicación / Ambiente / Detalle:</label>
+          <input type="text" id="mObs" placeholder="Ej: THSSB_P2, RAMPA DE INGRESO - Paño 3">
+        </div>
+      </div>
+
+      <button class="btn btn-marine" style="width:100%; padding:13px; font-size:13px; justify-content:center;" onclick="guardarRegistroConAuditoria()">
+        💾 Guardar Avance en Base de Datos Central
+      </button>
+
     </div>
-
-    <div class="grid-3">
-      <div class="f-group">
-        <label>Operario / Cuadrilla:</label>
-        <select id="mTrabajador">
-          <option value="VASQUEZ CULQUE FELIX ENRIQUE">VASQUEZ CULQUE FELIX ENRIQUE</option>
-          <option value="VASQUEZ MARTINEZ GUILLERMO CESAR">VASQUEZ MARTINEZ GUILLERMO CESAR</option>
-          <option value="DELGADO RIVAS LUIS MARTÍN">DELGADO RIVAS LUIS MARTÍN</option>
-          <option value="AREVALO GUERRERO RAUL">AREVALO GUERRERO RAUL</option>
-          <option value="BERMUDEZ MARIN DARWIN ENMANUEL">BERMUDEZ MARIN DARWIN ENMANUEL</option>
-          <option value="VELASQUEZ MUÑOZ YORFRAN JOSE">VELASQUEZ MUÑOZ YORFRAN JOSE</option>
-          <option value="BARDALES CHUFANDAMA MAURO">BARDALES CHUFANDAMA MAURO</option>
-        </select>
-      </div>
-
-      <div class="f-group">
-        <label>Nivel:</label>
-        <select id="mNivel">
-          <option value="S2">Sótano 2</option>
-          <option value="S1">Sótano 1</option>
-          <option value="P1">Piso 1</option>
-          <option value="P2" selected>Piso 2</option>
-          <option value="P3">Piso 3</option>
-          <option value="P4">Piso 4</option>
-        </select>
-      </div>
-
-      <div class="f-group">
-        <label>Elemento:</label>
-        <select id="mElemento">
-          <option value="MURO">Muro Interior</option>
-          <option value="CIELORASO">Cielorraso</option>
-          <option value="PLENUM">Plenum</option>
-          <option value="COLUMNAS">Columnas</option>
-          <option value="JUNTAS">Juntas Cortafuego</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="grid-3">
-      <div class="f-group">
-        <label>Subproceso / Rendimiento:</label>
-        <select id="mSubproceso">
-          <option value="LIJADO IMPRIMADO|91.0">Lijado e Imprimado (Ópt: 91 m²/d)</option>
-          <option value="EMPASTE 1RA MANO|52.0">Empaste 1ra Mano (Ópt: 52 m²/d)</option>
-          <option value="EMPASTE 2DA MANO|52.0">Empaste 2da Mano (Ópt: 52 m²/d)</option>
-          <option value="PINTURA 1RA MANO|182.0">Pintura 1ra Mano (Ópt: 182 m²/d)</option>
-          <option value="PINTURA 2DA MANO|46.0">Pintura 2da Mano (Ópt: 46 m²/d)</option>
-          <option value="JUNTAS SCF|43.0">Juntas Cortafuego (Ópt: 43 ml/d)</option>
-        </select>
-      </div>
-
-      <div class="f-group">
-        <label>Metrado Real Ejecutado (m² / ml):</label>
-        <input type="number" id="mMetrado" step="0.1" value="45.0">
-      </div>
-
-      <div class="f-group">
-        <label>Horas Reales Invertidas (HH):</label>
-        <input type="number" id="mHHReal" step="0.5" value="2.0">
-      </div>
-    </div>
-
-    <div class="grid-3">
-      <div class="f-group" style="grid-column: span 1;">
-        <label>Restricción (Si hubo problemas):</label>
-        <select id="mCausa">
-          <option value="Ninguna">Ninguna (Ritmo normal)</option>
-          <option value="Demora Andamios">Demora en entrega de andamios</option>
-          <option value="Frente No Liberado">Frente no liberado / Losa sin picar</option>
-          <option value="Interferencia MEP">Interferencia con instalaciones</option>
-        </select>
-      </div>
-      <div class="f-group" style="grid-column: span 2;">
-        <label>Ubicación / Ambiente / Observación:</label>
-        <input type="text" id="mObs" placeholder="Ej: THSSB_P2, RAMPA DE INGRESO - Paño 3">
-      </div>
-    </div>
-
-    <button class="btn btn-orange" style="width:100%; margin-top:14px; padding:12px;" onclick="guardarRegistroConAuditoria()">
-      💾 Firmar y Guardar Registro en Base de Datos Central
-    </button>
   </div>
 </div>
 
@@ -466,7 +752,7 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
 
 <script>
 // =========================================================================
-// URL DE GOOGLE APPS SCRIPT
+// ENDPOINT DE APPS SCRIPT
 // =========================================================================
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbz_TU_ID_AQUI/exec";
 
@@ -478,10 +764,13 @@ let USUARIO_ACTUAL = {
 };
 
 let LOG_REGISTROS = [
-  { id: "REG-20260919-01", horaExacta: "2026-09-19 09:15:22", usuario: "Hilder Mollocondo", rol: "CAPATAZ", trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S1", elemento: "MURO", sub: "PINTURA 1RA MANO", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, ef: 185.0, est: "GANANCIA", restr: "Ninguna", obs: "Central de gases" },
-  { id: "REG-20260919-02", horaExacta: "2026-09-19 11:32:05", usuario: "Ing. Residente", rol: "RESIDENTE", trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "P1", elemento: "CIELORASO", sub: "PINTURA 2DA MANO", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, ef: 93.3, est: "PERDIDA", restr: "Demora Andamios", obs: "Rampa de ingreso" },
-  { id: "REG-20260919-03", horaExacta: "2026-09-19 14:10:45", usuario: "Jorge Orosco", rol: "SUPER_ADMIN", trabajador: "AREVALO GUERRERO RAUL", nivel: "P2", elemento: "MURO", sub: "EMPASTE 2DA MANO", metrado: 24.5, hhReal: 1.5, rendOpt: 52.0, ef: 104.2, est: "GANANCIA", restr: "Ninguna", obs: "Pasillo central" }
+  { id: "REG-20260919-01", horaExacta: "2026-09-19 08:35:12", usuario: "Hilder Mollocondo", rol: "CAPATAZ", trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S1", elemento: "MURO", sub: "PINTURA 1RA MANO", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, ef: 185.0, est: "GANANCIA", restr: "Ninguna", obs: "Central de gases vacío" },
+  { id: "REG-20260919-02", horaExacta: "2026-09-19 10:15:44", usuario: "Ing. Residente", rol: "RESIDENTE", trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "P1", elemento: "CIELORASO", sub: "PINTURA 2DA MANO", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, ef: 93.3, est: "PERDIDA", restr: "Demora Andamios", obs: "Rampa de ingreso" },
+  { id: "REG-20260919-03", horaExacta: "2026-09-19 13:40:20", usuario: "Jorge Orosco", rol: "SUPER_ADMIN", trabajador: "AREVALO GUERRERO RAUL", nivel: "P2", elemento: "MURO", sub: "EMPASTE 2DA MANO", metrado: 24.5, hhReal: 1.5, rendOpt: 52.0, ef: 104.2, est: "GANANCIA", restr: "Ninguna", obs: "Pasillo central y rampa" }
 ];
+
+let chartPresupuesto = null;
+let chartDesglose = null;
 
 window.addEventListener('DOMContentLoaded', () => {
   const hoy = new Date();
@@ -489,6 +778,8 @@ window.addEventListener('DOMContentLoaded', () => {
   cambiarSesionUsuario();
   calcularMetricasHoy();
   renderizarTablaAuditoria();
+  inicializarGraficos();
+  actualizarCalculoModal();
 });
 
 function cambiarSesionUsuario() {
@@ -525,7 +816,7 @@ function calcularMetricasHoy() {
 
   const ef = hhRealHoy > 0 ? ((hhGanHoy / hhRealHoy) * 100).toFixed(1) : "0.0";
   document.getElementById('kpiGenteHoy').innerText = activosHoy.size + " operarios";
-  document.getElementById('kpiCuadrillasHoy').innerText = (activosHoy.size / 2).toFixed(1) + " cuadrillas";
+  document.getElementById('kpiCuadrillasHoy').innerText = (activosHoy.size / 2).toFixed(1) + " cuadrillas activas";
   document.getElementById('kpiMetradoHoy').innerText = metradoHoy.toFixed(2) + " m²";
   document.getElementById('kpiEficienciaHoy').innerText = ef + "%";
   document.getElementById('kpiAlertasHoy').innerText = alertas;
@@ -535,18 +826,23 @@ function renderizarTablaAuditoria() {
   const tbody = document.getElementById('cuerpoAuditoria');
   tbody.innerHTML = '';
 
-  LOG_REGISTROS.forEach(r => {
+  let totalMetrado = 0;
+  let totalHH = 0;
+
+  LOG_REGISTROS.forEach((r, idx) => {
+    totalMetrado += r.metrado;
+    totalHH += r.hhReal;
+
     const tr = document.createElement('tr');
-    const colorEf = r.ef >= 100 ? '#34d399' : '#f87171';
+    const colorEf = r.ef >= 100 ? 'var(--status-green)' : 'var(--status-red)';
     
-    // Botón de acción según permisos del usuario logueado
-    let btnAccion = `<span style="color:#64748b; font-size:11px;">Solo lectura</span>`;
+    let btnAccion = `<span style="color:var(--text-muted); font-size:11px;">Solo lectura</span>`;
     if (USUARIO_ACTUAL.puedeEditar) {
       btnAccion = `<button class="btn btn-secondary" style="padding:3px 8px; font-size:11px;" onclick="auditarRegistro('${r.id}')">Auditar</button>`;
     }
 
     tr.innerHTML = `
-      <td><span style="font-family:monospace; color:#94a3b8;">${r.id}</span></td>
+      <td><span style="font-family:monospace; color:var(--c-azul-marino); font-weight:700;">${r.id}</span></td>
       <td>
         <span class="user-tag">${r.usuario}</span>
         <span class="time-tag">⏱️ ${r.horaExacta.split(' ')[1]} (${r.rol})</span>
@@ -554,7 +850,7 @@ function renderizarTablaAuditoria() {
       <td><b>${r.trabajador}</b></td>
       <td>${r.nivel} - ${r.elemento}</td>
       <td>${r.sub}</td>
-      <td style="text-align:right; font-weight:700;">${r.metrado.toFixed(2)}</td>
+      <td style="text-align:right; font-weight:700;">${r.metrado.toFixed(2)} m²</td>
       <td style="text-align:right; font-family:monospace;">${r.hhReal.toFixed(2)} h</td>
       <td style="text-align:center; font-weight:800; color:${colorEf};">${r.ef}%</td>
       <td><span class="badge-state ${r.est.toLowerCase()}">${r.est}</span></td>
@@ -562,6 +858,47 @@ function renderizarTablaAuditoria() {
     `;
     tbody.appendChild(tr);
   });
+
+  // Fila de Subtotal con fondo Celeste Claro (#E3F2FD) según manual
+  if (LOG_REGISTROS.length > 0) {
+    const trSub = document.createElement('tr');
+    trSub.className = 'tr-subtotal';
+    trSub.innerHTML = `
+      <td colspan="5" style="font-weight:800; text-transform:uppercase;">SUBTOTAL ACUMULADO DEL TURNO</td>
+      <td style="text-align:right; font-weight:800;">${totalMetrado.toFixed(2)} m²</td>
+      <td style="text-align:right; font-weight:800; font-family:monospace;">${totalHH.toFixed(2)} h</td>
+      <td colspan="3"></td>
+    `;
+    tbody.appendChild(trSub);
+  }
+}
+
+function filtrarTabla() {
+  const q = document.getElementById('filtroTabla').value.toLowerCase();
+  const filas = document.querySelectorAll('#cuerpoAuditoria tr:not(.tr-subtotal)');
+  filas.forEach(f => {
+    f.style.display = f.innerText.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function actualizarCalculoModal() {
+  const subData = document.getElementById('mSubproceso').value.split('|');
+  const rendOpt = parseFloat(subData[1]) || 52.0;
+  const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
+  const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
+
+  const hhGan = metrado * (17.0 / rendOpt);
+  const ef = (hhGan / hhReal) * 100;
+  const est = ef >= 100 ? "GANANCIA" : "PERDIDA";
+
+  document.getElementById('dispRendOpt').innerText = rendOpt.toFixed(2) + " m²/d";
+  document.getElementById('dispHHGanadas').innerText = hhGan.toFixed(2) + " hrs";
+  document.getElementById('dispEficiencia').innerText = ef.toFixed(1) + "%";
+  document.getElementById('dispEficiencia').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
+  
+  const eEl = document.getElementById('dispEstado');
+  eEl.innerText = est;
+  eEl.style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
 }
 
 function guardarRegistroConAuditoria() {
@@ -606,14 +943,14 @@ function guardarRegistroConAuditoria() {
     obs: obs
   };
 
-  // 1. Registro local instantáneo
   LOG_REGISTROS.unshift(nuevoLog);
   calcularMetricasHoy();
   renderizarTablaAuditoria();
+  actualizarGraficos();
   cerrarModal();
   showToast("✅ Registro firmado por " + USUARIO_ACTUAL.nombre + " a las " + timeStr.split(' ')[1]);
 
-  // 2. Envío al endpoint central en Google Sheets
+  // Envío a Google Sheets en segundo plano
   const payload = {
     fecha: timeStr.split(' ')[0],
     usuarioEmail: USUARIO_ACTUAL.email,
@@ -635,13 +972,76 @@ function guardarRegistroConAuditoria() {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     }).then(() => {
-      showToast("✅ Sincronizado con Google Sheets");
+      showToast("✅ Sincronizado en la nube con Google Sheets");
     });
   }
 }
 
 function UtilitiesFormat(d) {
   return String(d.getHours()).padStart(2,'0') + String(d.getMinutes()).padStart(2,'0') + String(d.getSeconds()).padStart(2,'0');
+}
+
+function inicializarGraficos() {
+  // Gráfico de Barras con Azul Marino y Azul Real
+  const ctxBar = document.getElementById('chartPresupuesto').getContext('2d');
+  chartPresupuesto = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: ['Sótano 2', 'Sótano 1', 'Piso 1', 'Piso 2', 'Piso 3', 'Piso 4'],
+      datasets: [
+        { label: 'HH Ganadas (Meta Óptima)', data: [18.5, 24.2, 19.8, 38.4, 22.0, 31.5], backgroundColor: '#0052CC', borderRadius: 6 },
+        { label: 'HH Reales Invertidas', data: [16.0, 22.0, 24.5, 32.0, 25.0, 28.0], backgroundColor: '#0096E1', borderRadius: 6 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#475569', font: { size: 11, family: 'Plus Jakarta Sans' } } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#475569' } },
+        y: { grid: { color: '#E2E8F0' }, ticks: { color: '#475569' } }
+      }
+    }
+  });
+
+  // Donut con Azul Marino, Azul Cian y Acentos
+  const ctxDonut = document.getElementById('chartDesglose').getContext('2d');
+  chartDesglose = new Chart(ctxDonut, {
+    type: 'doughnut',
+    data: {
+      labels: ['Zona Ganancia', 'Zona Pérdida', 'En Proceso'],
+      datasets: [{
+        data: [70, 22, 8],
+        backgroundColor: ['#0052CC', '#DC2626', '#8CD2F5'],
+        borderWidth: 2,
+        borderColor: '#FFFFFF'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '72%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#475569', font: { size: 11, family: 'Plus Jakarta Sans' } } }
+      }
+    }
+  });
+}
+
+function actualizarGraficos() {
+  if (!chartDesglose) return;
+  const gan = LOG_REGISTROS.filter(r => r.est === "GANANCIA").length;
+  const per = LOG_REGISTROS.filter(r => r.est === "PERDIDA").length;
+  chartDesglose.data.datasets[0].data = [gan, per, 1];
+  chartDesglose.update();
+}
+
+function auditarRegistro(id) {
+  const it = LOG_REGISTROS.find(r => r.id === id);
+  if (!it) return;
+  alert(`AUDITORÍA EJECUTIVA CONVECSA:\n\nID: ${it.id}\nHora Exacta: ${it.horaExacta}\nFirmado por: ${it.usuario} (${it.rol})\nOperario: ${it.trabajador}\nFrente: ${it.nivel} - ${it.elemento}\nMetrado: ${it.metrado} m²\nEficiencia: ${it.ef}%\nRestricción: ${it.restr}\nObservación: ${it.obs}`);
 }
 
 function sincronizarConServidor() {
@@ -654,26 +1054,21 @@ function sincronizarConServidor() {
           LOG_REGISTROS = data.registros;
           calcularMetricasHoy();
           renderizarTablaAuditoria();
+          actualizarGraficos();
           showToast("✅ Datos sincronizados con éxito.");
         }
       })
       .catch(err => {
-        showToast("⚠️ Modo local activo (revisa el endpoint)");
+        showToast("⚠️ Modo local activo");
       });
   } else {
     showToast("⚠️ Pega tu URL de Apps Script en ENDPOINT_APPS_SCRIPT");
   }
 }
 
-function auditarRegistro(id) {
-  const it = LOG_REGISTROS.find(r => r.id === id);
-  if (!it) return;
-  alert(`AUDITORÍA EJECUTIVA:\n\nCódigo: ${it.id}\nHora Exacta: ${it.horaExacta}\nFirmado por: ${it.usuario} (${it.rol})\nOperario en campo: ${it.trabajador}\nFrente: ${it.nivel} - ${it.elemento}\nMetrado: ${it.metrado} m²\nEficiencia: ${it.ef}%\nRestricción: ${it.restr}\nObservación: ${it.obs}`);
-}
-
 function generarRDO() {
-  showToast("📄 Solicitando generación formal de RDO (PDF)...");
-  alert("El RDO se compilará con los registros del día y se archivará en la carpeta 03 CRONOGRAMAS/PPC.");
+  showToast("📄 Generando RDO oficial en PDF...");
+  alert("El PDF se generará con los registros del día y se enviará automáticamente a jorosco@convecsa.pe archivándose en 03 CRONOGRAMAS/PPC.");
 }
 
 function abrirModal() { document.getElementById('modalCaptura').classList.add('open'); }
