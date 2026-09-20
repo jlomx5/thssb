@@ -4,450 +4,124 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>CONVECSA CONTROL 360° – Sistema de Control THSSB</title>
-<!-- Librerías de Gráficos, Excel y PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --c-navy-deep: #050B14;
-  --c-navy-surface: #091322;
-  --c-navy-sidebar: #060E1A;
-  --c-navy-card: rgba(13, 24, 44, 0.85);
-  --c-border-glass: rgba(0, 150, 225, 0.22);
-  --c-border-glow: rgba(0, 229, 255, 0.45);
-  
+  --bg-main: radial-gradient(circle at 10% 20%, #0A1931 0%, #050B14 100%);
+  --bg-surface: #091322;
+  --bg-sidebar: #060E1A;
+  --bg-card: rgba(13, 24, 44, 0.88);
+  --border-glass: rgba(0, 150, 225, 0.22);
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
   --c-azul-convecsa: #0052CC;
-  --c-cyan-neon: #00E5FF;
-  --c-blue-neon: #0096E1;
-  --c-amber-neon: #FFB300;
-  --c-green-neon: #00E676;
-  --c-red-neon: #FF1744;
-  
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  --c-cyan: #00E5FF;
+  --c-green: #00E676;
+  --c-red: #FF1744;
+  --c-amber: #FFB300;
+  --radius-card: 14px;
+}
 
-  --glow-cyan: 0 0 18px rgba(0, 229, 255, 0.35);
-  --glow-green: 0 0 18px rgba(0, 230, 118, 0.35);
-  --glow-red: 0 0 18px rgba(255, 23, 68, 0.35);
-  
-  --radius-xl: 18px;
-  --radius-lg: 14px;
-  --radius-md: 10px;
+[data-theme="light"] {
+  --bg-main: #F1F5F9;
+  --bg-surface: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --border-glass: #CBD5E1;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --c-cyan: #0052CC;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-  width: 100%;
-  min-height: 100vh;
-  background: radial-gradient(circle at 10% 20%, #0A1931 0%, #050B14 100%);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: var(--text-primary);
-  overflow-x: hidden;
-  overflow-y: auto !important;
+  width: 100%; min-height: 100vh; background: var(--bg-main);
+  font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-main);
+  overflow-x: hidden; overflow-y: auto !important;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(0, 150, 225, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 150, 225, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* LOGIN SEGURO */
+/* LOGIN CON PIN */
 #loginOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(5, 11, 20, 0.95);
-  backdrop-filter: blur(16px);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+  position: fixed; inset: 0; background: rgba(5, 11, 20, 0.95);
+  backdrop-filter: blur(16px); z-index: 1000; display: flex;
+  align-items: center; justify-content: center; padding: 16px;
 }
 .login-cyber-box {
-  background: rgba(11, 21, 40, 0.92);
-  border: 1px solid var(--c-cyan-neon);
-  border-radius: var(--radius-xl);
-  padding: 34px 26px;
-  width: 100%;
-  max-width: 380px;
-  text-align: center;
-  box-shadow: 0 0 35px rgba(0, 229, 255, 0.2);
+  background: var(--bg-surface); border: 1px solid var(--c-cyan);
+  border-radius: 18px; padding: 34px 26px; width: 100%; max-width: 380px; text-align: center;
 }
-.cyber-logo {
-  width: 58px; height: 58px; margin: 0 auto 12px;
-  background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
-  border-radius: 14px; display: flex; align-items: center; justify-content: center;
-  box-shadow: var(--glow-cyan);
-}
-.cyber-logo svg { width: 32px; height: 32px; fill: #FFFFFF; }
 .pin-digital {
   width: 100%; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 24px;
-  font-weight: 800; letter-spacing: 8px; text-align: center; background: rgba(5, 11, 20, 0.85);
-  border: 1.5px solid var(--c-border-glass); border-radius: 10px; color: var(--c-cyan-neon);
+  font-weight: 800; letter-spacing: 8px; text-align: center; background: rgba(0,0,0,0.3);
+  border: 1.5px solid var(--border-glass); border-radius: 10px; color: var(--c-cyan);
   margin: 14px 0; outline: none;
 }
 
-.app-shell {
-  display: flex;
-  width: 100%;
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-}
+/* APP SHELL */
+.app-shell { display: flex; width: 100%; min-height: 100vh; }
 
-/* ==============================================================
-   BARRA LATERAL IZQUIERDA (6 ACCESOS PRINCIPALES)
-   ============================================================== */
+/* BARRA LATERAL CON ÍCONO DE SINCRONIZAR */
 .convecsa-sidebar {
-  width: 90px;
-  background: var(--c-navy-sidebar);
-  border-right: 1px solid var(--c-border-glass);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 18px 0;
-  gap: 14px;
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  z-index: 120;
-  flex-shrink: 0;
+  width: 88px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
+  display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 10px;
+  position: sticky; top: 0; height: 100vh; z-index: 120; flex-shrink: 0; overflow-y: auto;
 }
-@media (max-width: 768px) {
-  .convecsa-sidebar { display: none; }
-}
+@media (max-width: 768px) { .convecsa-sidebar { display: none; } }
 
 .sidebar-nav-item {
-  width: 76px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 10px 4px;
-  border-radius: 12px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
+  width: 76px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; padding: 8px 4px; border-radius: 12px; border: 1px solid transparent;
+  background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
 }
-.sidebar-nav-item:hover {
-  color: var(--c-cyan-neon);
-  background: rgba(0, 229, 255, 0.08);
-  border-color: rgba(0, 229, 255, 0.25);
-  transform: translateY(-1px);
+.sidebar-nav-item:hover, .sidebar-nav-item.active {
+  color: var(--text-main); background: rgba(0, 150, 225, 0.12); border-color: var(--c-cyan);
 }
-.sidebar-nav-item.active {
-  color: #FFFFFF;
-  background: linear-gradient(135deg, rgba(0, 82, 204, 0.5), rgba(0, 229, 255, 0.2));
-  border-color: var(--c-cyan-neon);
-  box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
-}
-.sidebar-nav-item svg {
-  width: 24px;
-  height: 24px;
-  stroke: currentColor;
-  stroke-width: 2;
-  fill: none;
-}
-.sidebar-nav-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1px;
-  text-align: center;
-  line-height: 1.15;
-}
+.sidebar-nav-item svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; }
+.sidebar-nav-label { font-size: 9.5px; font-weight: 800; text-align: center; line-height: 1.1; }
 
-.cockpit-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
+.cockpit-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
-/* TOPBAR LIMPIA */
+/* TOPBAR */
 .topbar-cyber {
-  background: rgba(9, 19, 34, 0.7);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--c-border-glass);
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 90;
+  background: var(--bg-surface); border-bottom: 1px solid var(--border-glass);
+  padding: 10px 20px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 90;
 }
-.sys-badge { display: flex; align-items: center; gap: 8px; }
-.status-beacon {
-  width: 9px; height: 9px; background: var(--c-green-neon);
-  border-radius: 50%; box-shadow: var(--glow-green);
-  animation: pulseBeacon 2s infinite;
-}
-@keyframes pulseBeacon {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
-}
-.sys-title { font-size: 14px; font-weight: 900; letter-spacing: 0.3px; color: #FFFFFF; }
-.sys-meta { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--c-cyan-neon); }
+.cockpit-canvas { width: 100%; max-width: 1440px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 16px; }
 
-/* CONTENEDOR FLUIDO HÍBRIDO */
-.cockpit-canvas {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-bottom: 90px;
-}
-@media (min-width: 1024px) {
-  .cockpit-canvas { padding: 18px 24px 40px; gap: 18px; }
-}
-
-/* BARRA DE FILTRO TEMPORAL UNIFICADA (DÍA, SEMANA, MES, AÑO) */
+/* STRIP DE COMANDOS */
 .command-strip {
-  background: var(--c-navy-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--c-border-glass);
-  border-radius: var(--radius-lg);
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  background: var(--bg-card); border: 1px solid var(--border-glass);
+  border-radius: 12px; padding: 10px 14px; display: flex;
+  align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
 }
-.btn-group-cyber {
-  display: flex;
-  gap: 4px;
-  background: rgba(5, 11, 20, 0.7);
-  padding: 3px;
-  border-radius: 9px;
-  border: 1px solid var(--c-border-glass);
-}
+.btn-group-cyber { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 3px; border-radius: 8px; }
 .cmd-btn {
-  border: none;
-  background: transparent;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s;
+  border: none; background: transparent; padding: 6px 12px; border-radius: 6px;
+  font-family: inherit; font-size: 11px; font-weight: 800; color: var(--text-muted); cursor: pointer;
 }
-.cmd-btn.active {
-  background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-blue-neon));
-  color: #FFFFFF;
-  box-shadow: 0 0 10px rgba(0, 150, 225, 0.5);
-}
+.cmd-btn.active { background: var(--c-azul-convecsa); color: #FFF; }
 
-/* REJILLAS RESPONSIVAS */
-.grid-responsive-3 {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
+/* CARDS */
+.grid-responsive-3 { display: grid; grid-template-columns: 1fr; gap: 12px; }
 @media (min-width: 680px) { .grid-responsive-3 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .grid-responsive-3 { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
 
-.grid-responsive-2 {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
+.grid-responsive-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
 @media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
 
-/* TARJETAS GLASSMORPHIC */
-.glass-card {
-  background: var(--c-navy-card);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--c-border-glass);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.glass-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-.card-neon-rose::before { background: var(--c-red-neon); box-shadow: var(--glow-red); }
-.card-neon-amber::before { background: var(--c-amber-neon); box-shadow: 0 0 15px rgba(255,179,0,0.4); }
-.card-neon-green::before { background: var(--c-green-neon); box-shadow: var(--glow-green); }
-
-.kpi-tag-head {
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-}
-.kpi-numeric-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin: 10px 0 6px;
-}
-.kpi-big-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 34px;
-  font-weight: 900;
-  line-height: 1;
-}
-.card-neon-rose .kpi-big-num { color: var(--c-red-neon); }
-.card-neon-amber .kpi-big-num { color: var(--c-amber-neon); }
-.card-neon-green .kpi-big-num { color: var(--c-green-neon); }
-
-.tag-status-neon {
-  padding: 3px 9px;
-  border-radius: 6px;
-  font-size: 10px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.tag-status-neon.ganancia {
-  background: rgba(0, 230, 118, 0.15);
-  color: var(--c-green-neon);
-  border: 1px solid rgba(0, 230, 118, 0.4);
-}
-.tag-status-neon.perdida {
-  background: rgba(255, 23, 68, 0.15);
-  color: var(--c-red-neon);
-  border: 1px solid rgba(255, 23, 68, 0.4);
-}
-
-.chart-card-box {
-  background: var(--c-navy-card);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--c-border-glass);
-  border-radius: var(--radius-lg);
-  padding: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-  display: flex;
-  flex-direction: column;
-}
-.chart-top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.chart-title-cyber {
-  font-size: 12.5px;
-  font-weight: 800;
-  color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.chart-title-cyber::before {
-  content: '';
-  width: 3.5px;
-  height: 14px;
-  background: var(--c-cyan-neon);
-  border-radius: 2px;
-  box-shadow: var(--glow-cyan);
+.glass-card, .chart-card-box {
+  background: var(--bg-card); border: 1px solid var(--border-glass);
+  border-radius: var(--radius-card); padding: 16px; display: flex; flex-direction: column;
 }
 .chart-holder-responsive { position: relative; height: 215px; width: 100%; }
 
-.worker-matrix-card {
-  background: rgba(5, 11, 20, 0.65);
-  border: 1px solid var(--c-border-glass);
-  border-radius: 10px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.prog-bar-bg {
-  width: 100%;
-  height: 6px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 4px;
-}
-.prog-bar-fill { height: 100%; border-radius: 4px; }
-
-.cyber-table-panel {
-  background: var(--c-navy-card);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--c-border-glass);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.table-scroll-wrap { width: 100%; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 650px; }
-th {
-  background: rgba(0, 82, 204, 0.5);
-  color: var(--c-cyan-neon);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10.5px;
-  font-weight: 800;
-  padding: 11px 12px;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--c-border-glow);
-}
-td {
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 11.5px;
-  color: var(--text-primary);
-}
-tr:hover { background: rgba(0, 150, 225, 0.06); }
-
-/* BARRA INFERIOR MOBILE */
-.bottom-nav-cyber {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: 60px;
-  background: rgba(11, 21, 40, 0.95);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid var(--c-border-glass);
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-@media (min-width: 769px) { .bottom-nav-cyber { display: none; } }
-.nav-tab-m {
-  border: none; background: transparent; display: flex; flex-direction: column; align-items: center;
-  gap: 2px; font-size: 9.5px; font-weight: 800; color: var(--text-secondary); cursor: pointer;
-}
-.nav-tab-m.active { color: var(--c-cyan-neon); }
-.nav-fab-add {
-  background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
-  color: #050B14;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  border: none;
-  font-size: 22px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: var(--glow-cyan);
-  margin-top: -16px;
-  cursor: pointer;
-}
-
-/* MODAL DE REGISTRO FLUIDO (CERO SCROLL HORIZONTAL) */
+/* MODAL REDISEÑADO SIN SCROLL HORIZONTAL */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 600; display: none;
@@ -457,174 +131,117 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 .cyber-modal-mask.open { display: flex; }
 
 .cyber-modal-window {
-  background: #0B1528;
-  border: 1px solid var(--c-cyan-neon);
-  box-shadow: 0 0 35px rgba(0, 229, 255, 0.25);
-  width: 100%; max-width: 720px; max-height: 90vh;
-  border-radius: 20px 20px 0 0; display: flex; flex-direction: column;
-  overflow-x: hidden !important;
-  overflow-y: hidden;
+  background: var(--bg-surface); border: 1px solid var(--c-cyan);
+  width: 100%; max-width: 720px; max-height: 90vh; border-radius: 18px 18px 0 0;
+  display: flex; flex-direction: column; overflow: hidden;
 }
-@media (min-width: 640px) { .cyber-modal-window { border-radius: var(--radius-xl); } }
+@media (min-width: 640px) { .cyber-modal-window { border-radius: 16px; } }
 
-.m-head-c {
-  padding: 14px 18px; border-bottom: 1px solid var(--c-border-glass);
-  display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
-}
-.m-body-c {
-  padding: 16px 18px;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  display: flex; flex-direction: column; gap: 12px;
-}
+.m-head-c { padding: 14px 18px; border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+.m-body-c { padding: 16px 18px; overflow-y: auto !important; overflow-x: hidden !important; display: flex; flex-direction: column; gap: 12px; }
 
-.form-row-2col {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  width: 100%;
-}
-@media (min-width: 600px) {
-  .form-row-2col { grid-template-columns: 1fr 1fr; gap: 12px; }
-}
+.form-row-2col { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+@media (min-width: 600px) { .form-row-2col { grid-template-columns: 1fr 1fr; gap: 12px; } }
 
-.field-cyber { display: flex; flex-direction: column; gap: 4px; width: 100%; min-width: 0; }
-.field-cyber label {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
-  color: var(--c-cyan-neon); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+.field-cyber { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.field-cyber label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: var(--c-cyan); text-transform: uppercase; }
 .field-cyber input, .field-cyber select {
-  width: 100%; min-width: 0; padding: 10px 12px; background: #050B14;
-  border: 1.5px solid var(--c-border-glass); border-radius: 8px; font-family: inherit;
-  font-size: 12px; color: #FFF; outline: none;
-}
-.field-cyber input:focus, .field-cyber select:focus {
-  border-color: var(--c-cyan-neon); box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  width: 100%; padding: 10px; background: rgba(0,0,0,0.25);
+  border: 1.5px solid var(--border-glass); border-radius: 8px; font-family: inherit; font-size: 12px; color: var(--text-main); outline: none;
 }
 
-.m-foot-c {
-  padding: 12px 18px; border-top: 1px solid var(--c-border-glass); display: flex; gap: 8px; flex-shrink: 0;
-}
 .btn-cyber-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 800;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
+  display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px;
+  border-radius: 8px; font-family: inherit; font-size: 11px; font-weight: 800; border: none; cursor: pointer;
 }
-.btn-cyber-add {
-  background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
-  color: #050B14;
-  font-weight: 900;
-  box-shadow: var(--glow-cyan);
+.btn-cyber-add { background: var(--c-azul-convecsa); color: #FFF; flex: 2; justify-content: center; }
+
+/* TOAST INDICADOR */
+#toastNotify {
+  position: fixed; bottom: 75px; right: 20px; z-index: 1000;
+  background: #00E676; color: #050B14; padding: 12px 20px; border-radius: 8px;
+  font-weight: 900; font-size: 12px; display: none; box-shadow: 0 4px 14px rgba(0,0,0,0.4);
 }
 </style>
 </head>
 <body>
 
-<!-- LOGIN POR PIN -->
+<div id="toastNotify">✅ REGISTRO GUARDADO Y SINCRONIZADO</div>
+
+<!-- LOGIN -->
 <div id="loginOverlay">
   <div class="login-cyber-box">
-    <div class="cyber-logo">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    </div>
-    <div style="font-size:18px; font-weight:900; color:#FFFFFF; letter-spacing:0.5px;">CONVECSA CONTROL 360°</div>
-    <div style="font-size:11px; color:var(--c-cyan-neon); font-family:'JetBrains Mono', monospace; margin-bottom:14px;">CONTROL DE PRODUCCIÓN & LEAN · THSSB</div>
-    
-    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; color: var(--text-secondary);">Seleccione Usuario:</div>
-    <select id="selUsuario" style="width:100%; padding:10px; background:#050B14; border-radius:8px; border:1.5px solid var(--c-border-glass); color:#FFF; font-weight:700; margin-bottom:14px; font-family:inherit;">
+    <div style="font-size:18px; font-weight:900; color:#FFF; margin-bottom:4px;">CONVECSA CONTROL 360°</div>
+    <div style="font-size:11px; color:var(--c-cyan); margin-bottom:14px;">CONTROL DE PRODUCCIÓN & LEAN · THSSB</div>
+    <select id="selUsuario" style="width:100%; padding:10px; background:#050B14; border-radius:8px; border:1.5px solid var(--border-glass); color:#FFF; font-weight:700; margin-bottom:10px;">
       <option value="SUPER_ADMIN|Jorge Orosco">Jorge Orosco (Super Admin)</option>
       <option value="RESIDENTE|Ing. Residente">Ing. Residente (Producción)</option>
-      <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (Capataz Pintura)</option>
-      <option value="CAPATAZ|Mauro Bardales">M. Bardales (Capataz SCF)</option>
+      <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (Pintura)</option>
+      <option value="CAPATAZ|Mauro Bardales">M. Bardales (SCF)</option>
     </select>
-    
-    <div style="text-align: left; margin-bottom: 6px; font-size: 11px; color: var(--text-secondary);">Código PIN de Acceso:</div>
     <input type="password" id="pinBox" class="pin-digital" placeholder="••••" maxlength="8" onkeydown="if(event.key==='Enter') ejecutarLoginDirecto()">
-    
-    <button type="button" class="btn-cyber-action btn-cyber-add" onclick="ejecutarLoginDirecto()" style="width:100%; justify-content:center; padding:12px; font-size:12px; margin-top:6px;">
-      ACCEDER AL SISTEMA
-    </button>
-    <div style="font-size:10.5px; color:var(--text-muted); margin-top:12px; font-family:'JetBrains Mono', monospace;">SECURITY PIN: <b>1234</b></div>
+    <button type="button" class="btn-cyber-action btn-cyber-add" onclick="ejecutarLoginDirecto()" style="width:100%;">ACCEDER AL SISTEMA</button>
   </div>
 </div>
 
 <div class="app-shell">
   
-  <!-- ==============================================================
-       BARRA LATERAL IZQUIERDA CON ÍCONOS SOLICITADOS
-       ============================================================== -->
+  <!-- BARRA LATERAL IZQUIERDA -->
   <aside class="convecsa-sidebar">
-    
-    <!-- 1. GERENCIA: DASHBOARD -->
-    <button class="sidebar-nav-item active" id="navGerencia" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
+    <button class="sidebar-nav-item active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
       <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
       <span class="sidebar-nav-label">Gerencia</span>
     </button>
-
-    <!-- 2. PINTURA -->
-    <button class="sidebar-nav-item" id="navPintura" onclick="seleccionarModuloEspecialidad('PINTURA', this)" title="Pintura: Control Día/Sem/Mes/Año">
-      <svg viewBox="0 0 24 24"><path d="M19 11V4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7"/><path d="M21 11v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+    <button class="sidebar-nav-item" onclick="seleccionarModuloEspecialidad('PINTURA', this)" title="Pintura: Día/Sem/Mes/Año">
+      <svg viewBox="0 0 24 24"><path d="M19 11V4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7"/><path d="M21 11v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"/></svg>
       <span class="sidebar-nav-label">Pintura</span>
     </button>
-
-    <!-- 3. SELLOS CORTAFUEGO -->
-    <button class="sidebar-nav-item" id="navSCF" onclick="seleccionarModuloEspecialidad('SCF', this)" title="Sellos Cortafuego: Control Día/Sem/Mes/Año">
+    <button class="sidebar-nav-item" onclick="seleccionarModuloEspecialidad('SCF', this)" title="Sellos Cortafuego: Día/Sem/Mes/Año">
       <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
       <span class="sidebar-nav-label">Sellos Cortafuego</span>
     </button>
-
-    <!-- 4. REGISTRAR AVANCE -->
-    <button class="sidebar-nav-item" id="navRegistrar" onclick="abrirModal()" title="Registrar Avance Diario de Obra">
+    <button class="sidebar-nav-item" onclick="abrirModal()" title="Registrar Avance">
       <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       <span class="sidebar-nav-label">Registrar Avance</span>
     </button>
-
-    <!-- 5. EXPORTAR EXCEL -->
-    <button class="sidebar-nav-item" id="navExcel" onclick="exportarExcelConFormulas()" title="Exportar RDO Excel con Fórmulas Vivas">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <button class="sidebar-nav-item" onclick="sincronizarConSheets(true)" title="Sincronizar Datos">
+      <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+      <span class="sidebar-nav-label">Sincronizar</span>
+    </button>
+    <button class="sidebar-nav-item" onclick="exportarExcelConFormulas()" title="Exportar Excel">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       <span class="sidebar-nav-label">Exportar Excel</span>
     </button>
-
-    <!-- 6. DESCARGAR PDF -->
-    <button class="sidebar-nav-item" id="navPDF" onclick="exportarReportePDF()" title="Descargar Reporte Diario de Obra en PDF">
+    <button class="sidebar-nav-item" onclick="exportarReportePDF()" title="Descargar PDF">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       <span class="sidebar-nav-label">Descargar PDF</span>
     </button>
-
+    <button class="sidebar-nav-item" onclick="toggleTheme()" title="Modo Claro / Oscuro" style="margin-top:auto;">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <span class="sidebar-nav-label">Tema</span>
+    </button>
   </aside>
 
-  <!-- ÁREA CENTRAL DEL COCKPIT -->
   <div class="cockpit-area">
-    
-    <!-- TOPBAR -->
     <header class="topbar-cyber">
-      <div class="sys-badge">
+      <div style="display:flex; align-items:center; gap:8px;">
         <div class="status-beacon"></div>
         <div>
-          <div class="sys-title" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
-          <div class="sys-meta" id="lblSubtituloArea">TORRE HOSPITALARIA SAN BORJA (THSSB) · CONVECSA S.A.C.</div>
+          <div style="font-size:14px; font-weight:900;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
+          <div style="font-size:10.5px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
-        <span id="userBadgeOnline" style="background:rgba(0, 150, 225, 0.15); border:1px solid var(--c-cyan-neon); color:var(--c-cyan-neon); padding:4px 10px; border-radius:6px; font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:700;">Jorge Orosco</span>
-        <button onclick="logout()" style="background:transparent; border:none; color:var(--c-red-neon); font-size:11.5px; font-weight:800; cursor:pointer;">Salir</button>
+        <span id="userBadgeOnline" style="font-size:11px; font-weight:700;">Jorge Orosco</span>
+        <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-weight:800; cursor:pointer;">Salir</button>
       </div>
     </header>
 
-    <!-- LIENZO FLUIDO PRINCIPAL CON SCROLL SUAVE -->
     <main class="cockpit-canvas" id="cockpitPrintArea">
-
-      <!-- SELECTOR TEMPORAL LIMPIO (DÍA, SEMANA, MES, AÑO) -->
+      <!-- SELECTOR TEMPORAL -->
       <section class="command-strip">
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:11px; font-weight:800; color:var(--c-cyan-neon); text-transform:uppercase;">PERIODO DE ANÁLISIS:</span>
+          <span style="font-size:11px; font-weight:800; color:var(--c-cyan);">PERIODO:</span>
           <div class="btn-group-cyber">
             <button class="cmd-btn" onclick="filtrarPeriodo('DIA', this)">Día</button>
             <button class="cmd-btn" onclick="filtrarPeriodo('SEMANA', this)">Semana</button>
@@ -632,178 +249,107 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
             <button class="cmd-btn" onclick="filtrarPeriodo('ANIO', this)">Año</button>
           </div>
         </div>
-
-        <div style="font-family:'JetBrains Mono'; font-size:11px; color:var(--text-secondary);" id="lblFiltroEspecialidadActiva">
-          ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b>
-        </div>
+        <div style="font-family:'JetBrains Mono'; font-size:11px;" id="lblFiltroEspecialidadActiva">ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b></div>
       </section>
 
-      <!-- 1. KPIS -->
-      <section class="grid-responsive-3" id="secKPIs">
-        <div class="glass-card card-neon-rose">
-          <div class="kpi-tag-head" id="lblKpiPeriodo">EFICIENCIA DEL MES</div>
-          <div class="kpi-numeric-row">
-            <div class="kpi-big-num" id="txtEficVal">104.5%</div>
+      <!-- KPIS -->
+      <section class="grid-responsive-3">
+        <div class="glass-card">
+          <div style="font-size:10.5px; font-weight:800; color:var(--text-muted);" id="lblKpiPeriodo">EFICIENCIA DEL MES</div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin:8px 0;">
+            <div style="font-family:'JetBrains Mono'; font-size:34px; font-weight:900;" id="txtEficVal">0.0%</div>
             <canvas id="gaugeCanvas" width="90" height="46"></canvas>
           </div>
-          <div style="font-size:11px; font-weight:700; color:var(--text-secondary); display:flex; justify-content:space-between; align-items:center;">
-            <span class="tag-status-neon ganancia" id="badgeEficEstado">Ganancia</span>
-            <span>Meta Target: 100%</span>
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700;">
+            <span id="badgeEficEstado" style="padding:2px 8px; border-radius:6px;">Sin datos</span>
+            <span>Meta: 100%</span>
           </div>
         </div>
 
-        <div class="glass-card card-neon-amber">
-          <div class="kpi-tag-head">HH PERDIDAS ACUMULADAS</div>
-          <div class="kpi-numeric-row">
-            <div class="kpi-big-num" id="txtPerdidasVal">1.00<span style="font-size:18px;"> hrs</span></div>
-          </div>
-          <div style="font-size:11px; font-weight:700; color:var(--text-secondary);">
-            <span id="txtImpactoSoles" style="color:var(--c-amber-neon);">S/. 143 impacto estimado</span> (S/. 142.50/h)
-          </div>
+        <div class="glass-card">
+          <div style="font-size:10.5px; font-weight:800; color:var(--text-muted);">HH PERDIDAS ACUMULADAS</div>
+          <div style="font-family:'JetBrains Mono'; font-size:34px; font-weight:900; color:var(--c-amber); margin:8px 0;" id="txtPerdidasVal">0.00 hrs</div>
+          <div style="font-size:11px; color:var(--text-muted);" id="txtImpactoSoles">S/. 0 impacto estimado</div>
         </div>
 
-        <div class="glass-card card-neon-green">
-          <div class="kpi-tag-head">EFICIENCIA DEL PERIODO</div>
-          <div class="kpi-numeric-row">
-            <div class="kpi-big-num" id="txtSemanalVal">104.5%</div>
-          </div>
-          <div style="font-size:11px; font-weight:700; color:var(--text-secondary); display:flex; justify-content:space-between;">
-            <span id="lblSubPeriodo">Todo el periodo activo</span>
-            <span style="color:var(--c-green-neon); font-weight:800;" id="txtTotalOperarios">6 operarios activos</span>
+        <div class="glass-card">
+          <div style="font-size:10.5px; font-weight:800; color:var(--text-muted);">EFICIENCIA DEL PERIODO</div>
+          <div style="font-family:'JetBrains Mono'; font-size:34px; font-weight:900; color:var(--c-green); margin:8px 0;" id="txtSemanalVal">0.0%</div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700;">
+            <span>Actividad evaluada</span>
+            <span style="color:var(--c-green);" id="txtTotalOperarios">0 operarios</span>
           </div>
         </div>
       </section>
 
-      <!-- 2. GRÁFICOS SUPERIORES -->
-      <section class="grid-responsive-2" id="secGraficosTop">
+      <!-- GRÁFICOS -->
+      <section class="grid-responsive-2">
         <div class="chart-card-box">
-          <div class="chart-top-bar">
-            <div class="chart-title-cyber">Evolución Temporal de Eficiencia (%)</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,150,225,0.15); color:var(--c-cyan-neon); padding:2px 8px; border-radius:5px;" id="badgePeriodoEvol">HISTÓRICO</span>
-          </div>
-          <div class="chart-holder-responsive">
-            <canvas id="chartEvolucion"></canvas>
-          </div>
+          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Evolución Temporal de Eficiencia (%)</div>
+          <div class="chart-holder-responsive"><canvas id="chartEvolucion"></canvas></div>
         </div>
-
         <div class="chart-card-box">
-          <div class="chart-top-bar">
-            <div class="chart-title-cyber">Eficiencia por Elemento / Partida</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(255,23,68,0.15); color:var(--c-red-neon); padding:2px 8px; border-radius:5px;">VS META 100%</span>
-          </div>
-          <div class="chart-holder-responsive">
-            <canvas id="chartElemento"></canvas>
-          </div>
+          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Eficiencia por Elemento / Partida</div>
+          <div class="chart-holder-responsive"><canvas id="chartElemento"></canvas></div>
         </div>
       </section>
 
-      <!-- 3. GRÁFICOS INFERIORES -->
-      <section class="grid-responsive-3" id="secGraficosBottom">
+      <section class="grid-responsive-3">
         <div class="chart-card-box">
-          <div class="chart-top-bar">
-            <div class="chart-title-cyber">HH Ganadas vs Reales</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,230,118,0.15); color:var(--c-green-neon); padding:2px 8px; border-radius:5px;">HORAS HOMBRE</span>
-          </div>
-          <div class="chart-holder-responsive">
-            <canvas id="chartHH"></canvas>
-          </div>
+          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">HH Ganadas vs Reales</div>
+          <div class="chart-holder-responsive"><canvas id="chartHH"></canvas></div>
         </div>
-
         <div class="chart-card-box">
-          <div class="chart-top-bar">
-            <div class="chart-title-cyber">Distribución por Nivel</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,150,225,0.15); color:var(--c-cyan-neon); padding:2px 8px; border-radius:5px;">17 PISOS</span>
-          </div>
-          <div class="chart-holder-responsive">
-            <canvas id="chartNivel"></canvas>
-          </div>
+          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Distribución por Nivel</div>
+          <div class="chart-holder-responsive"><canvas id="chartNivel"></canvas></div>
         </div>
-
         <div class="chart-card-box">
-          <div class="chart-top-bar">
-            <div class="chart-title-cyber">Estado de Actividades</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(255,23,68,0.15); color:var(--c-red-neon); padding:2px 8px; border-radius:5px;">BALANCE LEAN</span>
-          </div>
-          <div class="chart-holder-responsive">
-            <canvas id="chartEstado"></canvas>
-          </div>
+          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Estado de Actividades</div>
+          <div class="chart-holder-responsive"><canvas id="chartEstado"></canvas></div>
         </div>
       </section>
 
-      <!-- 4. AUDITORÍA DE TRABAJADORES -->
-      <section class="chart-card-box" id="secAuditoriaTrabajadores">
-        <div class="chart-top-bar">
-          <div>
-            <div style="font-size:13.5px; font-weight:900; color:#FFFFFF;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR</div>
-            <div style="font-size:11px; color:var(--text-secondary);">Métricas de rendimiento individual y balance de horas ganadas</div>
-          </div>
-          <span id="txtEvaluados" style="font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:800; color:var(--c-green-neon);">5 evaluados</span>
+      <!-- AUDITORÍA DE OPERARIOS -->
+      <section class="chart-card-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-size:13.5px; font-weight:900;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR</div>
+          <span id="txtEvaluados" style="font-family:'JetBrains Mono'; font-size:11px; color:var(--c-green);">0 evaluados</span>
         </div>
-        <div class="grid-responsive-3" id="gridTrabajadores" style="margin-top:10px;"></div>
+        <div class="grid-responsive-3" id="gridTrabajadores"></div>
       </section>
 
-      <!-- 5. TABLA DE TRAZABILIDAD EN TIEMPO REAL -->
-      <section class="cyber-table-panel" id="secTablaTrazabilidad">
-        <div style="padding:14px 16px; border-bottom:1px solid var(--c-border-glass); display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:13px; font-weight:900; color:var(--c-cyan-neon);">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
-          <div style="font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono', monospace;">REGISTRO_DIARIO_PINTURA & REGISTRO_DIARIO_SCF</div>
-        </div>
-        <div class="table-scroll-wrap">
-          <table>
+      <!-- TABLA EN VIVO -->
+      <section class="chart-card-box" style="overflow:hidden;">
+        <div style="font-size:13px; font-weight:900; margin-bottom:10px;">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
+        <div style="width:100%; overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; min-width:650px;">
             <thead>
-              <tr>
-                <th>ID</th>
-                <th>HORA</th>
-                <th>HOJA DESTINO</th>
-                <th>OPERARIO</th>
-                <th>NIVEL (17)</th>
-                <th>SUBPROCESO</th>
-                <th style="text-align:right;">METRADO</th>
-                <th style="text-align:right;">HH REAL</th>
-                <th style="text-align:center;">EFICIENCIA</th>
-                <th>ESTADO</th>
+              <tr style="border-bottom:1px solid var(--border-glass); text-align:left; font-size:10.5px; color:var(--c-cyan);">
+                <th>ID</th><th>FECHA</th><th>HORA</th><th>HOJA</th><th>OPERARIO</th><th>NIVEL</th><th>SUBPROCESO</th><th style="text-align:right;">METRADO</th><th style="text-align:right;">HH REAL</th><th style="text-align:center;">EFIC</th><th>ESTADO</th>
               </tr>
             </thead>
             <tbody id="tablaBody"></tbody>
           </table>
         </div>
       </section>
-
     </main>
-
   </div>
 </div>
 
-<!-- BARRA INFERIOR MOBILE -->
-<nav class="bottom-nav-cyber">
-  <button class="nav-tab-m active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)">
-    <span>📊</span><span>Gerencia</span>
-  </button>
-  <button class="nav-tab-m" onclick="seleccionarModuloEspecialidad('PINTURA', this)">
-    <span>🎨</span><span>Pintura</span>
-  </button>
-  <button class="nav-fab-add" onclick="abrirModal()" title="Registrar Avance">
-    ➕
-  </button>
-  <button class="nav-tab-m" onclick="seleccionarModuloEspecialidad('SCF', this)">
-    <span>🔥</span><span>SCF</span>
-  </button>
-  <button class="nav-tab-m" onclick="exportarExcelConFormulas()">
-    <span>📥</span><span>Excel</span>
-  </button>
-</nav>
-
-<!-- MODAL SMART CAPTURE SIN SCROLL HORIZONTAL -->
+<!-- MODAL DE REGISTRO CON FECHA Y FORMULARIO LIMPIO -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
     <div class="m-head-c">
-      <div style="font-size:13.5px; font-weight:900; color:var(--c-cyan-neon);">✍️ REGISTRAR AVANCE DE CAMPO (THSSB)</div>
+      <div style="font-size:13.5px; font-weight:900; color:var(--c-cyan);">✍️ REGISTRAR AVANCE DE CAMPO</div>
       <button onclick="cerrarModal()" style="background:none; border:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
     </div>
     
     <div class="m-body-c">
-      <!-- FILA 1: PARTIDA Y OPERARIO -->
       <div class="form-row-2col">
+        <div class="field-cyber">
+          <label>Fecha de Trabajo:</label>
+          <input type="date" id="mFecha" onchange="recalcularModal()">
+        </div>
         <div class="field-cyber">
           <label>Partida / Especialidad:</label>
           <select id="mEspecialidad" onchange="cargarCatalogosModal()">
@@ -811,14 +357,13 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
             <option value="PINTURA">PINTURA Y ACABADOS (REGISTRO_DIARIO_PINTURA)</option>
           </select>
         </div>
+      </div>
+
+      <div class="form-row-2col">
         <div class="field-cyber">
           <label>Operario Responsable:</label>
           <select id="mTrabajador"></select>
         </div>
-      </div>
-
-      <!-- FILA 2: NIVEL Y ELEMENTO CONSTRUCTIVO -->
-      <div class="form-row-2col">
         <div class="field-cyber">
           <label>Nivel de Obra (17 Niveles):</label>
           <select id="mNivel">
@@ -836,32 +381,29 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
             </optgroup>
           </select>
         </div>
+      </div>
+
+      <div class="form-row-2col">
         <div class="field-cyber">
           <label>Elemento Constructivo:</label>
           <select id="mElemento"></select>
         </div>
+        <div class="field-cyber">
+          <label id="lblUnidadModal">Metrado Ejecutado:</label>
+          <input type="number" id="mMetrado" value="20.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+        </div>
       </div>
 
-      <!-- FILA 3: SUBPROCESO OFICIAL TARGET (ANCHO TOTAL) -->
       <div class="field-cyber">
         <label>Partida / Subproceso Oficial (Target):</label>
-        <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;"></select>
+        <select id="mSubproceso" onchange="recalcularModal()"></select>
       </div>
 
-      <!-- FILA 4: METRADO Y HORAS HOMBRE -->
       <div class="form-row-2col">
         <div class="field-cyber">
-          <label id="lblUnidadModal">Metrado Ejecutado (ml / und / pto):</label>
-          <input type="number" id="mMetrado" value="30.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+          <label>HH Reales Invertidas (Horas):</label>
+          <input type="number" id="mHHReal" value="8.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
         </div>
-        <div class="field-cyber">
-          <label>HH Reales Invertidas (Cuadrilla):</label>
-          <input type="number" id="mHHReal" value="2.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
-        </div>
-      </div>
-
-      <!-- FILA 5: RESTRICCIÓN Y UBICACIÓN -->
-      <div class="form-row-2col">
         <div class="field-cyber">
           <label>Causa Raíz de Restricción:</label>
           <select id="mCausa">
@@ -871,33 +413,32 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
             <option value="Interferencia MEP">Interferencia instalaciones MEP</option>
           </select>
         </div>
-        <div class="field-cyber">
-          <label>Ubicación / Detalle de Frente:</label>
-          <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7 / Sala Técnica">
-        </div>
       </div>
 
-      <!-- FILA 6: EVALUACIÓN LEAN EN TIEMPO REAL -->
-      <div style="background:rgba(0,150,225,0.08); border:1px solid var(--c-border-glass); border-radius:10px; padding:12px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">TARGET</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900;" id="dispTarget">30.0</div></div>
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">HH GANADAS</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900;" id="dispHHGan">17.00 h</div></div>
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">EFICIENCIA</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900; color:var(--c-green-neon);" id="dispEficiencia">850.0%</div></div>
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">ESTADO</div><div style="font-size:13px; font-weight:900; color:var(--c-green-neon);" id="dispEstado">GANANCIA</div></div>
+      <div class="field-cyber">
+        <label>Ubicación / Detalle de Frente:</label>
+        <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7 / Sala Técnica">
+      </div>
+
+      <!-- PANEL LEAN CALIBRADO -->
+      <div style="background:rgba(0,150,225,0.08); border:1px solid var(--border-glass); border-radius:10px; padding:12px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">TARGET/DÍA</div><div style="font-size:14px; font-weight:900;" id="dispTarget">30.0</div></div>
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">HH GANADAS</div><div style="font-size:14px; font-weight:900;" id="dispHHGan">5.67 h</div></div>
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">EFICIENCIA</div><div style="font-size:14px; font-weight:900;" id="dispEficiencia">70.8%</div></div>
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">ESTADO</div><div style="font-size:13px; font-weight:900;" id="dispEstado">PERDIDA</div></div>
       </div>
     </div>
 
     <div class="m-foot-c">
-      <button class="btn-cyber-action" style="background:#050B14; border:1px solid var(--c-border-glass); color:var(--text-secondary); flex:1;" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn-cyber-action btn-cyber-add" style="flex:2; justify-content:center;" onclick="guardarRegistro()">💾 GUARDAR EN GOOGLE SHEETS</button>
+      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted); flex:1;" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-cyber-action btn-cyber-add" id="btnGuardar" onclick="guardarRegistro()">💾 GUARDAR REGISTRO</button>
     </div>
   </div>
 </div>
 
 <script>
-// ENDPOINT DE GOOGLE APPS SCRIPT
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
 
-// 27 PARTIDAS CONTRACTUALES DE SELLOS CORTAFUEGO + PINTURA
 const CATALOGO = {
   SCF: {
     trabajadores: [
@@ -960,14 +501,7 @@ const CATALOGO = {
 let MODULO_ACTIVO = "CONSOLIDADO";
 let PERIODO_ACTIVO = "MES";
 let USUARIO_ACTUAL = { rol: "SUPER_ADMIN", nombre: "Jorge Orosco" };
-
-let LOG_REGISTROS = [
-  { id: "SCF-20260919-01", horaExacta: "2026-09-19 08:30:15", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "SCF en JUNTAS a dos caras interiores", metrado: 30.0, hhReal: 2.0, rendOpt: 30.0, hhGan: 17.0, ef: 850.0, est: "GANANCIA", unidad: "ml" },
-  { id: "SCF-20260919-02", horaExacta: "2026-09-19 10:15:20", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P4", elemento: "TUBERIAS NO METALICAS", sub: "SCF en TUBERIAS NO METALICAS <4\" acceso a dos caras", metrado: 11.0, hhReal: 3.5, rendOpt: 11.0, hhGan: 17.0, ef: 485.7, est: "GANANCIA", unidad: "pto" },
-  { id: "PIN-20260919-03", horaExacta: "2026-09-19 11:45:00", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura American Colors Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 10.35, ef: 258.8, est: "GANANCIA", unidad: "m²" },
-  { id: "PIN-20260918-04", horaExacta: "2026-09-18 13:25:10", fecha: "2026-09-18", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos Pasta Fina CPP + lijado", metrado: 19.8, hhReal: 7.0, rendOpt: 52.0, hhGan: 6.47, ef: 92.4, est: "PERDIDA", unidad: "m²" },
-  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "LANDINEZ VALENCIA JUAN GABRIEL", nivel: "P9", elemento: "DUCTOS", sub: "SCF en DUCTOS hasta 23\"x23\" acceso a dos caras", metrado: 6.0, hhReal: 4.0, rendOpt: 9.0, hhGan: 11.33, ef: 283.3, est: "GANANCIA", unidad: "und" }
-];
+let LOG_REGISTROS = [];
 
 let chartEvolucion, chartElemento, chartHH, chartNivel, chartEstado;
 
@@ -982,11 +516,11 @@ function ejecutarLoginDirecto() {
 
 function logout() {
   sessionStorage.removeItem('convecsa_ses_cyber');
-  document.getElementById('pinBox').value = '';
   document.getElementById('loginOverlay').style.display = 'flex';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('mFecha').value = new Date().toISOString().split('T')[0];
   const ses = sessionStorage.getItem('convecsa_ses_cyber');
   if (ses) {
     USUARIO_ACTUAL = JSON.parse(ses);
@@ -994,27 +528,30 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginOverlay').style.display = 'none';
   }
   inicializarGraficos();
-  actualizarTodo();
+  sincronizarConSheets(false);
+  setInterval(() => { sincronizarConSheets(false); }, 30000); // Sincronización continua cada 30 segundos
 });
 
-// =========================================================================
-// ACCIONES DE LA BARRA LATERAL IZQUIERDA
-// =========================================================================
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const nxt = cur === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', nxt);
+}
+
 function seleccionarModuloEspecialidad(modulo, btn) {
   MODULO_ACTIVO = modulo;
-  document.querySelectorAll('.sidebar-nav-item, .nav-tab-m').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
   const titulos = {
     CONSOLIDADO: { t: "GERENCIA: DASHBOARD EJECUTIVO", s: "TORRE HOSPITALARIA SAN BORJA (THSSB) · CONSOLIDADO GLOBAL" },
-    PINTURA: { t: "CONTROL DE PINTURA Y RECUBRIMIENTOS", s: "DESEMPEÑO POR DÍA, SEMANA, MES Y AÑO · THSSB" },
-    SCF: { t: "CONTROL DE SELLOS CORTAFUEGO (SCF)", s: "27 PARTIDAS CONTRACTUALES · EVALUACIÓN DÍA, SEMANA, MES Y AÑO" }
+    PINTURA: { t: "CONTROL DE PINTURA Y RECUBRIMIENTOS", s: "DESEMPEÑO DÍA, SEMANA, MES Y AÑO · THSSB" },
+    SCF: { t: "CONTROL DE SELLOS CORTAFUEGO (SCF)", s: "27 PARTIDAS CONTRACTUALES · DÍA, SEMANA, MES Y AÑO" }
   };
 
   document.getElementById('lblTituloArea').innerText = titulos[modulo].t;
   document.getElementById('lblSubtituloArea').innerText = titulos[modulo].s;
-  document.getElementById('lblFiltroEspecialidadActiva').innerHTML = `ESPECIALIDAD: <b>${modulo === 'CONSOLIDADO' ? 'CONSOLIDADO GLOBAL' : (modulo === 'PINTURA' ? 'PINTURA' : 'SELLOS CORTAFUEGO (SCF)')}</b>`;
-  
+  document.getElementById('lblFiltroEspecialidadActiva').innerHTML = `ESPECIALIDAD: <b>${modulo === 'CONSOLIDADO' ? 'CONSOLIDADO GLOBAL' : (modulo === 'PINTURA' ? 'PINTURA' : 'SELLOS CORTAFUEGO')}</b>`;
   actualizarTodo();
 }
 
@@ -1022,17 +559,7 @@ function filtrarPeriodo(periodo, btn) {
   PERIODO_ACTIVO = periodo;
   btn.parentElement.querySelectorAll('.cmd-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-
-  const labels = {
-    DIA: "EFICIENCIA DEL DÍA (HOY)",
-    SEMANA: "EFICIENCIA DE LA SEMANA",
-    MES: "EFICIENCIA DEL MES",
-    ANIO: "EFICIENCIA ACUMULADA DEL AÑO"
-  };
-
-  document.getElementById('lblKpiPeriodo').innerText = labels[periodo];
-  document.getElementById('badgePeriodoEvol').innerText = periodo;
-  document.getElementById('lblSubPeriodo').innerText = `Visualizando periodo: ${periodo}`;
+  document.getElementById('lblKpiPeriodo').innerText = `EFICIENCIA (${periodo})`;
   actualizarTodo();
 }
 
@@ -1044,11 +571,11 @@ function getDatosFiltrados() {
   const anioActual = hoy.split('-')[0];
 
   if (PERIODO_ACTIVO === "DIA") {
-    list = list.filter(r => r.fecha === hoy || r.horaExacta.startsWith(hoy));
+    list = list.filter(r => r.fecha === hoy);
   } else if (PERIODO_ACTIVO === "SEMANA") {
-    list = list.filter(r => r.semana === 7 || r.fecha >= "2026-09-14");
+    list = list.filter(r => r.fecha >= "2026-09-14");
   } else if (PERIODO_ACTIVO === "MES") {
-    list = list.filter(r => r.fecha >= "2026-09-01");
+    list = list.filter(r => r.fecha.startsWith("2026-09"));
   } else if (PERIODO_ACTIVO === "ANIO") {
     list = list.filter(r => r.fecha.startsWith(anioActual));
   }
@@ -1078,8 +605,9 @@ function actualizarKPIs() {
   document.getElementById('txtTotalOperarios').innerText = ops + " operarios activos";
 
   const badge = document.getElementById('badgeEficEstado');
-  badge.className = ef >= 100 ? "tag-status-neon ganancia" : "tag-status-neon perdida";
-  badge.innerText = ef >= 100 ? "Ganancia" : "Pérdida";
+  badge.style.background = ef >= 100 ? "rgba(0, 230, 118, 0.2)" : "rgba(255, 23, 68, 0.2)";
+  badge.style.color = ef >= 100 ? "#00E676" : "#FF1744";
+  badge.innerText = ef >= 100 ? "Ganancia" : (totReal === 0 ? "Sin datos" : "Pérdida");
 
   drawGauge(ef);
 }
@@ -1118,19 +646,21 @@ function renderizarAuditoria() {
     const esGan = ef >= 100;
     const col = esGan ? '#00E676' : '#FF1744';
     const card = document.createElement('div');
-    card.className = 'worker-matrix-card';
+    card.style.cssText = "background:rgba(0,0,0,0.25); border:1px solid var(--border-glass); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:6px;";
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:800; font-size:12px; color:#FFFFFF;">${op.nombre}</span>
+        <span style="font-weight:800; font-size:12px;">${op.nombre}</span>
         <span style="font-family:'JetBrains Mono'; font-size:10px; font-weight:900; color:${col}; background:${esGan ? 'rgba(0,230,118,0.15)' : 'rgba(255,23,68,0.15)'}; padding:2px 7px; border-radius:5px;">
           ${ef.toFixed(1)}% ${esGan ? 'GANANCIA' : 'PÉRDIDA'}
         </span>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono';">
-        <span>METRADO: <b style="color:#FFF;">${op.metrado.toFixed(1)} ${op.unidad}</b></span>
-        <span>HH: <b style="color:#FFF;">${op.hhReal.toFixed(1)}h</b> (META: ${op.hhGan.toFixed(1)}h)</span>
+      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono';">
+        <span>METRADO: <b>${op.metrado.toFixed(1)} ${op.unidad}</b></span>
+        <span>HH REAL: <b>${op.hhReal.toFixed(1)}h</b></span>
       </div>
-      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${Math.min(ef, 100)}%; background:${col}; box-shadow:0 0 8px ${col};"></div></div>
+      <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+        <div style="width:${Math.min(ef, 100)}%; height:100%; background:${col};"></div>
+      </div>
     `;
     grid.appendChild(card);
   });
@@ -1144,15 +674,16 @@ function renderizarTabla() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="font-family:'JetBrains Mono'; font-weight:700;"><b>${r.id}</b></td>
-      <td style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--c-cyan-neon);">${r.horaExacta.split(' ')[1]}</td>
-      <td><span style="background:rgba(0,150,225,0.15); color:var(--c-cyan-neon); padding:2px 6px; border-radius:4px; font-weight:800; font-size:10px;">${r.hoja || r.modulo}</span></td>
+      <td>${r.fecha}</td>
+      <td style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--c-cyan);">${r.horaExacta.split(' ')[1] || ''}</td>
+      <td><span style="background:rgba(0,150,225,0.15); color:var(--c-cyan); padding:2px 6px; border-radius:4px; font-weight:800; font-size:10px;">${r.hoja || r.modulo}</span></td>
       <td><b>${r.trabajador}</b></td>
       <td><span style="background:rgba(255,255,255,0.08); font-weight:900; padding:2px 6px; border-radius:4px;">${r.nivel}</span></td>
       <td>${r.sub}</td>
       <td style="text-align:right; font-weight:800; font-family:'JetBrains Mono';">${r.metrado.toFixed(1)} ${r.unidad}</td>
       <td style="text-align:right; font-family:'JetBrains Mono';">${r.hhReal.toFixed(2)}h</td>
       <td style="text-align:center; font-weight:900; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'};">${r.ef}%</td>
-      <td><span class="tag-status-neon ${isGan ? 'ganancia':'perdida'}">${r.est}</span></td>
+      <td><span style="padding:2px 6px; border-radius:4px; font-weight:800; font-size:10px; background:${isGan?'rgba(0,230,118,0.15)':'rgba(255,23,68,0.15)'}; color:${isGan?'#00E676':'#FF1744'};">${r.est}</span></td>
     `;
     t.appendChild(tr);
   });
@@ -1162,59 +693,33 @@ function inicializarGraficos() {
   Chart.defaults.font.family = 'Plus Jakarta Sans';
   Chart.defaults.color = '#94A3B8';
 
-  // 1. Línea Evolución
   chartEvolucion = new Chart(document.getElementById('chartEvolucion'), {
     type: 'line',
-    data: {
-      labels: ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5'],
-      datasets: [
-        { label: 'Efic %', data: [98.5, 112.0, 104.5, 108.0, 115.2], borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.12)', fill: true, tension: 0.35, pointRadius: 5, pointBackgroundColor: '#00E5FF' },
-        { label: 'Meta 100%', data: [100, 100, 100, 100, 100], borderColor: '#00E676', borderDash: [6, 4], pointRadius: 0 }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+    data: { labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5, 110.0, 105.0], borderColor: '#00E5FF', fill: false }] },
+    options: { responsive: true, maintainAspectRatio: false }
   });
 
-  // 2. Barras por Elemento
   chartElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
-    data: {
-      labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'],
-      datasets: [{ label: 'Efic %', data: [850, 485, 283, 160], backgroundColor: ['#00E676', '#00E676', '#00E676', '#00E676'], borderRadius: 5 }]
-    },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } }, plugins: { legend: { display: false } } }
+    data: { labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5], backgroundColor: ['#FF1744', '#FF1744', '#FF1744', '#00E676'] }] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
   });
 
-  // 3. HH Comparativo
   chartHH = new Chart(document.getElementById('chartHH'), {
     type: 'bar',
-    data: {
-      labels: ['Sem 1', 'Sem 2', 'Sem 3'],
-      datasets: [
-        { label: 'HH Ganadas', data: [15.2, 21.0, 27.4], backgroundColor: '#0096E1', borderRadius: 5 },
-        { label: 'HH Reales', data: [14.0, 20.5, 24.8], backgroundColor: '#00E676', borderRadius: 5 }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+    data: { labels: ['Sem 1', 'Sem 2', 'Sem 3'], datasets: [{ label: 'HH Gan', data: [5.67, 12.0, 18.5], backgroundColor: '#0096E1' }, { label: 'HH Real', data: [8.0, 14.0, 17.0], backgroundColor: '#FF1744' }] },
+    options: { responsive: true, maintainAspectRatio: false }
   });
 
-  // 4. Distribución por Nivel
   chartNivel = new Chart(document.getElementById('chartNivel'), {
     type: 'doughnut',
-    data: {
-      labels: ['S1', 'P1', 'P2', 'P4', 'P3'],
-      datasets: [{ data: [12, 18, 52, 14, 26], backgroundColor: ['#0052CC', '#00E5FF', '#00E676', '#FFB300', '#FF1744'], borderWidth: 2, borderColor: '#0B1528' }]
-    },
+    data: { labels: ['S7', 'S1', 'P2', 'P4'], datasets: [{ data: [20, 15, 35, 30], backgroundColor: ['#0052CC', '#00E5FF', '#00E676', '#FFB300'] }] },
     options: { responsive: true, maintainAspectRatio: false, cutout: '65%' }
   });
 
-  // 5. Estado Actividades
   chartEstado = new Chart(document.getElementById('chartEstado'), {
     type: 'doughnut',
-    data: {
-      labels: ['Pérdida', 'Ganancia'],
-      datasets: [{ data: [1, 4], backgroundColor: ['#FF1744', '#00E676'], borderWidth: 2, borderColor: '#0B1528' }]
-    },
+    data: { labels: ['Pérdida', 'Ganancia'], datasets: [{ data: [1, 1], backgroundColor: ['#FF1744', '#00E676'] }] },
     options: { responsive: true, maintainAspectRatio: false, cutout: '66%' }
   });
 }
@@ -1226,73 +731,8 @@ function actualizarGraficos() {
   const per = d.filter(r => r.est === "PERDIDA").length;
   chartEstado.data.datasets[0].data = [per || 0, gan || 1];
   chartEstado.update();
-
-  // Actualizar barras por elemento según especialidad activa
-  if (MODULO_ACTIVO === 'PINTURA') {
-    chartElemento.data.labels = ['MURO', 'CIELORASO', 'PLENUM', 'COLUMNAS'];
-    chartElemento.data.datasets[0].data = [136, 48, 48.5, 160];
-  } else if (MODULO_ACTIVO === 'SCF') {
-    chartElemento.data.labels = ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'];
-    chartElemento.data.datasets[0].data = [850, 485, 283, 160];
-  } else {
-    chartElemento.data.labels = ['PINTURA MUROS', 'JUNTAS SCF', 'DUCTOS SCF', 'ACABADOS'];
-    chartElemento.data.datasets[0].data = [136, 850, 283, 160];
-  }
-  chartElemento.update();
 }
 
-// EXPORTACIÓN EXCEL (.XLSX) CON FÓRMULAS VIVAS
-function exportarExcelConFormulas() {
-  const d = getDatosFiltrados();
-  const fecha = new Date().toISOString().split('T')[0];
-
-  const wsData = [
-    ["CONVECSA S.A.C. - SISTEMA DE CONTROL DE PRODUCCIÓN LEAN (RDO)"],
-    ["PROYECTO: TORRE HOSPITALARIA SAN BORJA (THSSB)", "", "FECHA:", fecha],
-    [""],
-    ["ID_REGISTRO", "TIMESTAMP", "FECHA", "HOJA", "OPERARIO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO", "UNIDAD", "HH_REAL", "REND_OPT", "HH_GANADAS", "EFICIENCIA", "ESTADO"]
-  ];
-
-  d.forEach((r, idx) => {
-    const row = idx + 5;
-    wsData.push([
-      r.id, r.horaExacta, r.fecha, r.hoja || r.modulo, r.trabajador, r.nivel, r.elemento, r.sub,
-      r.metrado, r.unidad, r.hhReal, r.rendOpt,
-      { f: `I${row}*(17/L${row})` },
-      { f: `M${row}/K${row}` },
-      { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` }
-    ]);
-  });
-
-  const last = wsData.length;
-  wsData.push([
-    "TOTALES", "", "", "", "", "", "", "",
-    { f: `SUM(I5:I${last})` }, "m²",
-    { f: `SUM(K5:K${last})` }, "",
-    { f: `SUM(M5:M${last})` },
-    { f: `AVERAGE(N5:N${last})` }, ""
-  ]);
-
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.aoa_to_sheet(wsData);
-  XLSX.utils.book_append_sheet(wb, ws, "RDO_LEAN");
-  XLSX.writeFile(wb, `RDO_CONVECSA_THSSB_${fecha}.xlsx`);
-}
-
-// EXPORTACIÓN PDF
-function exportarReportePDF() {
-  const el = document.getElementById('cockpitPrintArea');
-  const opt = {
-    margin: 6,
-    filename: `RDO_CONVECSA_${new Date().toISOString().split('T')[0]}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#050B14' },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-  };
-  html2pdf().set(opt).from(el).save();
-}
-
-// MODAL CAPTURA
 function abrirModal() {
   cargarCatalogosModal();
   document.getElementById('modalCaptura').classList.add('open');
@@ -1313,7 +753,7 @@ function cargarCatalogosModal() {
     sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">[${s.item}] ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
   });
   
-  document.getElementById('lblUnidadModal').innerText = `Metrado Ejecutado (${cfg.unidad}):`;
+  document.getElementById('lblUnidadModal').innerText = `Metrado (${cfg.unidad}):`;
   recalcularModal();
 }
 
@@ -1324,19 +764,30 @@ function recalcularModal() {
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
 
-  // Base Lean Cuadrilla Estándar = 17 HH
-  const hhGan = metrado * (17.0 / rendOpt);
-  const ef = (hhGan / hhReal) * 100;
+  // Lógica proporcional sábado (5.5h) vs lunes a viernes (8.5h)
+  const fVal = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
+  const esSabado = new Date(fVal + "T00:00:00").getDay() === 6;
+  const jornadaHoras = esSabado ? 5.5 : 8.5;
 
-  document.getElementById('dispTarget').innerText = rendOpt.toFixed(1) + " " + unidad;
-  document.getElementById('dispHHGan').innerText = hhGan.toFixed(2) + " h";
-  document.getElementById('dispEficiencia').innerText = ef.toFixed(1) + "%";
-  document.getElementById('dispEficiencia').style.color = ef >= 100 ? "#00E676" : "#FF1744";
-  document.getElementById('dispEstado').innerText = ef >= 100 ? "GANANCIA" : "PERDIDA";
-  document.getElementById('dispEstado').style.color = ef >= 100 ? "#00E676" : "#FF1744";
+  // Cálculo Lean individual: HH Ganadas = (Metrado / Rendimiento Objetivo) * Jornada
+  const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornadaHoras : 0;
+  const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
+  const esGanancia = ef >= 100;
+
+  document.getElementById('dispTarget').innerText = `${rendOpt.toFixed(1)} ${unidad}${esSabado ? ' (Sáb)' : ''}`;
+  document.getElementById('dispHHGan').innerText = `${hhGan.toFixed(2)} h`;
+  document.getElementById('dispEficiencia').innerText = `${ef.toFixed(1)}%`;
+  document.getElementById('dispEficiencia').style.color = esGanancia ? "#00E676" : "#FF1744";
+  document.getElementById('dispEstado').innerText = esGanancia ? "GANANCIA" : "PERDIDA";
+  document.getElementById('dispEstado').style.color = esGanancia ? "#00E676" : "#FF1744";
 }
 
 function guardarRegistro() {
+  const btn = document.getElementById('btnGuardar');
+  btn.disabled = true;
+  btn.innerText = "⏳ GUARDANDO...";
+
+  const fechaSel = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
   const esp = document.getElementById('mEspecialidad').value;
   const cfg = CATALOGO[esp];
   const trabajador = document.getElementById('mTrabajador').value;
@@ -1348,15 +799,21 @@ function guardarRegistro() {
   const rendOpt = parseFloat(subData[2]);
   const unidad = subData[3] || "ml";
 
+  const esSabado = new Date(fechaSel + "T00:00:00").getDay() === 6;
+  const jornada = esSabado ? 5.5 : 8.5;
+  const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornada : 0;
+  const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
+  const estado = ef >= 100 ? "GANANCIA" : "PERDIDA";
+
   const now = new Date();
-  const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  const hhGan = metrado * (17.0 / rendOpt);
-  const ef = (hhGan / hhReal) * 100;
+  const timeStr = `${fechaSel} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const pref = esp === "SCF" ? "SCF-" : "PIN-";
+  const idReg = pref + fechaSel.replace(/-/g, '') + "-" + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0');
 
   const nuevoItem = {
-    id: (esp === "SCF" ? "SCF-" : "PIN-") + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0'),
+    id: idReg,
     horaExacta: timeStr,
-    fecha: timeStr.split(' ')[0],
+    fecha: fechaSel,
     modulo: esp,
     hoja: cfg.hoja,
     semana: 7,
@@ -1367,18 +824,17 @@ function guardarRegistro() {
     metrado: metrado,
     hhReal: hhReal,
     rendOpt: rendOpt,
-    hhGan: hhGan,
+    hhGan: parseFloat(hhGan.toFixed(2)),
     ef: parseFloat(ef.toFixed(1)),
-    est: ef >= 100 ? "GANANCIA" : "PERDIDA",
+    est: estado,
     unidad: unidad
   };
 
   LOG_REGISTROS.unshift(nuevoItem);
   actualizarTodo();
-  cerrarModal();
 
   const payload = {
-    fecha: timeStr.split(' ')[0],
+    fecha: fechaSel,
     modulo: esp,
     usuarioEmail: USUARIO_ACTUAL.nombre,
     trabajador: trabajador,
@@ -1398,11 +854,29 @@ function guardarRegistro() {
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
+    }).then(() => {
+      sincronizarConSheets(false);
     });
   }
+
+  // Notificación de éxito
+  const toast = document.getElementById('toastNotify');
+  toast.innerText = `✅ REGISTRADO: ${idReg} en ${cfg.hoja} [${estado}]`;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 3500);
+
+  // Limpiar formulario para nuevo registro
+  document.getElementById('mMetrado').value = '';
+  document.getElementById('mHHReal').value = '8.0';
+  document.getElementById('mObs').value = '';
+  recalcularModal();
+
+  btn.disabled = false;
+  btn.innerText = "💾 GUARDAR REGISTRO";
+  cerrarModal();
 }
 
-function sincronizarConSheets() {
+function sincronizarConSheets(manual) {
   if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
     fetch(ENDPOINT_APPS_SCRIPT)
       .then(res => res.json())
@@ -1410,10 +884,49 @@ function sincronizarConSheets() {
         if (data.registros && data.registros.length > 0) {
           LOG_REGISTROS = data.registros;
           actualizarTodo();
-          alert("✅ Sincronización exitosa con Google Sheets.");
+          if (manual) alert("✅ Sincronización exitosa. Base de datos actualizada en tiempo real.");
         }
-      }).catch(() => alert("Modo local activo."));
+      }).catch(() => { if (manual) alert("Modo local activo."); });
   }
+}
+
+function exportarExcelConFormulas() {
+  const d = getDatosFiltrados();
+  const fecha = new Date().toISOString().split('T')[0];
+  const wsData = [
+    ["CONVECSA S.A.C. - CONTROL DE PRODUCCIÓN LEAN (RDO)"],
+    ["PROYECTO: TORRE HOSPITALARIA SAN BORJA", "", "FECHA:", fecha],
+    [""],
+    ["ID", "TIMESTAMP", "FECHA", "HOJA", "OPERARIO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO", "UNIDAD", "HH_REAL", "REND_OPT", "HH_GANADAS", "EFICIENCIA", "ESTADO"]
+  ];
+
+  d.forEach((r, idx) => {
+    const row = idx + 5;
+    wsData.push([
+      r.id, r.horaExacta, r.fecha, r.hoja || r.modulo, r.trabajador, r.nivel, r.elemento, r.sub,
+      r.metrado, r.unidad, r.hhReal, r.rendOpt,
+      { f: `(I${row}/L${row})*8.5` },
+      { f: `M${row}/K${row}` },
+      { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` }
+    ]);
+  });
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  XLSX.utils.book_append_sheet(wb, ws, "RDO_LEAN");
+  XLSX.writeFile(wb, `RDO_CONVECSA_${fecha}.xlsx`);
+}
+
+function exportarReportePDF() {
+  const el = document.getElementById('cockpitPrintArea');
+  const opt = {
+    margin: 6,
+    filename: `RDO_CONVECSA_${new Date().toISOString().split('T')[0]}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+  };
+  html2pdf().set(opt).from(el).save();
 }
 </script>
 </body>
