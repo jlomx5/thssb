@@ -46,13 +46,7 @@ html, body {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-body::before {
-  content: ''; position: fixed; inset: 0;
-  background-image: linear-gradient(rgba(0, 150, 225, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 150, 225, 0.02) 1px, transparent 1px);
-  background-size: 32px 32px; pointer-events: none; z-index: 0;
-}
-
-/* LOGIN SEGURO CON PIN */
+/* LOGIN CON PIN */
 #loginOverlay {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.95);
   backdrop-filter: blur(16px); z-index: 1000; display: flex;
@@ -71,7 +65,7 @@ body::before {
 
 .app-shell { display: flex; width: 100%; min-height: 100vh; }
 
-/* BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) */
+/* BARRA LATERAL IZQUIERDA MINIMALISTA */
 .convecsa-sidebar {
   width: 84px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
   display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px;
@@ -108,7 +102,7 @@ body::before {
   display: flex; flex-direction: column; gap: 14px; padding-bottom: 90px;
 }
 
-/* STRIP DE COMANDOS CON CALENDARIOS INTEGRADOS */
+/* STRIP DE COMANDOS */
 .command-strip {
   background: var(--bg-card); border: 1px solid var(--border-glass);
   border-radius: var(--radius-card); padding: 10px 14px; display: flex;
@@ -142,7 +136,7 @@ body::before {
 .kpi-big-num { font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 700; line-height: 1; }
 .chart-holder-responsive { position: relative; height: 215px; width: 100%; }
 
-/* TABLA EN VIVO ESTILIZADA SIN AMONTONAMIENTO */
+/* TABLA EN VIVO */
 .cyber-table { width: 100%; border-collapse: collapse; min-width: 780px; }
 .cyber-table th {
   padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -151,9 +145,8 @@ body::before {
 .cyber-table td {
   padding: 9px 12px; font-size: 11.5px; border-bottom: 1px solid rgba(255,255,255,0.04);
 }
-.badge-subtle { padding: 2px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 600; }
 
-/* MODAL SMART CAPTURE CON BARRA DE PROGRESO INTEGRADA */
+/* MODALES */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 600; display: none;
@@ -164,7 +157,7 @@ body::before {
 
 .cyber-modal-window {
   background: var(--bg-surface); border: 1px solid var(--c-cyan);
-  width: 100%; max-width: 700px; max-height: 90vh; border-radius: 16px 16px 0 0;
+  width: 100%; max-width: 720px; max-height: 92vh; border-radius: 16px 16px 0 0;
   display: flex; flex-direction: column; overflow: hidden;
 }
 @media (min-width: 640px) { .cyber-modal-window { border-radius: 14px; } }
@@ -183,22 +176,18 @@ body::before {
 }
 
 .m-foot-c {
-  padding: 10px 18px; border-top: 1px solid var(--border-glass);
-  display: flex; align-items: center; gap: 10px;
+  padding: 12px 18px; border-top: 1px solid var(--border-glass);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
 }
 
-/* BARRA DE PROGRESO DE REGISTRO */
 .save-progress-container {
-  flex: 1; display: none; flex-direction: column; gap: 3px;
+  flex: 1; display: none; flex-direction: column; gap: 3px; min-width: 160px;
 }
 .save-progress-bar {
-  width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;
+  width: 100%; height: 5px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;
 }
 .save-progress-fill {
   width: 0%; height: 100%; background: var(--c-green); transition: width 0.3s ease;
-}
-.save-progress-msg {
-  font-size: 10px; font-weight: 600; color: var(--c-green);
 }
 
 .btn-cyber-action {
@@ -206,8 +195,9 @@ body::before {
   border-radius: 6px; font-family: inherit; font-size: 11px; font-weight: 600; border: none; cursor: pointer;
 }
 .btn-cyber-add { background: var(--c-azul); color: #FFF; }
+.btn-cyber-recurso { background: rgba(0, 150, 225, 0.15); border: 1px solid var(--c-cyan); color: var(--c-cyan); }
 
-/* BARRA INFERIOR DE ACCESO RÁPIDO (IPHONE Y TABLETS) */
+/* BARRA INFERIOR MOBILE */
 .mobile-bottom-bar {
   position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
   background: var(--bg-surface); border-top: 1px solid var(--border-glass);
@@ -229,7 +219,7 @@ body::before {
 </head>
 <body>
 
-<!-- LOGIN SEGURO CON PIN -->
+<!-- LOGIN SEGURO -->
 <div id="loginOverlay">
   <div class="login-box">
     <div style="font-size:16px; font-weight:700; color:#FFF; margin-bottom:2px;">CONVECSA CONTROL 360°</div>
@@ -247,7 +237,7 @@ body::before {
 
 <div class="app-shell">
   
-  <!-- BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) -->
+  <!-- BARRA LATERAL IZQUIERDA -->
   <aside class="convecsa-sidebar">
     <button class="sidebar-nav-item active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
       <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
@@ -300,7 +290,7 @@ body::before {
 
     <main class="cockpit-canvas" id="cockpitPrintArea">
       
-      <!-- SELECTOR TEMPORAL CON CALENDARIO INTERACTIVO -->
+      <!-- SELECTOR TEMPORAL CON CALENDARIOS -->
       <section class="command-strip">
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <div class="btn-group-cyber">
@@ -310,7 +300,6 @@ body::before {
             <button class="cmd-btn" onclick="cambiarTipoPeriodo('ANIO', this)">Año</button>
           </div>
 
-          <!-- INPUTS DE CALENDARIO SEGÚN EL PERIODO -->
           <div id="calendarInputsContainer" style="display:flex; align-items:center; gap:6px;">
             <input type="month" id="pickerMes" class="date-picker-cyber" onchange="actualizarTodo()">
             <input type="date" id="pickerDia" class="date-picker-cyber" style="display:none;" onchange="actualizarTodo()">
@@ -333,7 +322,7 @@ body::before {
             <canvas id="gaugeCanvas" width="80" height="42"></canvas>
           </div>
           <div style="display:flex; justify-content:space-between; font-size:10.5px; font-weight:600;">
-            <span id="badgeEficEstado" class="badge-subtle">Sin datos</span>
+            <span id="badgeEficEstado" style="padding:2px 6px; border-radius:4px;">Sin datos</span>
             <span>Meta: 100%</span>
           </div>
         </div>
@@ -390,24 +379,14 @@ body::before {
         <div class="grid-responsive-3" id="gridTrabajadores"></div>
       </section>
 
-      <!-- TABLA EN VIVO ESTILIZADA SIN AMONTONAMIENTO -->
+      <!-- TABLA EN VIVO -->
       <section class="chart-card-box" style="overflow:hidden;">
         <div style="font-size:12px; font-weight:700; margin-bottom:8px;">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
         <div style="width:100%; overflow-x:auto;">
           <table class="cyber-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>FECHA</th>
-                <th>HORA</th>
-                <th>HOJA</th>
-                <th>OPERARIO</th>
-                <th>NIVEL</th>
-                <th>SUBPROCESO</th>
-                <th style="text-align:right;">METRADO</th>
-                <th style="text-align:right;">HH REAL</th>
-                <th style="text-align:center;">EFIC</th>
-                <th>ESTADO</th>
+                <th>ID</th><th>FECHA</th><th>HORA</th><th>HOJA</th><th>OPERARIO</th><th>NIVEL</th><th>SUBPROCESO</th><th style="text-align:right;">METRADO</th><th style="text-align:right;">HH REAL</th><th style="text-align:center;">EFIC</th><th>ESTADO</th>
               </tr>
             </thead>
             <tbody id="tablaBody"></tbody>
@@ -418,7 +397,7 @@ body::before {
   </div>
 </div>
 
-<!-- MODAL SMART CAPTURE CON BARRA DE PROGRESO Y CONSERVACIÓN DEL DIÁLOGO -->
+<!-- MODAL SMART CAPTURE -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
     <div class="m-head-c">
@@ -511,22 +490,62 @@ body::before {
       </div>
     </div>
 
-    <!-- FOOTER DEL MODAL CON BARRA DE PROGRESO INTEGRADA -->
+    <!-- BOTONES: CERRAR, GUARDAR Y AGREGAR RECURSO -->
     <div class="m-foot-c">
-      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()">Cerrar</button>
-      <button class="btn-cyber-action btn-cyber-add" id="btnGuardar" onclick="guardarRegistro()">💾 GUARDAR REGISTRO</button>
-      
+      <div style="display:flex; gap:6px;">
+        <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()">Cerrar</button>
+        <button class="btn-cyber-action btn-cyber-recurso" onclick="abrirModalRecurso()">➕ AGREGAR RECURSO</button>
+      </div>
+
       <div class="save-progress-container" id="saveProgressBox">
-        <div class="save-progress-msg" id="saveProgressText">⏳ Guardando y sincronizando...</div>
+        <div style="font-size:10px; font-weight:600; color:var(--c-green);" id="saveProgressText">⏳ Guardando...</div>
         <div class="save-progress-bar">
           <div class="save-progress-fill" id="saveProgressBar"></div>
         </div>
       </div>
+
+      <button class="btn-cyber-action btn-cyber-add" id="btnGuardar" onclick="guardarRegistro()">💾 GUARDAR REGISTRO</button>
     </div>
   </div>
 </div>
 
-<!-- BARRA INFERIOR DE ACCESO RÁPIDO (IPHONE Y TABLETS) -->
+<!-- MODAL SECUNDARIO: AGREGAR NUEVO RECURSO (OPERARIO/PINTOR/SELLADOR) -->
+<div class="cyber-modal-mask" id="modalRecurso" style="z-index: 700;">
+  <div class="cyber-modal-window" style="max-width: 440px;">
+    <div class="m-head-c">
+      <div style="font-size:12.5px; font-weight:700; color:var(--c-cyan);">👷 AGREGAR NUEVO RECURSO DE CAMPO</div>
+      <button onclick="cerrarModalRecurso()" style="background:none; border:none; font-size:16px; color:var(--text-muted); cursor:pointer;">✕</button>
+    </div>
+    <div class="m-body-c">
+      <div class="field-cyber">
+        <label>Especialidad:</label>
+        <select id="rModulo">
+          <option value="SCF">SELLOS CORTAFUEGO</option>
+          <option value="PINTURA">PINTURA Y ACABADOS</option>
+        </select>
+      </div>
+      <div class="field-cyber">
+        <label>Nombres y Apellidos Completos:</label>
+        <input type="text" id="rNombre" placeholder="Ej: JUAN CARLOS RAMIREZ SOTO">
+      </div>
+      <div class="field-cyber">
+        <label>Cargo / Rol en Obra:</label>
+        <select id="rCargo">
+          <option value="OPERARIO">OPERARIO (SELLADOR / PINTOR)</option>
+          <option value="OFICIAL">OFICIAL</option>
+          <option value="PEÓN">PEÓN DE APOYO</option>
+          <option value="CAPATAZ">CAPATAZ DE FRENTE</option>
+        </select>
+      </div>
+    </div>
+    <div class="m-foot-c" style="justify-content: flex-end;">
+      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModalRecurso()">Cancelar</button>
+      <button class="btn-cyber-action btn-cyber-add" id="btnGuardarRecurso" onclick="guardarNuevoRecurso()">💾 REGISTRAR RECURSO</button>
+    </div>
+  </div>
+</div>
+
+<!-- BARRA INFERIOR MOBILE -->
 <nav class="mobile-bottom-bar">
   <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('PINTURA', this)">
     <span>🎨</span><span>Pintura</span>
@@ -546,7 +565,7 @@ body::before {
 </nav>
 
 <script>
-const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
+const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbz3YRpjCuxyEG3A4dd3w76vtj9AFljg91owcoF0es3Xrcrq7X0u4h7W2xvne6cF-l4soA/exec";
 
 // 27 PARTIDAS CONTRACTUALES DE SELLOS CORTAFUEGO + PINTURA
 const CATALOGO = {
@@ -825,13 +844,13 @@ function inicializarGraficos() {
 
   chartElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
-    data: { labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5], backgroundColor: ['#FF1744', '#FF1744', '#FF1744', '#00E676'], borderRadius: 4 }] },
+    data: { labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5], backgroundColor: ['#FF1744', '#FF1744', '#FF1744', '#00E676'] }] },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
   });
 
   chartHH = new Chart(document.getElementById('chartHH'), {
     type: 'bar',
-    data: { labels: ['Sem 1', 'Sem 2', 'Sem 3'], datasets: [{ label: 'HH Gan', data: [5.67, 12.0, 18.5], backgroundColor: '#0096E1', borderRadius: 4 }, { label: 'HH Real', data: [8.0, 14.0, 17.0], backgroundColor: '#FF1744', borderRadius: 4 }] },
+    data: { labels: ['Sem 1', 'Sem 2', 'Sem 3'], datasets: [{ label: 'HH Gan', data: [5.67, 12.0, 18.5], backgroundColor: '#0096E1' }, { label: 'HH Real', data: [8.0, 14.0, 17.0], backgroundColor: '#FF1744' }] },
     options: { responsive: true, maintainAspectRatio: false }
   });
 
@@ -844,7 +863,7 @@ function inicializarGraficos() {
   chartEstado = new Chart(document.getElementById('chartEstado'), {
     type: 'doughnut',
     data: { labels: ['Pérdida', 'Ganancia'], datasets: [{ data: [1, 1], backgroundColor: ['#FF1744', '#00E676'] }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '65%' }
+    options: { responsive: true, maintainAspectRatio: false, cutout: '66%' }
   });
 }
 
@@ -862,6 +881,12 @@ function abrirModal() {
   document.getElementById('modalCaptura').classList.add('open');
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
+
+function abrirModalRecurso() {
+  document.getElementById('rNombre').value = '';
+  document.getElementById('modalRecurso').classList.add('open');
+}
+function cerrarModalRecurso() { document.getElementById('modalRecurso').classList.remove('open'); }
 
 function cargarCatalogosModal() {
   const esp = document.getElementById('mEspecialidad').value;
@@ -883,7 +908,7 @@ function cargarCatalogosModal() {
 
 function recalcularModal() {
   const subVal = document.getElementById('mSubproceso').value.split('|');
-  const rendOpt = parseFloat(subVal[2]) || 30.0;
+  const rendNominal = parseFloat(subVal[2]) || 30.0;
   const unidad = subVal[3] || "ml";
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
@@ -891,14 +916,17 @@ function recalcularModal() {
   // Lógica proporcional de Sábados (5.5h) vs Lunes a Viernes (8.5h)
   const fVal = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
   const esSabado = new Date(fVal + "T00:00:00").getDay() === 6;
-  const jornada = esSabado ? 5.5 : 8.5;
+  const jornadaHoras = esSabado ? 5.5 : 8.5;
 
-  // HH Ganadas = (Metrado / Rendimiento Objetivo) * Jornada
-  const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornada : 0;
+  // Target diario proporcional a la jornada
+  const targetDia = (rendNominal / 8.5) * jornadaHoras;
+
+  // HH Ganadas contractuales
+  const hhGan = rendNominal > 0 ? (metrado / rendNominal) * jornadaHoras : 0;
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const esGanancia = ef >= 100;
 
-  document.getElementById('dispTarget').innerText = `${rendOpt.toFixed(1)} ${unidad}${esSabado ? ' (Sáb)' : ''}`;
+  document.getElementById('dispTarget').innerText = `${targetDia.toFixed(1)} ${unidad}${esSabado ? ' (Sáb)' : ''}`;
   document.getElementById('dispHHGan').innerText = `${hhGan.toFixed(2)} h`;
   document.getElementById('dispEficiencia').innerText = `${ef.toFixed(1)}%`;
   document.getElementById('dispEficiencia').style.color = esGanancia ? "#00E676" : "#FF1744";
@@ -922,7 +950,7 @@ function guardarRegistro() {
   const subData = document.getElementById('mSubproceso').value.split('|');
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 1.0;
-  const rendOpt = parseFloat(subData[2]);
+  const rendNominal = parseFloat(subData[2]);
   const unidad = subData[3] || "ml";
 
   if (metrado <= 0) {
@@ -934,11 +962,11 @@ function guardarRegistro() {
   btn.disabled = true;
   progBox.style.display = 'flex';
   progBar.style.width = '35%';
-  progTxt.innerText = "⏳ Escribiendo en base de datos...";
+  progTxt.innerText = "⏳ Escribiendo en Sheets...";
 
   const esSabado = new Date(fechaSel + "T00:00:00").getDay() === 6;
   const jornada = esSabado ? 5.5 : 8.5;
-  const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornada : 0;
+  const hhGan = rendNominal > 0 ? (metrado / rendNominal) * jornada : 0;
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const estado = ef >= 100 ? "GANANCIA" : "PERDIDA";
 
@@ -960,7 +988,7 @@ function guardarRegistro() {
     sub: `[${subData[0]}] ${subData[1]}`,
     metrado: metrado,
     hhReal: hhReal,
-    rendOpt: rendOpt,
+    rendOpt: rendNominal,
     hhGan: parseFloat(hhGan.toFixed(2)),
     ef: parseFloat(ef.toFixed(1)),
     est: estado,
@@ -978,7 +1006,7 @@ function guardarRegistro() {
     nivel: nivel,
     elemento: elemento,
     subproceso: `[${subData[0]}] ${subData[1]}`,
-    rendOpt: rendOpt,
+    rendOpt: rendNominal,
     metrado: metrado,
     hhReal: hhReal,
     causa: document.getElementById('mCausa').value,
@@ -997,9 +1025,9 @@ function guardarRegistro() {
       progBar.style.width = '100%';
       progTxt.innerText = "✅ ¡Registro guardado exitosamente!";
       
-      // Limpiar datos del formulario dejando ejemplos de guía sin cerrar el modal
+      // Limpiar formulario dejando ejemplos de guía sin cerrar el modal
       document.getElementById('mMetrado').value = '';
-      document.getElementById('mMetrado').placeholder = "Ej: 25.0";
+      document.getElementById('mMetrado').placeholder = "Ej: 20.0";
       document.getElementById('mHHReal').value = '';
       document.getElementById('mHHReal').placeholder = "Ej: 8.0";
       document.getElementById('mObs').value = '';
@@ -1023,7 +1051,47 @@ function guardarRegistro() {
   }
 }
 
-// SINCRONIZACIÓN SILENCIOSA (SIN ALERTAS INVASIVAS)
+// GUARDAR NUEVO RECURSO DINÁMICO
+function guardarNuevoRecurso() {
+  const mod = document.getElementById('rModulo').value;
+  const nom = document.getElementById('rNombre').value.trim().toUpperCase();
+  const cargo = document.getElementById('rCargo').value;
+
+  if (!nom) {
+    alert("Por favor ingrese el nombre del operario.");
+    return;
+  }
+
+  // Agregar al catálogo local
+  if (!CATALOGO[mod].trabajadores.includes(nom)) {
+    CATALOGO[mod].trabajadores.unshift(nom);
+  }
+
+  // Refrescar selector en modal
+  if (document.getElementById('mEspecialidad').value === mod) {
+    cargarCatalogosModal();
+    document.getElementById('mTrabajador').value = nom;
+  }
+
+  // Guardar en Google Sheets pestaña CATALOGO_RECURSOS
+  if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
+    fetch(ENDPOINT_APPS_SCRIPT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        tipoAccion: "NUEVO_RECURSO",
+        modulo: mod,
+        nombreOperario: nom,
+        cargo: cargo
+      })
+    });
+  }
+
+  cerrarModalRecurso();
+}
+
+// SINCRONIZACIÓN SILENCIOSA SIN ALERTAS
 function sincronizarConSheets(manual) {
   const btnRail = document.getElementById('btnSyncRail');
   if (btnRail && manual) btnRail.style.transform = 'rotate(180deg)';
@@ -1035,6 +1103,14 @@ function sincronizarConSheets(manual) {
         if (data.registros && data.registros.length > 0) {
           LOG_REGISTROS = data.registros;
           actualizarTodo();
+        }
+        // Incorporar recursos guardados en el servidor
+        if (data.recursos && data.recursos.length > 0) {
+          data.recursos.forEach(rc => {
+            if (CATALOGO[rc.modulo] && !CATALOGO[rc.modulo].trabajadores.includes(rc.nombre)) {
+              CATALOGO[rc.modulo].trabajadores.push(rc.nombre);
+            }
+          });
         }
         if (btnRail) btnRail.style.transform = 'none';
       }).catch(() => { if (btnRail) btnRail.style.transform = 'none'; });
