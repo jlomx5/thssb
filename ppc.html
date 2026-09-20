@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>CONVECSA ERP 360° – Control de Producción & RDO THSSB</title>
+<title>CONVECSA ERP 360° – Control de Productividad & Auditoría THSSB</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#0052CC">
@@ -37,7 +37,7 @@ html, body { width: 100%; max-width: 100vw; overflow-x: hidden; }
 
 body {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: var(--c-gris-suave);
+  background-color: #F1F5F9;
   color: var(--text-main);
   min-height: 100vh;
   display: flex;
@@ -54,7 +54,7 @@ body {
 .topbar {
   background: #FFFFFF;
   border-bottom: 2px solid var(--c-azul-marino);
-  padding: 8px 14px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -151,7 +151,7 @@ body {
 }
 .nav-item.active { border-left: 3px solid var(--c-azul-marino); }
 
-/* BOTTOM NAV (MÓVILES) */
+/* BOTTOM NAV PARA CELULARES */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -206,70 +206,90 @@ body {
   cursor: pointer;
 }
 
-/* MAIN */
+/* MAIN CONTENT */
 .main-content {
   flex: 1;
   padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   width: 100%;
   max-width: 1350px;
   margin: 0 auto;
 }
 @media (min-width: 768px) {
-  .main-content { padding: 22px; gap: 18px; }
+  .main-content { padding: 22px; gap: 20px; }
 }
 
-/* HEADER DEL MÓDULO */
-.module-header {
+/* BARRA DE CONTROL TEMPORAL (DÍA, SEMANA, MES, ACUMULADO) */
+.control-bar {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--c-gris-linea);
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 @media (min-width: 768px) {
-  .module-header {
+  .control-bar {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
   }
 }
-.module-title h1 {
-  font-size: 17px;
-  font-weight: 900;
-  color: var(--c-azul-marino);
-  letter-spacing: -0.3px;
+
+.period-pills {
+  display: flex;
+  background: #F1F5F9;
+  padding: 3px;
+  border-radius: 10px;
+  gap: 3px;
 }
-.module-title p { font-size: 11.5px; color: var(--text-muted); }
+.period-btn {
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.period-btn.active {
+  background: var(--c-azul-marino);
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(0, 82, 204, 0.25);
+}
 
 .segmented-tabs {
   display: flex;
-  background: #FFFFFF;
+  background: #F1F5F9;
   padding: 3px;
   border-radius: 10px;
-  border: 1px solid var(--c-gris-linea);
   gap: 3px;
 }
 .segmented-tab {
-  flex: 1;
-  padding: 7px 12px;
+  padding: 6px 12px;
   background: transparent;
   border: none;
-  border-radius: 7px;
+  border-radius: 8px;
   font-family: inherit;
   font-size: 11.5px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-muted);
   cursor: pointer;
-  text-align: center;
 }
 .segmented-tab.active {
-  background: var(--c-azul-marino);
-  color: #FFFFFF;
-  box-shadow: 0 2px 6px rgba(0, 82, 204, 0.2);
+  background: #FFFFFF;
+  color: var(--c-azul-marino);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
-/* TARJETAS PÉRDIDA Y GANANCIA */
+/* CARDS KPI SUPERIORES (MATCH EXACTO A LA IMAGEN) */
 .kpi-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -286,7 +306,7 @@ body {
   padding: 18px 20px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -297,16 +317,16 @@ body {
   top: 0; left: 0; right: 0;
   height: 4px;
 }
-.kpi-card.c-rose::before { background: var(--status-red); }
-.kpi-card.c-amber::before { background: #D97706; }
-.kpi-card.c-emerald::before { background: var(--status-green); }
+.kpi-card.c-rose::before { background: #F43F5E; }
+.kpi-card.c-amber::before { background: #F59E0B; }
+.kpi-card.c-emerald::before { background: #10B981; }
 
 .kpi-head {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -315,21 +335,21 @@ body {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin: 10px 0 4px;
+  margin: 10px 0 6px;
 }
 .kpi-num {
-  font-size: 36px;
+  font-size: 38px;
   font-weight: 900;
   letter-spacing: -1px;
   line-height: 1;
 }
-.kpi-card.c-rose .kpi-num { color: var(--status-red); }
+.kpi-card.c-rose .kpi-num { color: #E11D48; }
 .kpi-card.c-amber .kpi-num { color: #D97706; }
-.kpi-card.c-emerald .kpi-num { color: var(--status-green); }
+.kpi-card.c-emerald .kpi-num { color: #059669; }
 
 .gauge-canvas {
-  width: 90px;
-  height: 50px;
+  width: 96px;
+  height: 52px;
 }
 
 .kpi-footer {
@@ -346,26 +366,36 @@ body {
   font-size: 10.5px;
   font-weight: 800;
 }
-.pill-status.perdida { background: var(--status-red-bg); color: var(--status-red); }
-.pill-status.ganancia { background: var(--status-green-bg); color: var(--status-green); }
+.pill-status.perdida { background: #FFE4E6; color: #E11D48; }
+.pill-status.ganancia { background: #D1FAE5; color: #059669; }
 
 /* GRÁFICOS */
-.charts-grid {
+.charts-grid-top {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 14px;
 }
 @media (min-width: 1024px) {
-  .charts-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .charts-grid-top { grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+
+.charts-grid-bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 1024px) {
+  .charts-grid-bottom { grid-template-columns: 1.1fr 0.95fr 0.95fr; gap: 16px; }
 }
 
 .card-box {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
 }
 .card-box-head {
   display: flex;
@@ -376,26 +406,95 @@ body {
 .card-box-title {
   font-size: 12.5px;
   font-weight: 800;
-  color: var(--c-azul-marino);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-box-title::before {
+  content: '';
+  width: 4px;
+  height: 14px;
+  background: var(--c-azul-marino);
+  border-radius: 3px;
 }
 .badge-tag {
   font-size: 10px;
   font-weight: 800;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 6px;
   text-transform: uppercase;
 }
-.badge-tag.red { background: var(--status-red-bg); color: var(--status-red); }
-.badge-tag.blue { background: var(--c-celeste-claro); color: var(--c-azul-marino); }
+.badge-tag.blue { background: #EFF6FF; color: #2563EB; }
+.badge-tag.red { background: #FFF1F2; color: #E11D48; }
+.badge-tag.green { background: #ECFDF5; color: #059669; }
 
-.chart-holder { position: relative; height: 200px; width: 100%; }
+.chart-holder { position: relative; height: 195px; width: 100%; }
 
-/* TABLA Y FILTROS */
+/* MÓDULO DE AUDITORÍA POR TRABAJADOR */
+.audit-workers-box {
+  background: #FFFFFF;
+  border: 1px solid var(--c-gris-linea);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.worker-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 640px) {
+  .worker-card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .worker-card-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.worker-audit-item {
+  background: #F8FAFC;
+  border: 1px solid var(--c-gris-linea);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.worker-audit-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.worker-name { font-weight: 800; font-size: 12px; color: var(--text-main); }
+.worker-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.worker-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #E2E8F0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.worker-progress-fill {
+  height: 100%;
+  border-radius: 6px;
+}
+
+/* TABLA DE TRAZABILIDAD Y REGISTROS */
 .audit-box {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
 }
 .audit-box-head {
   padding: 12px 16px;
@@ -411,10 +510,7 @@ body {
     align-items: center;
   }
 }
-.filter-pills {
-  display: flex;
-  gap: 6px;
-}
+.filter-pills { display: flex; gap: 6px; }
 .filter-btn {
   padding: 4px 10px;
   border-radius: 6px;
@@ -462,7 +558,7 @@ body {
 .log-card-top { display: flex; justify-content: space-between; align-items: center; }
 
 .badge-lean {
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 6px;
   font-size: 10px;
   font-weight: 800;
@@ -470,7 +566,7 @@ body {
 .badge-lean.ganancia { background: var(--status-green-bg); color: var(--status-green); }
 .badge-lean.perdida { background: var(--status-red-bg); color: var(--status-red); }
 
-/* MODAL */
+/* MODAL DE REGISTRO */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(4px); z-index: 300; display: none;
@@ -530,8 +626,8 @@ body {
   <div class="brand-pill">
     <div class="brand-icon">C</div>
     <div>
-      <div class="brand-title">CONVECSA ERP</div>
-      <div class="brand-sub">Control Pérdida & Ganancia THSSB</div>
+      <div class="brand-title">CONVECSA ERP 360°</div>
+      <div class="brand-sub">Control THSSB · Pérdida y Ganancia</div>
     </div>
   </div>
 
@@ -568,26 +664,38 @@ body {
 
   <main class="main-content">
     
-    <div class="module-header">
-      <div class="module-title">
-        <h1 id="lblModuloTitulo">Consolidado General THSSB</h1>
-        <p>17 niveles: S7 a S1, P1 a P9 + Azotea · Control de Rendimientos</p>
+    <!-- BARRA DE FILTRO TEMPORAL PARA CONTROL DE DESVIACIONES -->
+    <div class="control-bar">
+      <div>
+        <div style="font-size:14px; font-weight:900; color:var(--c-azul-marino);" id="lblModuloTitulo">
+          Consolidado General THSSB
+        </div>
+        <div style="font-size:11px; color:var(--text-muted);">Control de desviaciones por periodo y especialidad</div>
       </div>
-      
-      <div class="segmented-tabs">
-        <button class="segmented-tab active" id="tabConsolidado" onclick="seleccionarModulo('CONSOLIDADO')">Global</button>
-        <button class="segmented-tab" id="tabPintura" onclick="seleccionarModulo('PINTURA')">🎨 Pintura</button>
-        <button class="segmented-tab" id="tabSCF" onclick="seleccionarModulo('SCF')">🔥 SCF</button>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="period-pills">
+          <button class="period-btn" id="btnPeriodoDia" onclick="cambiarPeriodo('DIA')">Día (Hoy)</button>
+          <button class="period-btn" id="btnPeriodoSemana" onclick="cambiarPeriodo('SEMANA')">Semana</button>
+          <button class="period-btn active" id="btnPeriodoMes" onclick="cambiarPeriodo('MES')">Mes</button>
+          <button class="period-btn" id="btnPeriodoTodo" onclick="cambiarPeriodo('TODO')">Todo</button>
+        </div>
+
+        <div class="segmented-tabs">
+          <button class="segmented-tab active" id="tabConsolidado" onclick="seleccionarModulo('CONSOLIDADO')">Global</button>
+          <button class="segmented-tab" id="tabPintura" onclick="seleccionarModulo('PINTURA')">🎨 Pintura</button>
+          <button class="segmented-tab" id="tabSCF" onclick="seleccionarModulo('SCF')">🔥 SCF</button>
+        </div>
       </div>
     </div>
 
-    <!-- TARJETAS DE PÉRDIDA Y GANANCIA -->
+    <!-- TARJETAS KPI (IDENTICAS A LA IMAGEN) -->
     <section class="kpi-row">
       <div class="kpi-card c-rose">
-        <div class="kpi-head"><span>📉</span> EFICIENCIA DEL MES</div>
+        <div class="kpi-head"><span>📉</span> <span id="lblKpiEfic">EFICIENCIA DEL MES</span></div>
         <div class="kpi-val-wrap">
           <div class="kpi-num" id="kpiEficMes">58.7<span style="font-size:22px;">%</span></div>
-          <canvas id="gaugeC" class="gauge-canvas" width="90" height="50"></canvas>
+          <canvas id="gaugeC" class="gauge-canvas" width="96" height="52"></canvas>
         </div>
         <div class="kpi-footer">
           <span class="pill-status perdida" id="kpiEficTag">Pérdida</span>
@@ -601,7 +709,7 @@ body {
           <div class="kpi-num" id="kpiHHPerdidas">40.55<span style="font-size:18px; font-weight:700;"> hrs</span></div>
         </div>
         <div class="kpi-footer" id="kpiImpactoSoles">
-          S/. 5,778 impacto estimado
+          S/. 5,778 impacto estimado (S/. 142.50/h)
         </div>
       </div>
 
@@ -611,28 +719,28 @@ body {
           <div class="kpi-num" id="kpiEficSemanal">58.7<span style="font-size:22px;">%</span></div>
         </div>
         <div class="kpi-footer">
-          <span>Todas las semanas</span>
+          <span id="lblSubSemanal">Todas las semanas</span>
           <span style="color:var(--status-green); font-weight:800; margin-left:auto;" id="kpiGenteHoy">8 operarios</span>
         </div>
       </div>
     </section>
 
-    <!-- GRÁFICOS -->
-    <section class="charts-grid">
+    <!-- GRÁFICOS SUPERIORES (EVOLUCIÓN SEMANAL & ELEMENTO) -->
+    <section class="charts-grid-top">
       <div class="card-box">
         <div class="card-box-head">
-          <div class="card-box-title">Estado de Actividades (Balance Lean)</div>
-          <span class="badge-tag red" id="badgeTotalActs">46 ACTIVIDADES</span>
+          <div class="card-box-title">Evolución por Semana (Eficiencia %)</div>
+          <span class="badge-tag blue" id="badgeSemanas">3 SEMANAS</span>
         </div>
         <div class="chart-holder">
-          <canvas id="chartEstadoActs"></canvas>
+          <canvas id="chartEvolucionSem"></canvas>
         </div>
       </div>
 
       <div class="card-box">
         <div class="card-box-head">
-          <div class="card-box-title">Eficiencia por Elemento vs Meta 100%</div>
-          <span class="badge-tag blue">VS META 100%</span>
+          <div class="card-box-title">Eficiencia por Elemento</div>
+          <span class="badge-tag red">VS META 100%</span>
         </div>
         <div class="chart-holder">
           <canvas id="chartPorElemento"></canvas>
@@ -640,11 +748,62 @@ body {
       </div>
     </section>
 
-    <!-- AUDITORÍA -->
+    <!-- GRÁFICOS INFERIORES (HH GANADAS VS REALES, DISTRIBUCIÓN POR NIVEL, ESTADO ACTIVIDADES) -->
+    <section class="charts-grid-bottom">
+      <div class="card-box">
+        <div class="card-box-head">
+          <div class="card-box-title">HH Ganadas vs Reales · Semana</div>
+          <span class="badge-tag green">SEMANAL</span>
+        </div>
+        <div class="chart-holder">
+          <canvas id="chartHHComparativo"></canvas>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-head">
+          <div class="card-box-title">Distribución por Nivel</div>
+          <span class="badge-tag blue">17 PISOS</span>
+        </div>
+        <div class="chart-holder">
+          <canvas id="chartPorNivel"></canvas>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="card-box-head">
+          <div class="card-box-title">Estado de Actividades</div>
+          <span class="badge-tag red" id="badgeTotalActs">46 ACTIVIDADES</span>
+        </div>
+        <div class="chart-holder">
+          <canvas id="chartEstadoActs"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUDITORÍA DE EFICIENCIA POR TRABAJADOR -->
+    <section class="audit-workers-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:13px; font-weight:900; color:var(--c-azul-marino);">
+            👷 Auditoría de Eficiencia por Trabajador
+          </div>
+          <div style="font-size:11px; color:var(--text-muted);">
+            Monitoreo individual de rendimiento, horas invertidas y estado Lean
+          </div>
+        </div>
+        <span style="font-size:11px; font-weight:800; color:var(--status-green);" id="lblResumenOperarios">
+          8 evaluados
+        </span>
+      </div>
+      <div class="worker-card-grid" id="gridAuditoriaTrabajadores"></div>
+    </section>
+
+    <!-- LOG DE AUDITORÍA Y TRAZABILIDAD (TABLA / CARDS) -->
     <section class="audit-box">
       <div class="audit-box-head">
         <div style="font-size:12px; font-weight:800; color:var(--c-azul-marino);">
-          📋 Registros en Vivo (<span id="lblHojaActiva">REGISTRO_DIARIO_PINTURA & SCF</span>)
+          📋 Trazabilidad de Campo (<span id="lblHojaActiva">REGISTRO_DIARIO_PINTURA & SCF</span>)
         </div>
         <div class="filter-pills">
           <button class="filter-btn active" id="fTodos" onclick="filtrarEstado('TODOS')">Todos</button>
@@ -659,13 +818,13 @@ body {
             <th>ID / Hora</th>
             <th>Hoja Destino</th>
             <th>Operario</th>
-            <th>Nivel</th>
+            <th>Nivel (17)</th>
             <th>Subproceso</th>
             <th style="text-align:right;">Metrado</th>
             <th style="text-align:right;">HH Real</th>
             <th style="text-align:center;">Eficiencia</th>
             <th>Estado</th>
-            <th>Detalle</th>
+            <th>Usuario</th>
           </tr>
         </thead>
         <tbody id="tablaDesktopBody"></tbody>
@@ -677,7 +836,7 @@ body {
   </main>
 </div>
 
-<!-- BARRA INFERIOR MOBILE -->
+<!-- BOTTOM BAR MOBILE -->
 <nav class="bottom-nav">
   <button class="bottom-tab active" id="bNavGlobal" onclick="seleccionarModulo('CONSOLIDADO')">
     <span class="icon">📊</span><span>Global</span>
@@ -863,11 +1022,12 @@ const CATALOGO = {
 };
 
 // =========================================================================
-// PEGA TU URL DE APPS SCRIPT OBTENIDA EN "GESTIONAR IMPLEMENTACIONES"
+// PEGA TU URL DE APPS SCRIPT AQUÍ (LA QUE TERMINA EN /exec)
 // =========================================================================
-const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWghCaq4dKINsECS_ca663m6kwlGAERlwA2VoAD2zAY5bAbjN_C70ei4Q2ktGHnU0D/exec";
+const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbz_TU_ID_AQUI/exec";
 
 let MODULO_ACTIVO = "CONSOLIDADO";
+let PERIODO_ACTIVO = "MES";
 let FILTRO_ESTADO_ACTUAL = "TODOS";
 
 let USUARIO_ACTUAL = {
@@ -877,21 +1037,24 @@ let USUARIO_ACTUAL = {
 };
 
 let LOG_REGISTROS = [
-  { id: "PIN-20260919-01", horaExacta: "2026-09-19 08:30:15", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", usuario: "Hilder Mollocondo", trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S7", elemento: "MURO", sub: "Pintura 1ra mano", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, hhGan: 1.85, ef: 185.0, est: "GANANCIA", unidad: "m²" },
-  { id: "PIN-20260919-02", horaExacta: "2026-09-19 09:45:22", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", usuario: "Ing. Residente", trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 3.73, ef: 93.3, est: "PERDIDA", unidad: "m²" },
-  { id: "SCF-20260919-03", horaExacta: "2026-09-19 11:10:40", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", usuario: "Mauro Bardales", trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "Juntas a 2 caras", metrado: 18.5, hhReal: 3.5, rendOpt: 43.0, hhGan: 3.66, ef: 104.5, est: "GANANCIA", unidad: "ml" },
-  { id: "PIN-20260919-04", horaExacta: "2026-09-19 13:25:10", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", usuario: "Jorge Orosco", trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos", metrado: 19.8, hhReal: 1.0, rendOpt: 52.0, hhGan: 0.87, ef: 87.0, est: "PERDIDA", unidad: "m²" },
-  { id: "SCF-20260919-05", horaExacta: "2026-09-19 14:15:30", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", usuario: "Mauro Bardales", trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P9", elemento: "TUBERIAS NO METALICAS", sub: "Tuberías <2\"", metrado: 12.0, hhReal: 4.0, rendOpt: 18.0, hhGan: 3.40, ef: 85.0, est: "PERDIDA", unidad: "und" },
-  { id: "PIN-20260919-06", horaExacta: "2026-09-19 15:00:00", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", usuario: "Jorge Orosco", trabajador: "BERMUDEZ MARIN DARWIN ENMANUEL", nivel: "AZ", elemento: "COLUMNAS", sub: "Empaste columnas", metrado: 26.0, hhReal: 0.63, rendOpt: 52.0, hhGan: 1.25, ef: 198.4, est: "GANANCIA", unidad: "m²" }
+  { id: "PIN-20260919-01", horaExacta: "2026-09-19 08:30:15", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, usuario: "Hilder Mollocondo", trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S7", elemento: "MURO", sub: "Pintura 1ra mano", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, hhGan: 1.85, ef: 185.0, est: "GANANCIA", unidad: "m²" },
+  { id: "PIN-20260919-02", horaExacta: "2026-09-19 09:45:22", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, usuario: "Ing. Residente", trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 3.73, ef: 93.3, est: "PERDIDA", unidad: "m²" },
+  { id: "SCF-20260919-03", horaExacta: "2026-09-19 11:10:40", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 4, usuario: "Mauro Bardales", trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "Juntas a 2 caras", metrado: 18.5, hhReal: 3.5, rendOpt: 43.0, hhGan: 3.66, ef: 104.5, est: "GANANCIA", unidad: "ml" },
+  { id: "PIN-20260918-04", horaExacta: "2026-09-18 13:25:10", fecha: "2026-09-18", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, usuario: "Jorge Orosco", trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos", metrado: 19.8, hhReal: 1.0, rendOpt: 52.0, hhGan: 0.87, ef: 87.0, est: "PERDIDA", unidad: "m²" },
+  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, usuario: "Mauro Bardales", trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P9", elemento: "PLENUM", sub: "Tuberías <2\"", metrado: 12.0, hhReal: 4.0, rendOpt: 18.0, hhGan: 3.40, ef: 85.0, est: "PERDIDA", unidad: "und" },
+  { id: "PIN-20260916-06", horaExacta: "2026-09-16 15:00:00", fecha: "2026-09-16", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, usuario: "Jorge Orosco", trabajador: "BERMUDEZ MARIN DARWIN ENMANUEL", nivel: "AZ", elemento: "COLUMNAS", sub: "Empaste columnas", metrado: 26.0, hhReal: 0.63, rendOpt: 52.0, hhGan: 1.25, ef: 198.4, est: "GANANCIA", unidad: "m²" }
 ];
 
-let chartEstadoActs = null;
+let chartEvolucionSem = null;
 let chartPorElemento = null;
+let chartHHComparativo = null;
+let chartPorNivel = null;
+let chartEstadoActs = null;
 
 window.addEventListener('DOMContentLoaded', () => {
   cambiarSesion();
   seleccionarModulo("CONSOLIDADO");
-  inicializarGraficos();
+  inicializarTodosLosGraficos();
   drawGauge(58.7);
 });
 
@@ -901,6 +1064,27 @@ function cambiarSesion() {
   USUARIO_ACTUAL.rol = val[1];
   USUARIO_ACTUAL.nombre = val[2];
   renderizarLogs();
+}
+
+function cambiarPeriodo(periodo) {
+  PERIODO_ACTIVO = periodo;
+  ['Dia', 'Semana', 'Mes', 'Todo'].forEach(p => {
+    const el = document.getElementById('btnPeriodo' + p);
+    if (el) el.classList.toggle('active', p.toUpperCase() === periodo);
+  });
+
+  const titles = {
+    DIA: "EFICIENCIA DEL DÍA (HOY)",
+    SEMANA: "EFICIENCIA DE LA SEMANA",
+    MES: "EFICIENCIA DEL MES",
+    TODO: "EFICIENCIA ACUMULADA DEL PROYECTO"
+  };
+  document.getElementById('lblKpiEfic').innerText = titles[periodo] || "EFICIENCIA DEL MES";
+
+  actualizarKPIs();
+  renderizarLogs();
+  renderizarAuditoriaTrabajadores();
+  actualizarGraficos();
 }
 
 function seleccionarModulo(mod) {
@@ -929,35 +1113,48 @@ function seleccionarModulo(mod) {
 
   actualizarKPIs();
   renderizarLogs();
+  renderizarAuditoriaTrabajadores();
   actualizarGraficos();
 }
 
 function getDatosFiltrados() {
   let list = LOG_REGISTROS;
+  
   if (MODULO_ACTIVO !== "CONSOLIDADO") {
     list = list.filter(r => r.modulo === MODULO_ACTIVO);
   }
+
+  const hoyStr = new Date().toISOString().split('T')[0];
+  if (PERIODO_ACTIVO === "DIA") {
+    list = list.filter(r => r.fecha === hoyStr || r.horaExacta.startsWith(hoyStr));
+  } else if (PERIODO_ACTIVO === "SEMANA") {
+    list = list.filter(r => r.semana === 7 || r.fecha >= "2026-09-14");
+  } else if (PERIODO_ACTIVO === "MES") {
+    list = list.filter(r => r.fecha >= "2026-09-01");
+  }
+
   if (FILTRO_ESTADO_ACTUAL !== "TODOS") {
     list = list.filter(r => r.est === FILTRO_ESTADO_ACTUAL);
   }
+
   return list;
 }
 
 function actualizarKPIs() {
-  const datosBase = MODULO_ACTIVO === "CONSOLIDADO" ? LOG_REGISTROS : LOG_REGISTROS.filter(r => r.modulo === MODULO_ACTIVO);
-  const totHHReal = datosBase.reduce((acc, r) => acc + r.hhReal, 0);
-  const totHHGan = datosBase.reduce((acc, r) => acc + r.hhGan, 0);
+  const datos = getDatosFiltrados();
+  const totHHReal = datos.reduce((acc, r) => acc + r.hhReal, 0);
+  const totHHGan = datos.reduce((acc, r) => acc + r.hhGan, 0);
   const ef = totHHReal > 0 ? (totHHGan / totHHReal) * 100 : 0;
   
-  const perdidas = datosBase.reduce((acc, r) => acc + Math.max(r.hhReal - r.hhGan, 0), 0);
+  const perdidas = datos.reduce((acc, r) => acc + Math.max(r.hhReal - r.hhGan, 0), 0);
   const impactoSoles = perdidas * 142.5;
-  const activosHoy = new Set(datosBase.map(r => r.trabajador)).size;
+  const activos = new Set(datos.map(r => r.trabajador)).size;
 
   document.getElementById('kpiEficMes').innerHTML = `${ef.toFixed(1)}<span style="font-size:22px;">%</span>`;
   document.getElementById('kpiEficSemanal').innerHTML = `${ef.toFixed(1)}<span style="font-size:22px;">%</span>`;
   document.getElementById('kpiHHPerdidas').innerHTML = `${perdidas.toFixed(2)}<span style="font-size:18px; font-weight:700;"> hrs</span>`;
-  document.getElementById('kpiImpactoSoles').innerText = `S/. ${impactoSoles.toFixed(0)} impacto estimado`;
-  document.getElementById('kpiGenteHoy').innerText = `${activosHoy} operarios`;
+  document.getElementById('kpiImpactoSoles').innerText = `S/. ${impactoSoles.toFixed(0)} impacto estimado (S/. 142.50/h)`;
+  document.getElementById('kpiGenteHoy').innerText = `${activos} operarios`;
 
   const tag = document.getElementById('kpiEficTag');
   if (ef >= 100) {
@@ -975,9 +1172,9 @@ function drawGauge(pct) {
   const c = document.getElementById('gaugeC');
   if (!c) return;
   const ctx = c.getContext('2d');
-  ctx.clearRect(0, 0, 90, 50);
+  ctx.clearRect(0, 0, 96, 52);
 
-  const cx = 45, cy = 46, r = 32, lw = 7;
+  const cx = 48, cy = 48, r = 34, lw = 7;
   ctx.beginPath();
   ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
   ctx.strokeStyle = '#E2E8F0';
@@ -1001,6 +1198,55 @@ function drawGauge(pct) {
   ctx.font = 'bold 10px Plus Jakarta Sans';
   ctx.textAlign = 'center';
   ctx.fillText(pct.toFixed(1) + '%', cx, cy - 6);
+}
+
+// AUDITORÍA INDIVIDUAL POR TRABAJADOR
+function renderizarAuditoriaTrabajadores() {
+  const grid = document.getElementById('gridAuditoriaTrabajadores');
+  grid.innerHTML = '';
+  const datos = getDatosFiltrados();
+
+  const mapa = {};
+  datos.forEach(r => {
+    if (!mapa[r.trabajador]) {
+      mapa[r.trabajador] = { nombre: r.trabajador, hhReal: 0, hhGan: 0, metrado: 0, unidad: r.unidad, partidas: new Set() };
+    }
+    mapa[r.trabajador].hhReal += r.hhReal;
+    mapa[r.trabajador].hhGan += r.hhGan;
+    mapa[r.trabajador].metrado += r.metrado;
+    mapa[r.trabajador].partidas.add(r.modulo);
+  });
+
+  const arr = Object.values(mapa);
+  arr.sort((a,b) => (b.hhGan/b.hhReal) - (a.hhGan/a.hhReal));
+
+  document.getElementById('lblResumenOperarios').innerText = `${arr.length} evaluados en ${PERIODO_ACTIVO}`;
+
+  arr.forEach(op => {
+    const ef = op.hhReal > 0 ? (op.hhGan / op.hhReal) * 100 : 0;
+    const esEficiente = ef >= 100;
+    const color = esEficiente ? '#059669' : '#DC2626';
+    const bgPill = esEficiente ? '#D1FAE5' : '#FEE2E2';
+
+    const card = document.createElement('div');
+    card.className = 'worker-audit-item';
+    card.innerHTML = `
+      <div class="worker-audit-top">
+        <span class="worker-name">${op.nombre}</span>
+        <span style="background:${bgPill}; color:${color}; font-weight:900; font-size:10px; padding:2px 7px; border-radius:6px;">
+          ${ef.toFixed(1)}% ${esEficiente ? 'GANANCIA' : 'PÉRDIDA'}
+        </span>
+      </div>
+      <div class="worker-stat-row">
+        <span>Metrado: <b>${op.metrado.toFixed(1)} ${op.unidad}</b></span>
+        <span>HH Real: <b>${op.hhReal.toFixed(1)}h</b> (Meta: ${op.hhGan.toFixed(1)}h)</span>
+      </div>
+      <div class="worker-progress-bar">
+        <div class="worker-progress-fill" style="width:${Math.min(ef, 100)}%; background:${color};"></div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
 }
 
 function filtrarEstado(est) {
@@ -1060,29 +1306,52 @@ function renderizarLogs() {
   });
 }
 
-function inicializarGraficos() {
+function inicializarTodosLosGraficos() {
   Chart.defaults.font.family = 'Plus Jakarta Sans';
+  Chart.defaults.color = '#64748B';
 
-  const ctxEst = document.getElementById('chartEstadoActs').getContext('2d');
-  chartEstadoActs = new Chart(ctxEst, {
-    type: 'doughnut',
+  // 1. Evolución por Semana
+  const ctxEvol = document.getElementById('chartEvolucionSem').getContext('2d');
+  chartEvolucionSem = new Chart(ctxEvol, {
+    type: 'line',
     data: {
-      labels: ['Pérdida', 'Ganancia'],
-      datasets: [{
-        data: [27, 19],
-        backgroundColor: ['#DC2626', '#059669'],
-        borderWidth: 2,
-        borderColor: '#FFFFFF'
-      }]
+      labels: ['Sem 3', 'Sem 4', 'Sem 7'],
+      datasets: [
+        {
+          label: 'Eficiencia %',
+          data: [66.5, 66.7, 58.7],
+          borderColor: '#6366F1',
+          backgroundColor: 'rgba(99, 102, 241, 0.12)',
+          borderWidth: 3.5,
+          pointRadius: 6,
+          pointBackgroundColor: '#6366F1',
+          pointBorderColor: '#FFFFFF',
+          pointBorderWidth: 2,
+          fill: true,
+          tension: 0.35
+        },
+        {
+          label: 'Meta 100%',
+          data: [100, 100, 100],
+          borderColor: '#10B981',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          fill: false
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: '66%',
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } }
+      scales: {
+        y: { min: 0, max: 160, grid: { color: '#F1F5F9' }, ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false } }
+      }
     }
   });
 
+  // 2. Eficiencia por Elemento
   const ctxElem = document.getElementById('chartPorElemento').getContext('2d');
   chartPorElemento = new Chart(ctxElem, {
     type: 'bar',
@@ -1091,8 +1360,8 @@ function inicializarGraficos() {
       datasets: [{
         label: 'Eficiencia %',
         data: [136.0, 48.0, 48.5, 160.0],
-        backgroundColor: ['#059669', '#DC2626', '#DC2626', '#059669'],
-        borderRadius: 4
+        backgroundColor: ['#10B981', '#EF4444', '#EF4444', '#10B981'],
+        borderRadius: 6
       }]
     },
     options: {
@@ -1106,11 +1375,74 @@ function inicializarGraficos() {
       plugins: { legend: { display: false } }
     }
   });
+
+  // 3. HH Ganadas vs Reales
+  const ctxComp = document.getElementById('chartHHComparativo').getContext('2d');
+  chartHHComparativo = new Chart(ctxComp, {
+    type: 'bar',
+    data: {
+      labels: ['Semana 3', 'Semana 4', 'Semana 7'],
+      datasets: [
+        { label: 'HH Ganadas', data: [15.2, 2.1, 27.4], backgroundColor: '#818CF8', borderRadius: 6 },
+        { label: 'HH Reales', data: [22.8, 3.1, 46.7], backgroundColor: '#F87171', borderRadius: 6 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { grid: { color: '#F1F5F9' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  // 4. Distribución por Nivel
+  const ctxNiv = document.getElementById('chartPorNivel').getContext('2d');
+  chartPorNivel = new Chart(ctxNiv, {
+    type: 'doughnut',
+    data: {
+      labels: ['S1', 'P1', 'P2', 'P4', 'P3'],
+      datasets: [{
+        data: [12, 18, 52, 14, 26],
+        backgroundColor: ['#6366F1', '#38BDF8', '#10B981', '#F59E0B', '#EF4444'],
+        borderWidth: 2,
+        borderColor: '#FFFFFF'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } } }
+    }
+  });
+
+  // 5. Estado de Actividades
+  const ctxEst = document.getElementById('chartEstadoActs').getContext('2d');
+  chartEstadoActs = new Chart(ctxEst, {
+    type: 'doughnut',
+    data: {
+      labels: ['Pérdida', 'Ganancia'],
+      datasets: [{
+        data: [27, 19],
+        backgroundColor: ['#EF4444', '#10B981'],
+        borderWidth: 2,
+        borderColor: '#FFFFFF'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '66%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 10 } } } }
+    }
+  });
 }
 
 function actualizarGraficos() {
   if (!chartEstadoActs) return;
-  const datos = MODULO_ACTIVO === "CONSOLIDADO" ? LOG_REGISTROS : LOG_REGISTROS.filter(r => r.modulo === MODULO_ACTIVO);
+  const datos = getDatosFiltrados();
   const gan = datos.filter(r => r.est === "GANANCIA").length;
   const per = datos.filter(r => r.est === "PERDIDA").length;
   chartEstadoActs.data.datasets[0].data = [per || 0, gan || 1];
@@ -1200,8 +1532,10 @@ function guardarRegistro() {
   const nuevoItem = {
     id: (esp === "SCF" ? "SCF-" : "PIN-") + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0'),
     horaExacta: timeStr,
+    fecha: timeStr.split(' ')[0],
     modulo: esp,
     hoja: cfg.hoja,
+    semana: 7,
     usuario: USUARIO_ACTUAL.nombre,
     trabajador: trabajador,
     nivel: nivel,
@@ -1221,6 +1555,7 @@ function guardarRegistro() {
   LOG_REGISTROS.unshift(nuevoItem);
   actualizarKPIs();
   renderizarLogs();
+  renderizarAuditoriaTrabajadores();
   actualizarGraficos();
   cerrarModal();
   mostrarToast(`✅ Guardado en ${cfg.hoja} [${estadoLean}]`);
@@ -1253,7 +1588,7 @@ function guardarRegistro() {
 }
 
 function sincronizarConSheets() {
-  mostrarToast("⏳ Leyendo hojas de Google Sheets...");
+  mostrarToast("⏳ Leyendo Google Sheets...");
   if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
     fetch(ENDPOINT_APPS_SCRIPT)
       .then(res => res.json())
@@ -1262,8 +1597,9 @@ function sincronizarConSheets() {
           LOG_REGISTROS = data.registros;
           actualizarKPIs();
           renderizarLogs();
+          renderizarAuditoriaTrabajadores();
           actualizarGraficos();
-          mostrarToast("✅ Sincronización completa con Google Sheets");
+          mostrarToast("✅ Sincronización exitosa con Sheets");
         }
       }).catch(() => mostrarToast("⚠️ Modo local activo"));
   }
@@ -1271,7 +1607,7 @@ function sincronizarConSheets() {
 
 function generarRDO() {
   mostrarToast("📄 Generando RDO...");
-  alert("El reporte oficial se compilará con los registros del día y se enviará a jorosco@convecsa.pe archivándose en Drive.");
+  alert("El reporte oficial se compilará con los registros del periodo seleccionado y se archivará en Drive.");
 }
 
 function mostrarToast(txt) {
