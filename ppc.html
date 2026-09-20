@@ -4,33 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>CONVECSA CONTROL 360° – Sistema de Control THSSB</title>
+<!-- Librerías -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-main: radial-gradient(circle at 10% 20%, #0A1931 0%, #050B14 100%);
   --bg-surface: #091322;
   --bg-sidebar: #060E1A;
-  --bg-card: rgba(13, 24, 44, 0.88);
-  --border-glass: rgba(0, 150, 225, 0.22);
-  --text-main: #F8FAFC;
+  --bg-card: rgba(13, 24, 44, 0.85);
+  --border-glass: rgba(0, 150, 225, 0.2);
+  --text-main: #F1F5F9;
   --text-muted: #94A3B8;
-  --c-azul-convecsa: #0052CC;
+  --c-azul: #0052CC;
   --c-cyan: #00E5FF;
   --c-green: #00E676;
   --c-red: #FF1744;
   --c-amber: #FFB300;
-  --radius-card: 14px;
+  --radius-card: 12px;
 }
 
 [data-theme="light"] {
-  --bg-main: #F1F5F9;
+  --bg-main: #F8FAFC;
   --bg-surface: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   --bg-card: #FFFFFF;
-  --border-glass: #CBD5E1;
+  --border-glass: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #64748B;
   --c-cyan: #0052CC;
@@ -40,88 +41,119 @@
 
 html, body {
   width: 100%; min-height: 100vh; background: var(--bg-main);
-  font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-main);
-  overflow-x: hidden; overflow-y: auto !important;
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; color: var(--text-main);
+  font-weight: 400; overflow-x: hidden; overflow-y: auto !important;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* LOGIN CON PIN */
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(0, 150, 225, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 150, 225, 0.02) 1px, transparent 1px);
+  background-size: 32px 32px; pointer-events: none; z-index: 0;
+}
+
+/* LOGIN SEGURO CON PIN */
 #loginOverlay {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.95);
   backdrop-filter: blur(16px); z-index: 1000; display: flex;
   align-items: center; justify-content: center; padding: 16px;
 }
-.login-cyber-box {
+.login-box {
   background: var(--bg-surface); border: 1px solid var(--c-cyan);
-  border-radius: 18px; padding: 34px 26px; width: 100%; max-width: 380px; text-align: center;
+  border-radius: 16px; padding: 30px 24px; width: 100%; max-width: 360px; text-align: center;
 }
 .pin-digital {
-  width: 100%; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 24px;
-  font-weight: 800; letter-spacing: 8px; text-align: center; background: rgba(0,0,0,0.3);
-  border: 1.5px solid var(--border-glass); border-radius: 10px; color: var(--c-cyan);
-  margin: 14px 0; outline: none;
+  width: 100%; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 20px;
+  letter-spacing: 6px; text-align: center; background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border-glass); border-radius: 8px; color: var(--c-cyan);
+  margin: 12px 0; outline: none;
 }
 
-/* APP SHELL */
 .app-shell { display: flex; width: 100%; min-height: 100vh; }
 
-/* BARRA LATERAL CON ÍCONO DE SINCRONIZAR */
+/* BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) */
 .convecsa-sidebar {
-  width: 88px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
-  display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 10px;
-  position: sticky; top: 0; height: 100vh; z-index: 120; flex-shrink: 0; overflow-y: auto;
+  width: 84px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
+  display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px;
+  position: sticky; top: 0; height: 100vh; z-index: 120; flex-shrink: 0;
 }
-@media (max-width: 768px) { .convecsa-sidebar { display: none; } }
+@media (max-width: 1023px) { .convecsa-sidebar { display: none; } }
 
 .sidebar-nav-item {
-  width: 76px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 4px; padding: 8px 4px; border-radius: 12px; border: 1px solid transparent;
+  width: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid transparent;
   background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
 }
 .sidebar-nav-item:hover, .sidebar-nav-item.active {
-  color: var(--text-main); background: rgba(0, 150, 225, 0.12); border-color: var(--c-cyan);
+  color: var(--text-main); background: rgba(0, 150, 225, 0.1); border-color: var(--c-cyan);
 }
-.sidebar-nav-item svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2; fill: none; }
-.sidebar-nav-label { font-size: 9.5px; font-weight: 800; text-align: center; line-height: 1.1; }
+.sidebar-nav-item svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8; fill: none; }
+.sidebar-nav-label { font-size: 9px; font-weight: 500; text-align: center; }
 
 .cockpit-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 
 /* TOPBAR */
 .topbar-cyber {
   background: var(--bg-surface); border-bottom: 1px solid var(--border-glass);
-  padding: 10px 20px; display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 18px; display: flex; align-items: center; justify-content: space-between;
   position: sticky; top: 0; z-index: 90;
 }
-.cockpit-canvas { width: 100%; max-width: 1440px; margin: 0 auto; padding: 14px; display: flex; flex-direction: column; gap: 16px; }
+.status-beacon {
+  width: 8px; height: 8px; background: var(--c-green);
+  border-radius: 50%; box-shadow: 0 0 10px var(--c-green);
+}
 
-/* STRIP DE COMANDOS */
+.cockpit-canvas {
+  width: 100%; max-width: 1440px; margin: 0 auto; padding: 14px;
+  display: flex; flex-direction: column; gap: 14px; padding-bottom: 90px;
+}
+
+/* STRIP DE COMANDOS CON CALENDARIOS INTEGRADOS */
 .command-strip {
   background: var(--bg-card); border: 1px solid var(--border-glass);
-  border-radius: 12px; padding: 10px 14px; display: flex;
+  border-radius: var(--radius-card); padding: 10px 14px; display: flex;
   align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
 }
 .btn-group-cyber { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 3px; border-radius: 8px; }
 .cmd-btn {
-  border: none; background: transparent; padding: 6px 12px; border-radius: 6px;
-  font-family: inherit; font-size: 11px; font-weight: 800; color: var(--text-muted); cursor: pointer;
+  border: none; background: transparent; padding: 5px 12px; border-radius: 6px;
+  font-family: inherit; font-size: 11px; font-weight: 600; color: var(--text-muted); cursor: pointer;
 }
-.cmd-btn.active { background: var(--c-azul-convecsa); color: #FFF; }
+.cmd-btn.active { background: var(--c-azul); color: #FFF; }
+
+.date-picker-cyber {
+  padding: 5px 8px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-glass);
+  border-radius: 6px; color: var(--text-main); font-family: inherit; font-size: 11px; outline: none;
+}
 
 /* CARDS */
 .grid-responsive-3 { display: grid; grid-template-columns: 1fr; gap: 12px; }
 @media (min-width: 680px) { .grid-responsive-3 { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .grid-responsive-3 { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+@media (min-width: 1024px) { .grid-responsive-3 { grid-template-columns: repeat(3, 1fr); } }
 
 .grid-responsive-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
-@media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
+@media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; } }
 
 .glass-card, .chart-card-box {
   background: var(--bg-card); border: 1px solid var(--border-glass);
-  border-radius: var(--radius-card); padding: 16px; display: flex; flex-direction: column;
+  border-radius: var(--radius-card); padding: 14px; display: flex; flex-direction: column;
 }
+.kpi-title-txt { font-size: 10px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; }
+.kpi-big-num { font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 700; line-height: 1; }
 .chart-holder-responsive { position: relative; height: 215px; width: 100%; }
 
-/* MODAL REDISEÑADO SIN SCROLL HORIZONTAL */
+/* TABLA EN VIVO ESTILIZADA SIN AMONTONAMIENTO */
+.cyber-table { width: 100%; border-collapse: collapse; min-width: 780px; }
+.cyber-table th {
+  padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  font-weight: 600; color: var(--c-cyan); text-align: left; border-bottom: 1px solid var(--border-glass);
+}
+.cyber-table td {
+  padding: 9px 12px; font-size: 11.5px; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.badge-subtle { padding: 2px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 600; }
+
+/* MODAL SMART CAPTURE CON BARRA DE PROGRESO INTEGRADA */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 600; display: none;
@@ -132,61 +164,90 @@ html, body {
 
 .cyber-modal-window {
   background: var(--bg-surface); border: 1px solid var(--c-cyan);
-  width: 100%; max-width: 720px; max-height: 90vh; border-radius: 18px 18px 0 0;
+  width: 100%; max-width: 700px; max-height: 90vh; border-radius: 16px 16px 0 0;
   display: flex; flex-direction: column; overflow: hidden;
 }
-@media (min-width: 640px) { .cyber-modal-window { border-radius: 16px; } }
+@media (min-width: 640px) { .cyber-modal-window { border-radius: 14px; } }
 
-.m-head-c { padding: 14px 18px; border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
-.m-body-c { padding: 16px 18px; overflow-y: auto !important; overflow-x: hidden !important; display: flex; flex-direction: column; gap: 12px; }
+.m-head-c { padding: 12px 18px; border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
+.m-body-c { padding: 16px 18px; overflow-y: auto !important; overflow-x: hidden !important; display: flex; flex-direction: column; gap: 10px; }
 
 .form-row-2col { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
 @media (min-width: 600px) { .form-row-2col { grid-template-columns: 1fr 1fr; gap: 12px; } }
 
 .field-cyber { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-.field-cyber label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: var(--c-cyan); text-transform: uppercase; }
+.field-cyber label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 600; color: var(--c-cyan); text-transform: uppercase; }
 .field-cyber input, .field-cyber select {
-  width: 100%; padding: 10px; background: rgba(0,0,0,0.25);
-  border: 1.5px solid var(--border-glass); border-radius: 8px; font-family: inherit; font-size: 12px; color: var(--text-main); outline: none;
+  width: 100%; padding: 8px 10px; background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border-glass); border-radius: 6px; font-family: inherit; font-size: 11.5px; color: var(--text-main); outline: none;
+}
+
+.m-foot-c {
+  padding: 10px 18px; border-top: 1px solid var(--border-glass);
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* BARRA DE PROGRESO DE REGISTRO */
+.save-progress-container {
+  flex: 1; display: none; flex-direction: column; gap: 3px;
+}
+.save-progress-bar {
+  width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;
+}
+.save-progress-fill {
+  width: 0%; height: 100%; background: var(--c-green); transition: width 0.3s ease;
+}
+.save-progress-msg {
+  font-size: 10px; font-weight: 600; color: var(--c-green);
 }
 
 .btn-cyber-action {
-  display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px;
-  border-radius: 8px; font-family: inherit; font-size: 11px; font-weight: 800; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px;
+  border-radius: 6px; font-family: inherit; font-size: 11px; font-weight: 600; border: none; cursor: pointer;
 }
-.btn-cyber-add { background: var(--c-azul-convecsa); color: #FFF; flex: 2; justify-content: center; }
+.btn-cyber-add { background: var(--c-azul); color: #FFF; }
 
-/* TOAST INDICADOR */
-#toastNotify {
-  position: fixed; bottom: 75px; right: 20px; z-index: 1000;
-  background: #00E676; color: #050B14; padding: 12px 20px; border-radius: 8px;
-  font-weight: 900; font-size: 12px; display: none; box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+/* BARRA INFERIOR DE ACCESO RÁPIDO (IPHONE Y TABLETS) */
+.mobile-bottom-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
+  background: var(--bg-surface); border-top: 1px solid var(--border-glass);
+  display: flex; align-items: center; justify-content: space-around;
+  z-index: 100; padding-bottom: env(safe-area-inset-bottom, 0);
+}
+@media (min-width: 1024px) { .mobile-bottom-bar { display: none; } }
+.m-tab-btn {
+  border: none; background: transparent; display: flex; flex-direction: column; align-items: center;
+  gap: 2px; font-size: 9px; font-weight: 600; color: var(--text-muted); cursor: pointer;
+}
+.m-tab-btn.active { color: var(--c-cyan); }
+.m-fab-btn {
+  background: var(--c-azul); color: #FFF; width: 38px; height: 38px;
+  border-radius: 50%; border: none; font-size: 18px; display: flex; align-items: center;
+  justify-content: center; margin-top: -14px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,82,204,0.4);
 }
 </style>
 </head>
 <body>
 
-<div id="toastNotify">✅ REGISTRO GUARDADO Y SINCRONIZADO</div>
-
-<!-- LOGIN -->
+<!-- LOGIN SEGURO CON PIN -->
 <div id="loginOverlay">
-  <div class="login-cyber-box">
-    <div style="font-size:18px; font-weight:900; color:#FFF; margin-bottom:4px;">CONVECSA CONTROL 360°</div>
-    <div style="font-size:11px; color:var(--c-cyan); margin-bottom:14px;">CONTROL DE PRODUCCIÓN & LEAN · THSSB</div>
-    <select id="selUsuario" style="width:100%; padding:10px; background:#050B14; border-radius:8px; border:1.5px solid var(--border-glass); color:#FFF; font-weight:700; margin-bottom:10px;">
+  <div class="login-box">
+    <div style="font-size:16px; font-weight:700; color:#FFF; margin-bottom:2px;">CONVECSA CONTROL 360°</div>
+    <div style="font-size:10.5px; color:var(--c-cyan); margin-bottom:12px;">SISTEMA DE CONTROL LEAN · THSSB</div>
+    <select id="selUsuario" style="width:100%; padding:9px; background:#050B14; border-radius:6px; border:1px solid var(--border-glass); color:#FFF; font-size:11px; margin-bottom:8px;">
       <option value="SUPER_ADMIN|Jorge Orosco">Jorge Orosco (Super Admin)</option>
       <option value="RESIDENTE|Ing. Residente">Ing. Residente (Producción)</option>
-      <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (Pintura)</option>
-      <option value="CAPATAZ|Mauro Bardales">M. Bardales (SCF)</option>
+      <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (Capataz Pintura)</option>
+      <option value="CAPATAZ|Mauro Bardales">M. Bardales (Capataz SCF)</option>
     </select>
     <input type="password" id="pinBox" class="pin-digital" placeholder="••••" maxlength="8" onkeydown="if(event.key==='Enter') ejecutarLoginDirecto()">
-    <button type="button" class="btn-cyber-action btn-cyber-add" onclick="ejecutarLoginDirecto()" style="width:100%;">ACCEDER AL SISTEMA</button>
+    <button type="button" class="btn-cyber-action btn-cyber-add" onclick="ejecutarLoginDirecto()" style="width:100%; justify-content:center;">ACCEDER AL SISTEMA</button>
   </div>
 </div>
 
 <div class="app-shell">
   
-  <!-- BARRA LATERAL IZQUIERDA -->
+  <!-- BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) -->
   <aside class="convecsa-sidebar">
     <button class="sidebar-nav-item active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
       <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
@@ -196,28 +257,28 @@ html, body {
       <svg viewBox="0 0 24 24"><path d="M19 11V4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7"/><path d="M21 11v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"/></svg>
       <span class="sidebar-nav-label">Pintura</span>
     </button>
-    <button class="sidebar-nav-item" onclick="seleccionarModuloEspecialidad('SCF', this)" title="Sellos Cortafuego: Día/Sem/Mes/Año">
+    <button class="sidebar-nav-item" onclick="seleccionarModuloEspecialidad('SCF', this)" title="Sellos Cortafuego">
       <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-      <span class="sidebar-nav-label">Sellos Cortafuego</span>
+      <span class="sidebar-nav-label">Sellos</span>
     </button>
     <button class="sidebar-nav-item" onclick="abrirModal()" title="Registrar Avance">
       <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      <span class="sidebar-nav-label">Registrar Avance</span>
+      <span class="sidebar-nav-label">Registrar</span>
     </button>
-    <button class="sidebar-nav-item" onclick="sincronizarConSheets(true)" title="Sincronizar Datos">
+    <button class="sidebar-nav-item" id="btnSyncRail" onclick="sincronizarConSheets(true)" title="Sincronizar Datos">
       <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
       <span class="sidebar-nav-label">Sincronizar</span>
     </button>
     <button class="sidebar-nav-item" onclick="exportarExcelConFormulas()" title="Exportar Excel">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span class="sidebar-nav-label">Exportar Excel</span>
+      <span class="sidebar-nav-label">Excel</span>
     </button>
     <button class="sidebar-nav-item" onclick="exportarReportePDF()" title="Descargar PDF">
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      <span class="sidebar-nav-label">Descargar PDF</span>
+      <span class="sidebar-nav-label">PDF</span>
     </button>
-    <button class="sidebar-nav-item" onclick="toggleTheme()" title="Modo Claro / Oscuro" style="margin-top:auto;">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <button class="sidebar-nav-item" onclick="toggleTheme()" title="Tema Claro / Oscuro" style="margin-top:auto;">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2"/></svg>
       <span class="sidebar-nav-label">Tema</span>
     </button>
   </aside>
@@ -227,56 +288,67 @@ html, body {
       <div style="display:flex; align-items:center; gap:8px;">
         <div class="status-beacon"></div>
         <div>
-          <div style="font-size:14px; font-weight:900;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
-          <div style="font-size:10.5px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
+          <div style="font-size:13px; font-weight:700;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
+          <div style="font-size:10px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
-        <span id="userBadgeOnline" style="font-size:11px; font-weight:700;">Jorge Orosco</span>
-        <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-weight:800; cursor:pointer;">Salir</button>
+        <span id="userBadgeOnline" style="font-size:11px; font-weight:600;">Jorge Orosco</span>
+        <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-size:11px; font-weight:600; cursor:pointer;">Salir</button>
       </div>
     </header>
 
     <main class="cockpit-canvas" id="cockpitPrintArea">
-      <!-- SELECTOR TEMPORAL -->
+      
+      <!-- SELECTOR TEMPORAL CON CALENDARIO INTERACTIVO -->
       <section class="command-strip">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:11px; font-weight:800; color:var(--c-cyan);">PERIODO:</span>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <div class="btn-group-cyber">
-            <button class="cmd-btn" onclick="filtrarPeriodo('DIA', this)">Día</button>
-            <button class="cmd-btn" onclick="filtrarPeriodo('SEMANA', this)">Semana</button>
-            <button class="cmd-btn active" onclick="filtrarPeriodo('MES', this)">Mes</button>
-            <button class="cmd-btn" onclick="filtrarPeriodo('ANIO', this)">Año</button>
+            <button class="cmd-btn" onclick="cambiarTipoPeriodo('DIA', this)">Día</button>
+            <button class="cmd-btn" onclick="cambiarTipoPeriodo('SEMANA', this)">Semana</button>
+            <button class="cmd-btn active" onclick="cambiarTipoPeriodo('MES', this)">Mes</button>
+            <button class="cmd-btn" onclick="cambiarTipoPeriodo('ANIO', this)">Año</button>
+          </div>
+
+          <!-- INPUTS DE CALENDARIO SEGÚN EL PERIODO -->
+          <div id="calendarInputsContainer" style="display:flex; align-items:center; gap:6px;">
+            <input type="month" id="pickerMes" class="date-picker-cyber" onchange="actualizarTodo()">
+            <input type="date" id="pickerDia" class="date-picker-cyber" style="display:none;" onchange="actualizarTodo()">
+            <input type="week" id="pickerSemana" class="date-picker-cyber" style="display:none;" onchange="actualizarTodo()">
+            <input type="number" id="pickerAnio" class="date-picker-cyber" min="2024" max="2030" style="display:none; width:70px;" onchange="actualizarTodo()">
           </div>
         </div>
-        <div style="font-family:'JetBrains Mono'; font-size:11px;" id="lblFiltroEspecialidadActiva">ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b></div>
+
+        <div style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--text-muted);" id="lblFiltroEspecialidadActiva">
+          ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b>
+        </div>
       </section>
 
       <!-- KPIS -->
       <section class="grid-responsive-3">
         <div class="glass-card">
-          <div style="font-size:10.5px; font-weight:800; color:var(--text-muted);" id="lblKpiPeriodo">EFICIENCIA DEL MES</div>
-          <div style="display:flex; justify-content:space-between; align-items:baseline; margin:8px 0;">
-            <div style="font-family:'JetBrains Mono'; font-size:34px; font-weight:900;" id="txtEficVal">0.0%</div>
-            <canvas id="gaugeCanvas" width="90" height="46"></canvas>
+          <div class="kpi-title-txt" id="lblKpiPeriodo">EFICIENCIA DEL MES</div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin:6px 0;">
+            <div class="kpi-big-num" id="txtEficVal">0.0%</div>
+            <canvas id="gaugeCanvas" width="80" height="42"></canvas>
           </div>
-          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700;">
-            <span id="badgeEficEstado" style="padding:2px 8px; border-radius:6px;">Sin datos</span>
+          <div style="display:flex; justify-content:space-between; font-size:10.5px; font-weight:600;">
+            <span id="badgeEficEstado" class="badge-subtle">Sin datos</span>
             <span>Meta: 100%</span>
           </div>
         </div>
 
         <div class="glass-card">
-          <div style="font-size:10.5px; font-weight:800; color:var(--text-muted);">HH PERDIDAS ACUMULADAS</div>
-          <div style="font-family:'JetBrains Mono'; font-size:34px; font-weight:900; color:var(--c-amber); margin:8px 0;" id="txtPerdidasVal">0.00 hrs</div>
-          <div style="font-size:11px; color:var(--text-muted);" id="txtImpactoSoles">S/. 0 impacto estimado</div>
+          <div class="kpi-title-txt">HH PERDIDAS ACUMULADAS</div>
+          <div class="kpi-big-num" style="color:var(--c-amber); margin:6px 0;" id="txtPerdidasVal">0.00 hrs</div>
+          <div style="font-size:10.5px; color:var(--text-muted);" id="txtImpactoSoles">S/. 0 impacto estimado</div>
         </div>
 
         <div class="glass-card">
-          <div style="font-size:10.5px; font-weight:800; color:var(--text-muted);">EFICIENCIA DEL PERIODO</div>
-          <div style="font-family:'JetBrains Mono'; font-size:34px; font-weight:900; color:var(--c-green); margin:8px 0;" id="txtSemanalVal">0.0%</div>
-          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700;">
-            <span>Actividad evaluada</span>
+          <div class="kpi-title-txt">EFICIENCIA DEL PERIODO</div>
+          <div class="kpi-big-num" style="color:var(--c-green); margin:6px 0;" id="txtSemanalVal">0.0%</div>
+          <div style="display:flex; justify-content:space-between; font-size:10.5px; font-weight:600;">
+            <span id="lblSubPeriodo">Periodo evaluado</span>
             <span style="color:var(--c-green);" id="txtTotalOperarios">0 operarios</span>
           </div>
         </div>
@@ -285,47 +357,57 @@ html, body {
       <!-- GRÁFICOS -->
       <section class="grid-responsive-2">
         <div class="chart-card-box">
-          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Evolución Temporal de Eficiencia (%)</div>
+          <div style="font-size:11.5px; font-weight:600; margin-bottom:8px;">Evolución Temporal de Eficiencia (%)</div>
           <div class="chart-holder-responsive"><canvas id="chartEvolucion"></canvas></div>
         </div>
         <div class="chart-card-box">
-          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Eficiencia por Elemento / Partida</div>
+          <div style="font-size:11.5px; font-weight:600; margin-bottom:8px;">Eficiencia por Elemento / Partida</div>
           <div class="chart-holder-responsive"><canvas id="chartElemento"></canvas></div>
         </div>
       </section>
 
       <section class="grid-responsive-3">
         <div class="chart-card-box">
-          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">HH Ganadas vs Reales</div>
+          <div style="font-size:11.5px; font-weight:600; margin-bottom:8px;">HH Ganadas vs Reales</div>
           <div class="chart-holder-responsive"><canvas id="chartHH"></canvas></div>
         </div>
         <div class="chart-card-box">
-          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Distribución por Nivel</div>
+          <div style="font-size:11.5px; font-weight:600; margin-bottom:8px;">Distribución por Nivel</div>
           <div class="chart-holder-responsive"><canvas id="chartNivel"></canvas></div>
         </div>
         <div class="chart-card-box">
-          <div style="font-size:12.5px; font-weight:800; margin-bottom:10px;">Estado de Actividades</div>
+          <div style="font-size:11.5px; font-weight:600; margin-bottom:8px;">Estado de Actividades</div>
           <div class="chart-holder-responsive"><canvas id="chartEstado"></canvas></div>
         </div>
       </section>
 
       <!-- AUDITORÍA DE OPERARIOS -->
       <section class="chart-card-box">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <div style="font-size:13.5px; font-weight:900;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR</div>
-          <span id="txtEvaluados" style="font-family:'JetBrains Mono'; font-size:11px; color:var(--c-green);">0 evaluados</span>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-size:12px; font-weight:700;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR</div>
+          <span id="txtEvaluados" style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--c-green);">0 evaluados</span>
         </div>
         <div class="grid-responsive-3" id="gridTrabajadores"></div>
       </section>
 
-      <!-- TABLA EN VIVO -->
+      <!-- TABLA EN VIVO ESTILIZADA SIN AMONTONAMIENTO -->
       <section class="chart-card-box" style="overflow:hidden;">
-        <div style="font-size:13px; font-weight:900; margin-bottom:10px;">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
+        <div style="font-size:12px; font-weight:700; margin-bottom:8px;">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
         <div style="width:100%; overflow-x:auto;">
-          <table style="width:100%; border-collapse:collapse; min-width:650px;">
+          <table class="cyber-table">
             <thead>
-              <tr style="border-bottom:1px solid var(--border-glass); text-align:left; font-size:10.5px; color:var(--c-cyan);">
-                <th>ID</th><th>FECHA</th><th>HORA</th><th>HOJA</th><th>OPERARIO</th><th>NIVEL</th><th>SUBPROCESO</th><th style="text-align:right;">METRADO</th><th style="text-align:right;">HH REAL</th><th style="text-align:center;">EFIC</th><th>ESTADO</th>
+              <tr>
+                <th>ID</th>
+                <th>FECHA</th>
+                <th>HORA</th>
+                <th>HOJA</th>
+                <th>OPERARIO</th>
+                <th>NIVEL</th>
+                <th>SUBPROCESO</th>
+                <th style="text-align:right;">METRADO</th>
+                <th style="text-align:right;">HH REAL</th>
+                <th style="text-align:center;">EFIC</th>
+                <th>ESTADO</th>
               </tr>
             </thead>
             <tbody id="tablaBody"></tbody>
@@ -336,12 +418,12 @@ html, body {
   </div>
 </div>
 
-<!-- MODAL DE REGISTRO CON FECHA Y FORMULARIO LIMPIO -->
+<!-- MODAL SMART CAPTURE CON BARRA DE PROGRESO Y CONSERVACIÓN DEL DIÁLOGO -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
     <div class="m-head-c">
-      <div style="font-size:13.5px; font-weight:900; color:var(--c-cyan);">✍️ REGISTRAR AVANCE DE CAMPO</div>
-      <button onclick="cerrarModal()" style="background:none; border:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
+      <div style="font-size:13px; font-weight:700; color:var(--c-cyan);">✍️ REGISTRAR AVANCE DE CAMPO</div>
+      <button onclick="cerrarModal()" style="background:none; border:none; font-size:16px; color:var(--text-muted); cursor:pointer;">✕</button>
     </div>
     
     <div class="m-body-c">
@@ -390,19 +472,19 @@ html, body {
         </div>
         <div class="field-cyber">
           <label id="lblUnidadModal">Metrado Ejecutado:</label>
-          <input type="number" id="mMetrado" value="20.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+          <input type="number" id="mMetrado" placeholder="Ej: 20.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
         </div>
       </div>
 
       <div class="field-cyber">
         <label>Partida / Subproceso Oficial (Target):</label>
-        <select id="mSubproceso" onchange="recalcularModal()"></select>
+        <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;"></select>
       </div>
 
       <div class="form-row-2col">
         <div class="field-cyber">
           <label>HH Reales Invertidas (Horas):</label>
-          <input type="number" id="mHHReal" value="8.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
+          <input type="number" id="mHHReal" placeholder="Ej: 8.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
         </div>
         <div class="field-cyber">
           <label>Causa Raíz de Restricción:</label>
@@ -421,24 +503,52 @@ html, body {
       </div>
 
       <!-- PANEL LEAN CALIBRADO -->
-      <div style="background:rgba(0,150,225,0.08); border:1px solid var(--border-glass); border-radius:10px; padding:12px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">TARGET/DÍA</div><div style="font-size:14px; font-weight:900;" id="dispTarget">30.0</div></div>
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">HH GANADAS</div><div style="font-size:14px; font-weight:900;" id="dispHHGan">5.67 h</div></div>
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">EFICIENCIA</div><div style="font-size:14px; font-weight:900;" id="dispEficiencia">70.8%</div></div>
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-cyan);">ESTADO</div><div style="font-size:13px; font-weight:900;" id="dispEstado">PERDIDA</div></div>
+      <div style="background:rgba(0,150,225,0.06); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
+        <div><div style="font-size:9px; color:var(--c-cyan);">TARGET/DÍA</div><div style="font-size:13px; font-weight:700;" id="dispTarget">30.0</div></div>
+        <div><div style="font-size:9px; color:var(--c-cyan);">HH GANADAS</div><div style="font-size:13px; font-weight:700;" id="dispHHGan">0.00 h</div></div>
+        <div><div style="font-size:9px; color:var(--c-cyan);">EFICIENCIA</div><div style="font-size:13px; font-weight:700;" id="dispEficiencia">0.0%</div></div>
+        <div><div style="font-size:9px; color:var(--c-cyan);">ESTADO</div><div style="font-size:12px; font-weight:700;" id="dispEstado">---</div></div>
       </div>
     </div>
 
+    <!-- FOOTER DEL MODAL CON BARRA DE PROGRESO INTEGRADA -->
     <div class="m-foot-c">
-      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted); flex:1;" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()">Cerrar</button>
       <button class="btn-cyber-action btn-cyber-add" id="btnGuardar" onclick="guardarRegistro()">💾 GUARDAR REGISTRO</button>
+      
+      <div class="save-progress-container" id="saveProgressBox">
+        <div class="save-progress-msg" id="saveProgressText">⏳ Guardando y sincronizando...</div>
+        <div class="save-progress-bar">
+          <div class="save-progress-fill" id="saveProgressBar"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- BARRA INFERIOR DE ACCESO RÁPIDO (IPHONE Y TABLETS) -->
+<nav class="mobile-bottom-bar">
+  <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('PINTURA', this)">
+    <span>🎨</span><span>Pintura</span>
+  </button>
+  <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('SCF', this)">
+    <span>🔥</span><span>Sellos</span>
+  </button>
+  <button class="m-fab-btn" onclick="abrirModal()" title="Registrar">
+    ➕
+  </button>
+  <button class="m-tab-btn" onclick="exportarExcelConFormulas()">
+    <span>📊</span><span>Excel</span>
+  </button>
+  <button class="m-tab-btn" onclick="toggleTheme()">
+    <span>🌓</span><span>Tema</span>
+  </button>
+</nav>
+
 <script>
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
 
+// 27 PARTIDAS CONTRACTUALES DE SELLOS CORTAFUEGO + PINTURA
 const CATALOGO = {
   SCF: {
     trabajadores: [
@@ -499,7 +609,7 @@ const CATALOGO = {
 };
 
 let MODULO_ACTIVO = "CONSOLIDADO";
-let PERIODO_ACTIVO = "MES";
+let TIPO_PERIODO = "MES";
 let USUARIO_ACTUAL = { rol: "SUPER_ADMIN", nombre: "Jorge Orosco" };
 let LOG_REGISTROS = [];
 
@@ -520,7 +630,12 @@ function logout() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('mFecha').value = new Date().toISOString().split('T')[0];
+  const hoyStr = new Date().toISOString().split('T')[0];
+  document.getElementById('mFecha').value = hoyStr;
+  document.getElementById('pickerDia').value = hoyStr;
+  document.getElementById('pickerMes').value = hoyStr.slice(0, 7);
+  document.getElementById('pickerAnio').value = hoyStr.slice(0, 4);
+
   const ses = sessionStorage.getItem('convecsa_ses_cyber');
   if (ses) {
     USUARIO_ACTUAL = JSON.parse(ses);
@@ -529,7 +644,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   inicializarGraficos();
   sincronizarConSheets(false);
-  setInterval(() => { sincronizarConSheets(false); }, 30000); // Sincronización continua cada 30 segundos
+  setInterval(() => { sincronizarConSheets(false); }, 25000);
 });
 
 function toggleTheme() {
@@ -540,7 +655,7 @@ function toggleTheme() {
 
 function seleccionarModuloEspecialidad(modulo, btn) {
   MODULO_ACTIVO = modulo;
-  document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav-item, .m-tab-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
   const titulos = {
@@ -555,29 +670,38 @@ function seleccionarModuloEspecialidad(modulo, btn) {
   actualizarTodo();
 }
 
-function filtrarPeriodo(periodo, btn) {
-  PERIODO_ACTIVO = periodo;
+function cambiarTipoPeriodo(tipo, btn) {
+  TIPO_PERIODO = tipo;
   btn.parentElement.querySelectorAll('.cmd-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('lblKpiPeriodo').innerText = `EFICIENCIA (${periodo})`;
+
+  document.getElementById('pickerDia').style.display = tipo === 'DIA' ? 'inline-block' : 'none';
+  document.getElementById('pickerSemana').style.display = tipo === 'SEMANA' ? 'inline-block' : 'none';
+  document.getElementById('pickerMes').style.display = tipo === 'MES' ? 'inline-block' : 'none';
+  document.getElementById('pickerAnio').style.display = tipo === 'ANIO' ? 'inline-block' : 'none';
+
+  document.getElementById('lblKpiPeriodo').innerText = `EFICIENCIA (${tipo})`;
   actualizarTodo();
 }
 
 function getDatosFiltrados() {
   let list = LOG_REGISTROS;
   if (MODULO_ACTIVO !== "CONSOLIDADO") list = list.filter(r => r.modulo === MODULO_ACTIVO);
-  
-  const hoy = new Date().toISOString().split('T')[0];
-  const anioActual = hoy.split('-')[0];
 
-  if (PERIODO_ACTIVO === "DIA") {
-    list = list.filter(r => r.fecha === hoy);
-  } else if (PERIODO_ACTIVO === "SEMANA") {
-    list = list.filter(r => r.fecha >= "2026-09-14");
-  } else if (PERIODO_ACTIVO === "MES") {
-    list = list.filter(r => r.fecha.startsWith("2026-09"));
-  } else if (PERIODO_ACTIVO === "ANIO") {
-    list = list.filter(r => r.fecha.startsWith(anioActual));
+  if (TIPO_PERIODO === "DIA") {
+    const diaSel = document.getElementById('pickerDia').value;
+    list = list.filter(r => r.fecha === diaSel);
+  } else if (TIPO_PERIODO === "SEMANA") {
+    const semVal = document.getElementById('pickerSemana').value;
+    if (semVal) {
+      list = list.filter(r => r.semana && r.semana.includes(semVal.split('-W')[1]));
+    }
+  } else if (TIPO_PERIODO === "MES") {
+    const mesSel = document.getElementById('pickerMes').value;
+    list = list.filter(r => r.fecha && r.fecha.startsWith(mesSel));
+  } else if (TIPO_PERIODO === "ANIO") {
+    const anioSel = String(document.getElementById('pickerAnio').value);
+    list = list.filter(r => r.fecha && r.fecha.startsWith(anioSel));
   }
   return list;
 }
@@ -600,7 +724,7 @@ function actualizarKPIs() {
 
   document.getElementById('txtEficVal').innerText = ef.toFixed(1) + "%";
   document.getElementById('txtSemanalVal').innerText = ef.toFixed(1) + "%";
-  document.getElementById('txtPerdidasVal').innerHTML = perd.toFixed(2) + "<span style='font-size:18px;'> hrs</span>";
+  document.getElementById('txtPerdidasVal').innerHTML = perd.toFixed(2) + "<span style='font-size:16px;'> hrs</span>";
   document.getElementById('txtImpactoSoles').innerText = "S/. " + soles.toFixed(0) + " impacto estimado";
   document.getElementById('txtTotalOperarios').innerText = ops + " operarios activos";
 
@@ -619,11 +743,11 @@ function drawGauge(pct) {
   ctx.clearRect(0, 0, 90, 46);
   const cx = 45, cy = 44, r = 30;
   ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.lineWidth = 5.5; ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 5; ctx.stroke();
   const ang = Math.PI + (Math.min(pct, 150) / 150) * Math.PI;
   ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, ang);
   ctx.strokeStyle = pct >= 100 ? '#00E676' : '#FF1744';
-  ctx.lineWidth = 5.5; ctx.stroke();
+  ctx.lineWidth = 5; ctx.stroke();
 }
 
 function renderizarAuditoria() {
@@ -639,26 +763,26 @@ function renderizarAuditoria() {
   });
 
   const arr = Object.values(map).sort((a,b) => (b.hhGan/b.hhReal) - (a.hhGan/a.hhReal));
-  document.getElementById('txtEvaluados').innerText = arr.length + " evaluados (" + PERIODO_ACTIVO + ")";
+  document.getElementById('txtEvaluados').innerText = arr.length + " evaluados (" + TIPO_PERIODO + ")";
 
   arr.forEach(op => {
     const ef = op.hhReal > 0 ? (op.hhGan / op.hhReal) * 100 : 0;
     const esGan = ef >= 100;
     const col = esGan ? '#00E676' : '#FF1744';
     const card = document.createElement('div');
-    card.style.cssText = "background:rgba(0,0,0,0.25); border:1px solid var(--border-glass); border-radius:10px; padding:12px; display:flex; flex-direction:column; gap:6px;";
+    card.style.cssText = "background:rgba(0,0,0,0.2); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:5px;";
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:800; font-size:12px;">${op.nombre}</span>
-        <span style="font-family:'JetBrains Mono'; font-size:10px; font-weight:900; color:${col}; background:${esGan ? 'rgba(0,230,118,0.15)' : 'rgba(255,23,68,0.15)'}; padding:2px 7px; border-radius:5px;">
+        <span style="font-weight:600; font-size:11.5px;">${op.nombre}</span>
+        <span style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:700; color:${col}; background:${esGan ? 'rgba(0,230,118,0.15)' : 'rgba(255,23,68,0.15)'}; padding:1px 6px; border-radius:4px;">
           ${ef.toFixed(1)}% ${esGan ? 'GANANCIA' : 'PÉRDIDA'}
         </span>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono';">
+      <div style="display:flex; justify-content:space-between; font-size:10.5px; color:var(--text-muted); font-family:'JetBrains Mono';">
         <span>METRADO: <b>${op.metrado.toFixed(1)} ${op.unidad}</b></span>
         <span>HH REAL: <b>${op.hhReal.toFixed(1)}h</b></span>
       </div>
-      <div style="width:100%; height:6px; background:rgba(255,255,255,0.08); border-radius:4px; overflow:hidden;">
+      <div style="width:100%; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
         <div style="width:${Math.min(ef, 100)}%; height:100%; background:${col};"></div>
       </div>
     `;
@@ -673,17 +797,17 @@ function renderizarTabla() {
     const isGan = r.est === "GANANCIA";
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-family:'JetBrains Mono'; font-weight:700;"><b>${r.id}</b></td>
+      <td style="font-family:'JetBrains Mono'; font-weight:600;">${r.id}</td>
       <td>${r.fecha}</td>
-      <td style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--c-cyan);">${r.horaExacta.split(' ')[1] || ''}</td>
-      <td><span style="background:rgba(0,150,225,0.15); color:var(--c-cyan); padding:2px 6px; border-radius:4px; font-weight:800; font-size:10px;">${r.hoja || r.modulo}</span></td>
+      <td style="font-family:'JetBrains Mono'; font-size:10px; color:var(--c-cyan);">${r.horaExacta.split(' ')[1] || ''}</td>
+      <td><span style="background:rgba(0,150,225,0.15); color:var(--c-cyan); padding:2px 5px; border-radius:4px; font-size:9.5px;">${r.hoja || r.modulo}</span></td>
       <td><b>${r.trabajador}</b></td>
-      <td><span style="background:rgba(255,255,255,0.08); font-weight:900; padding:2px 6px; border-radius:4px;">${r.nivel}</span></td>
+      <td><span style="background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px; font-weight:600;">${r.nivel}</span></td>
       <td>${r.sub}</td>
-      <td style="text-align:right; font-weight:800; font-family:'JetBrains Mono';">${r.metrado.toFixed(1)} ${r.unidad}</td>
+      <td style="text-align:right; font-family:'JetBrains Mono';">${r.metrado.toFixed(1)} ${r.unidad}</td>
       <td style="text-align:right; font-family:'JetBrains Mono';">${r.hhReal.toFixed(2)}h</td>
-      <td style="text-align:center; font-weight:900; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'};">${r.ef}%</td>
-      <td><span style="padding:2px 6px; border-radius:4px; font-weight:800; font-size:10px; background:${isGan?'rgba(0,230,118,0.15)':'rgba(255,23,68,0.15)'}; color:${isGan?'#00E676':'#FF1744'};">${r.est}</span></td>
+      <td style="text-align:center; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'}; font-weight:600;">${r.ef}%</td>
+      <td><span style="padding:2px 6px; border-radius:4px; font-size:9.5px; background:${isGan?'rgba(0,230,118,0.15)':'rgba(255,23,68,0.15)'}; color:${isGan?'#00E676':'#FF1744'}; font-weight:600;">${r.est}</span></td>
     `;
     t.appendChild(tr);
   });
@@ -695,19 +819,19 @@ function inicializarGraficos() {
 
   chartEvolucion = new Chart(document.getElementById('chartEvolucion'), {
     type: 'line',
-    data: { labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5, 110.0, 105.0], borderColor: '#00E5FF', fill: false }] },
+    data: { labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5, 110.0, 105.0], borderColor: '#00E5FF', borderWidth: 2, fill: false, tension: 0.3 }] },
     options: { responsive: true, maintainAspectRatio: false }
   });
 
   chartElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
-    data: { labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5], backgroundColor: ['#FF1744', '#FF1744', '#FF1744', '#00E676'] }] },
+    data: { labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'], datasets: [{ label: 'Efic %', data: [70.8, 85.0, 92.4, 104.5], backgroundColor: ['#FF1744', '#FF1744', '#FF1744', '#00E676'], borderRadius: 4 }] },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
   });
 
   chartHH = new Chart(document.getElementById('chartHH'), {
     type: 'bar',
-    data: { labels: ['Sem 1', 'Sem 2', 'Sem 3'], datasets: [{ label: 'HH Gan', data: [5.67, 12.0, 18.5], backgroundColor: '#0096E1' }, { label: 'HH Real', data: [8.0, 14.0, 17.0], backgroundColor: '#FF1744' }] },
+    data: { labels: ['Sem 1', 'Sem 2', 'Sem 3'], datasets: [{ label: 'HH Gan', data: [5.67, 12.0, 18.5], backgroundColor: '#0096E1', borderRadius: 4 }, { label: 'HH Real', data: [8.0, 14.0, 17.0], backgroundColor: '#FF1744', borderRadius: 4 }] },
     options: { responsive: true, maintainAspectRatio: false }
   });
 
@@ -720,7 +844,7 @@ function inicializarGraficos() {
   chartEstado = new Chart(document.getElementById('chartEstado'), {
     type: 'doughnut',
     data: { labels: ['Pérdida', 'Ganancia'], datasets: [{ data: [1, 1], backgroundColor: ['#FF1744', '#00E676'] }] },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '66%' }
+    options: { responsive: true, maintainAspectRatio: false, cutout: '65%' }
   });
 }
 
@@ -764,13 +888,13 @@ function recalcularModal() {
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
 
-  // Lógica proporcional sábado (5.5h) vs lunes a viernes (8.5h)
+  // Lógica proporcional de Sábados (5.5h) vs Lunes a Viernes (8.5h)
   const fVal = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
   const esSabado = new Date(fVal + "T00:00:00").getDay() === 6;
-  const jornadaHoras = esSabado ? 5.5 : 8.5;
+  const jornada = esSabado ? 5.5 : 8.5;
 
-  // Cálculo Lean individual: HH Ganadas = (Metrado / Rendimiento Objetivo) * Jornada
-  const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornadaHoras : 0;
+  // HH Ganadas = (Metrado / Rendimiento Objetivo) * Jornada
+  const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornada : 0;
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const esGanancia = ef >= 100;
 
@@ -778,14 +902,16 @@ function recalcularModal() {
   document.getElementById('dispHHGan').innerText = `${hhGan.toFixed(2)} h`;
   document.getElementById('dispEficiencia').innerText = `${ef.toFixed(1)}%`;
   document.getElementById('dispEficiencia').style.color = esGanancia ? "#00E676" : "#FF1744";
-  document.getElementById('dispEstado').innerText = esGanancia ? "GANANCIA" : "PERDIDA";
+  document.getElementById('dispEstado').innerText = metrado === 0 ? "---" : (esGanancia ? "GANANCIA" : "PERDIDA");
   document.getElementById('dispEstado').style.color = esGanancia ? "#00E676" : "#FF1744";
 }
 
+// GUARDAR REGISTRO CON BARRA DE PROGRESO SIN SALIR DEL MODAL
 function guardarRegistro() {
   const btn = document.getElementById('btnGuardar');
-  btn.disabled = true;
-  btn.innerText = "⏳ GUARDANDO...";
+  const progBox = document.getElementById('saveProgressBox');
+  const progBar = document.getElementById('saveProgressBar');
+  const progTxt = document.getElementById('saveProgressText');
 
   const fechaSel = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
   const esp = document.getElementById('mEspecialidad').value;
@@ -799,6 +925,17 @@ function guardarRegistro() {
   const rendOpt = parseFloat(subData[2]);
   const unidad = subData[3] || "ml";
 
+  if (metrado <= 0) {
+    alert("Por favor ingrese un metrado válido.");
+    return;
+  }
+
+  // Activar barra de progreso
+  btn.disabled = true;
+  progBox.style.display = 'flex';
+  progBar.style.width = '35%';
+  progTxt.innerText = "⏳ Escribiendo en base de datos...";
+
   const esSabado = new Date(fechaSel + "T00:00:00").getDay() === 6;
   const jornada = esSabado ? 5.5 : 8.5;
   const hhGan = rendOpt > 0 ? (metrado / rendOpt) * jornada : 0;
@@ -808,7 +945,7 @@ function guardarRegistro() {
   const now = new Date();
   const timeStr = `${fechaSel} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
   const pref = esp === "SCF" ? "SCF-" : "PIN-";
-  const idReg = pref + fechaSel.replace(/-/g, '') + "-" + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0');
+  const idReg = pref + fechaSel.replace(/-/g, '') + "-" + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0');
 
   const nuevoItem = {
     id: idReg,
@@ -816,7 +953,7 @@ function guardarRegistro() {
     fecha: fechaSel,
     modulo: esp,
     hoja: cfg.hoja,
-    semana: 7,
+    semana: "W" + getWeekNumber(new Date(fechaSel)),
     trabajador: trabajador,
     nivel: nivel,
     elemento: elemento,
@@ -848,6 +985,8 @@ function guardarRegistro() {
     detalle: document.getElementById('mObs').value
   };
 
+  progBar.style.width = '75%';
+
   if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
     fetch(ENDPOINT_APPS_SCRIPT, {
       method: 'POST',
@@ -855,28 +994,40 @@ function guardarRegistro() {
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
     }).then(() => {
+      progBar.style.width = '100%';
+      progTxt.innerText = "✅ ¡Registro guardado exitosamente!";
+      
+      // Limpiar datos del formulario dejando ejemplos de guía sin cerrar el modal
+      document.getElementById('mMetrado').value = '';
+      document.getElementById('mMetrado').placeholder = "Ej: 25.0";
+      document.getElementById('mHHReal').value = '';
+      document.getElementById('mHHReal').placeholder = "Ej: 8.0";
+      document.getElementById('mObs').value = '';
+      document.getElementById('mObs').placeholder = "Ej: Pasillo eje 4-7 / Siguiente frente";
+      recalcularModal();
+
+      setTimeout(() => {
+        progBox.style.display = 'none';
+        progBar.style.width = '0%';
+        btn.disabled = false;
+      }, 2500);
+
       sincronizarConSheets(false);
     });
+  } else {
+    progBar.style.width = '100%';
+    progTxt.innerText = "✅ Guardado localmente.";
+    document.getElementById('mMetrado').value = '';
+    document.getElementById('mHHReal').value = '';
+    setTimeout(() => { progBox.style.display = 'none'; btn.disabled = false; }, 1800);
   }
-
-  // Notificación de éxito
-  const toast = document.getElementById('toastNotify');
-  toast.innerText = `✅ REGISTRADO: ${idReg} en ${cfg.hoja} [${estado}]`;
-  toast.style.display = 'block';
-  setTimeout(() => { toast.style.display = 'none'; }, 3500);
-
-  // Limpiar formulario para nuevo registro
-  document.getElementById('mMetrado').value = '';
-  document.getElementById('mHHReal').value = '8.0';
-  document.getElementById('mObs').value = '';
-  recalcularModal();
-
-  btn.disabled = false;
-  btn.innerText = "💾 GUARDAR REGISTRO";
-  cerrarModal();
 }
 
+// SINCRONIZACIÓN SILENCIOSA (SIN ALERTAS INVASIVAS)
 function sincronizarConSheets(manual) {
+  const btnRail = document.getElementById('btnSyncRail');
+  if (btnRail && manual) btnRail.style.transform = 'rotate(180deg)';
+
   if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
     fetch(ENDPOINT_APPS_SCRIPT)
       .then(res => res.json())
@@ -884,10 +1035,18 @@ function sincronizarConSheets(manual) {
         if (data.registros && data.registros.length > 0) {
           LOG_REGISTROS = data.registros;
           actualizarTodo();
-          if (manual) alert("✅ Sincronización exitosa. Base de datos actualizada en tiempo real.");
         }
-      }).catch(() => { if (manual) alert("Modo local activo."); });
+        if (btnRail) btnRail.style.transform = 'none';
+      }).catch(() => { if (btnRail) btnRail.style.transform = 'none'; });
   }
+}
+
+function getWeekNumber(d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+  return weekNo;
 }
 
 function exportarExcelConFormulas() {
@@ -910,6 +1069,15 @@ function exportarExcelConFormulas() {
       { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` }
     ]);
   });
+
+  const last = wsData.length;
+  wsData.push([
+    "TOTALES", "", "", "", "", "", "", "",
+    { f: `SUM(I5:I${last})` }, "m²",
+    { f: `SUM(K5:K${last})` }, "",
+    { f: `SUM(M5:M${last})` },
+    { f: `AVERAGE(N5:N${last})` }, ""
+  ]);
 
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(wsData);
