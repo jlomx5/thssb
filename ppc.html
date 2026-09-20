@@ -2,17 +2,20 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>CONVECSA ERP 360° – Control THSSB</title>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CONVECSA ERP 360° – Sistema Integral THSSB</title>
+<!-- Librerías para Gráficos, Exportación Excel y PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --c-azul-marino: #0052CC;
   --c-azul-real: #0096E1;
+  --c-azul-cian: #8CD2F5;
   --c-celeste-claro: #E3F2FD;
+  --c-gris-suave: #F8FAFC;
   --c-gris-linea: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #64748B;
@@ -20,537 +23,528 @@
   --status-green-bg: #D1FAE5;
   --status-red: #DC2626;
   --status-red-bg: #FEE2E2;
+  --radius-lg: 16px;
+  --radius-md: 12px;
 }
 
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-  -webkit-tap-highlight-color: transparent; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-/* REGLA MAESTRA: EXACTAMENTE 1 SOLO LIENZO (SIN SCROLL) */
+/* ARQUITECTURA RESPONSIVA HÍBRIDA CON SCROLL FLUIDO */
 html, body {
-  width: 100vw;
-  height: 100dvh;
-  max-height: 100dvh;
-  overflow: hidden !important;
-  background-color: #F8FAFC;
-  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #F1F5F9;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   color: var(--text-main);
-  display: flex;
-  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto; /* Permite scroll natural en todos los dispositivos */
 }
 
-/* 1. HEADER COCKPIT (DYNAMIC ISLAND COMPATIBLE) */
-.header-bar {
-  height: calc(46px + env(safe-area-inset-top, 0px));
-  padding-top: env(safe-area-inset-top, 0px);
+/* PANTALLA DE LOGIN CON PIN CORPORATIVO */
+#loginOverlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0052CC 0%, #002B66 100%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.login-box {
   background: #FFFFFF;
-  border-bottom: 1px solid var(--c-gris-linea);
-  padding-left: 12px;
-  padding-right: 12px;
+  border-radius: var(--radius-lg);
+  padding: 30px 24px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.login-logo {
+  width: 52px;
+  height: 52px;
+  background: var(--c-azul-marino);
+  color: #FFFFFF;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+.login-title { font-size: 18px; font-weight: 900; color: var(--c-azul-marino); margin-bottom: 4px; }
+.login-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
+.pin-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 8px;
+  text-align: center;
+  border: 2px solid var(--c-gris-linea);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  outline: none;
+}
+.pin-input:focus { border-color: var(--c-azul-real); }
+
+/* TOPBAR */
+.topbar {
+  background: #FFFFFF;
+  border-bottom: 2px solid var(--c-azul-marino);
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.06);
 }
-.brand-title {
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--c-azul-marino);
-  white-space: nowrap;
+.brand-pill { display: flex; align-items: center; gap: 10px; }
+.brand-icon {
+  width: 34px; height: 34px; background: var(--c-azul-marino); color: #FFF;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 16px;
 }
-.brand-sub {
-  display: none;
-  font-size: 9.5px;
-  color: var(--text-muted);
+.brand-title { font-size: 14px; font-weight: 900; color: var(--c-azul-marino); }
+.brand-sub { font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+
+/* CONTENEDOR PRINCIPAL HÍBRIDO */
+.app-layout {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 85px; /* Espacio para barra inferior en móvil */
 }
-@media (min-width: 600px) {
-  .brand-sub { display: inline; }
-  .brand-title { font-size: 14px; }
+@media (min-width: 1024px) {
+  .app-layout { padding: 22px; padding-bottom: 40px; }
 }
 
-.filter-group {
+/* BARRA DE CONTROL Y EXPORTACIÓN */
+.control-bar {
+  background: #FFFFFF;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--c-gris-linea);
+  padding: 12px 16px;
   display: flex;
-  gap: 5px;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
 }
-.pills-wrap {
+@media (min-width: 768px) {
+  .control-bar { flex-direction: row; justify-content: space-between; align-items: center; }
+}
+.group-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pills-box {
   display: flex;
   background: #F1F5F9;
-  padding: 2px;
-  border-radius: 7px;
+  padding: 3px;
+  border-radius: 8px;
   gap: 2px;
 }
 .pill-btn {
   border: none;
   background: transparent;
-  padding: 3px 8px;
-  border-radius: 5px;
-  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--text-muted);
   cursor: pointer;
-  white-space: nowrap;
 }
-.pill-btn.active {
-  background: var(--c-azul-marino);
-  color: #FFFFFF;
-}
+.pill-btn.active { background: var(--c-azul-marino); color: #FFFFFF; }
 
-/* 2. LIENZO CENTRAL */
-.canvas-container {
-  flex: 1;
-  padding: 6px 10px;
-  display: flex;
-  flex-direction: column;
+.btn-export {
+  display: inline-flex;
+  align-items: center;
   gap: 6px;
-  overflow: hidden;
-  height: calc(100dvh - 46px - 54px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-@media (min-width: 1024px) {
-  .canvas-container {
-    height: calc(100dvh - 50px);
-    padding: 10px 16px;
-    gap: 10px;
-  }
-}
+.btn-excel { background: #10B981; color: #FFFFFF; }
+.btn-pdf { background: #E11D48; color: #FFFFFF; }
+.btn-export:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* FILA 1: KPI CARDS */
-.row-kpis {
+/* SECCIÓN 1: KPIS */
+.kpi-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  height: 18%;
-  min-height: 65px;
-  flex-shrink: 0;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
-@media (min-width: 1024px) {
-  .row-kpis { height: 19%; gap: 12px; }
-}
+@media (min-width: 640px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .kpi-card {
   background: #FFFFFF;
+  border-radius: var(--radius-md);
   border: 1px solid var(--c-gris-linea);
-  border-radius: 10px;
-  padding: 6px 10px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.02);
-  position: relative;
-  overflow: hidden;
 }
-.kpi-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-}
+.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
 .c-rose::before { background: #F43F5E; }
 .c-amber::before { background: #F59E0B; }
 .c-emerald::before { background: #10B981; }
 
-.kpi-title {
-  font-size: 8.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-@media (min-width: 600px) { .kpi-title { font-size: 10px; } }
+.kpi-header-lbl { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+.kpi-main-val { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 0; }
+.kpi-val-txt { font-size: 34px; font-weight: 900; line-height: 1; }
+.c-rose .kpi-val-txt { color: #E11D48; }
+.c-amber .kpi-val-txt { color: #D97706; }
+.c-emerald .kpi-val-txt { color: #059669; }
 
-.kpi-body {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.kpi-number {
-  font-size: 19px;
-  font-weight: 900;
-  line-height: 1;
-}
-@media (min-width: 600px) { .kpi-number { font-size: 28px; } }
+.kpi-tag-status { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; }
+.kpi-tag-status.perdida { background: #FFE4E6; color: #E11D48; }
+.kpi-tag-status.ganancia { background: #D1FAE5; color: #059669; }
 
-.c-rose .kpi-number { color: #E11D48; }
-.c-amber .kpi-number { color: #D97706; }
-.c-emerald .kpi-number { color: #059669; }
+/* SECCIÓN 2: GRÁFICOS (ADAPTACIÓN HÍBRIDA) */
+.charts-grid-top {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 900px) { .charts-grid-top { grid-template-columns: 1fr 1fr; } }
 
-.gauge-canvas {
-  width: 58px;
-  height: 30px;
+.charts-grid-bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
 }
-@media (min-width: 600px) {
-  .gauge-canvas { width: 80px; height: 42px; }
-}
-
-.kpi-foot {
-  font-size: 8.5px;
-  font-weight: 700;
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-}
-@media (min-width: 600px) { .kpi-foot { font-size: 10px; } }
-
-.tag-badge {
-  padding: 1px 5px;
-  border-radius: 4px;
-  font-size: 8px;
-  font-weight: 800;
-}
-@media (min-width: 600px) { .tag-badge { font-size: 9.5px; } }
-.tag-badge.perdida { background: #FFE4E6; color: #E11D48; }
-.tag-badge.ganancia { background: #D1FAE5; color: #059669; }
-
-/* SELECTOR DE VISTA EN CELULAR */
-.mobile-view-tabs {
-  display: flex;
-  gap: 4px;
-  background: #E2E8F0;
-  padding: 2px;
-  border-radius: 8px;
-  margin-bottom: 2px;
-}
-@media (min-width: 1024px) {
-  .mobile-view-tabs { display: none; }
-}
-.m-tab-btn {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--text-muted);
-  padding: 4px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.m-tab-btn.active {
-  background: #FFFFFF;
-  color: var(--c-azul-marino);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-/* ÁREA DE GRÁFICOS */
-.charts-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-height: 0;
-  overflow: hidden;
-}
-
-/* TABLET (GALAXY TAB S8/S9): 5 GRÁFICOS AL MISMO TIEMPO */
-@media (min-width: 1024px) {
-  .charts-wrapper {
-    display: grid;
-    grid-template-rows: 48% 48%;
-    gap: 10px;
-  }
-  .row-charts-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    height: 100%;
-  }
-  .row-charts-bottom {
-    display: grid;
-    grid-template-columns: 1.15fr 0.95fr 0.9fr;
-    gap: 10px;
-    height: 100%;
-  }
-}
-
-/* CELULARES (IPHONE 14 PRO / ANDROID): 1 SOLO LIENZO COMPACTO */
-@media (max-width: 1023px) {
-  .row-charts-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    flex: 1;
-    min-height: 0;
-  }
-  .row-charts-bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    flex: 1;
-    min-height: 0;
-  }
-  #cardHHCompMobile { display: none; }
-}
+@media (min-width: 900px) { .charts-grid-bottom { grid-template-columns: 1.2fr 0.9fr 0.9fr; } }
 
 .chart-card {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
-  border-radius: 10px;
-  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.02);
-  min-height: 0;
-  height: 100%;
 }
-.chart-header {
+.chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.chart-title { font-size: 12.5px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+.chart-title::before { content: ''; width: 3.5px; height: 14px; background: var(--c-azul-marino); border-radius: 2px; }
+.canvas-holder { position: relative; height: 210px; width: 100%; }
+
+/* SECCIÓN 3: AUDITORÍA DE EFICIENCIA POR TRABAJADOR */
+.audit-workers-card {
+  background: #FFFFFF;
+  border: 1px solid var(--c-gris-linea);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+.workers-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+@media (min-width: 640px) { .workers-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .workers-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.worker-item {
+  background: #F8FAFC;
+  border: 1px solid var(--c-gris-linea);
+  border-radius: 10px;
+  padding: 12px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2px;
-  flex-shrink: 0;
+  flex-direction: column;
+  gap: 6px;
 }
-.chart-title {
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--text-main);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-@media (min-width: 600px) { .chart-title { font-size: 11.5px; } }
+.worker-top { display: flex; justify-content: space-between; align-items: center; }
+.worker-name { font-size: 11.5px; font-weight: 800; }
+.worker-bar-bg { width: 100%; height: 6px; background: #E2E8F0; border-radius: 4px; overflow: hidden; }
+.worker-bar-fill { height: 100%; border-radius: 4px; }
 
-.chart-title::before {
-  content: '';
-  width: 3px;
-  height: 10px;
-  background: var(--c-azul-marino);
-  border-radius: 2px;
+/* SECCIÓN 4: TABLA DE REGISTRO EN VIVO */
+.table-card {
+  background: #FFFFFF;
+  border: 1px solid var(--c-gris-linea);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
-.chart-tag {
-  font-size: 8px;
-  font-weight: 800;
-  padding: 1px 5px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-.tag-blue { background: #EFF6FF; color: #2563EB; }
-.tag-red { background: #FFF1F2; color: #E11D48; }
-.tag-green { background: #ECFDF5; color: #059669; }
+.table-header { padding: 14px 16px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
+.table-responsive { width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th { background: var(--c-azul-real); color: #FFF; font-size: 11px; font-weight: 800; padding: 10px 12px; text-transform: uppercase; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--c-gris-linea); font-size: 12px; }
+tr:nth-child(even) { background: #F8FAFC; }
 
-.canvas-wrap {
-  flex: 1;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-}
-
-/* 3. BOTTOM NAV */
+/* BARRA INFERIOR FLOTANTE TÁCTIL (MÓVILES) */
 .bottom-nav {
-  height: calc(52px + env(safe-area-inset-bottom, 0px));
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
   background: #FFFFFF;
   border-top: 1px solid var(--c-gris-linea);
   display: flex;
+  align-items: center;
   justify-content: space-around;
-  align-items: center;
-  flex-shrink: 0;
-  z-index: 100;
+  z-index: 90;
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
-@media (min-width: 1024px) {
-  .bottom-nav { display: none; }
-}
-.b-tab {
-  border: none;
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  font-size: 9px;
-  font-weight: 800;
-  color: var(--text-muted);
-  cursor: pointer;
-  flex: 1;
-}
-.b-tab.active {
-  color: var(--c-azul-marino);
-}
+@media (min-width: 1024px) { .bottom-nav { display: none; } }
+.b-tab { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 800; color: var(--text-muted); cursor: pointer; }
+.b-tab.active { color: var(--c-azul-marino); }
 .b-btn-add {
   background: var(--c-azul-marino);
-  color: #FFFFFF;
-  width: 38px;
-  height: 38px;
+  color: #FFF;
+  width: 44px; height: 44px;
   border-radius: 50%;
   border: none;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 82, 204, 0.35);
-  margin-top: -12px;
+  font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.4);
+  margin-top: -16px;
   cursor: pointer;
 }
 
-/* MODAL */
+/* MODAL DE CAPTURA */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(3px); z-index: 300; display: none;
+  backdrop-filter: blur(4px); z-index: 500; display: none;
   align-items: flex-end; justify-content: center;
 }
-@media (min-width: 600px) { .modal-overlay { align-items: center; padding: 20px; } }
+@media (min-width: 640px) { .modal-overlay { align-items: center; padding: 20px; } }
 .modal-overlay.open { display: flex; }
-.modal-content {
-  background: #FFFFFF; width: 100%; max-width: 600px;
-  border-radius: 16px 16px 0 0; display: flex; flex-direction: column;
-  max-height: 85dvh; overflow: hidden;
+.modal-box {
+  background: #FFF; width: 100%; max-width: 680px; max-height: 90vh;
+  border-radius: 18px 18px 0 0; display: flex; flex-direction: column; overflow: hidden;
 }
-@media (min-width: 600px) { .modal-content { border-radius: 14px; } }
-.modal-header {
-  padding: 12px 16px; border-bottom: 1px solid var(--c-gris-linea);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.modal-body {
-  padding: 12px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-}
-.f-group { display: flex; flex-direction: column; gap: 3px; }
-.f-group label { font-size: 10px; font-weight: 800; color: var(--c-azul-marino); text-transform: uppercase; }
-.f-group input, .f-group select {
-  padding: 8px 10px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-family: inherit; font-size: 12px; outline: none;
-}
-.modal-footer {
-  padding: 10px 16px; border-top: 1px solid var(--c-gris-linea); display: flex; gap: 8px;
-}
-.btn {
-  padding: 8px 14px; border-radius: 8px; font-family: inherit; font-size: 12px; font-weight: 800; border: none; cursor: pointer;
-}
-.btn-p { background: var(--c-azul-marino); color: #FFFFFF; flex: 2; }
-.btn-s { background: #FFFFFF; border: 1px solid var(--c-gris-linea); color: var(--text-muted); flex: 1; }
+@media (min-width: 640px) { .modal-box { border-radius: 16px; } }
+.modal-head { padding: 14px 18px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+.form-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 640px) { .form-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
+.field-box { display: flex; flex-direction: column; gap: 4px; }
+.field-box label { font-size: 10.5px; font-weight: 800; color: var(--c-azul-marino); text-transform: uppercase; }
+.field-box input, .field-box select { padding: 9px 10px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-family: inherit; outline: none; }
+.modal-foot { padding: 12px 18px; border-top: 1px solid var(--c-gris-linea); display: flex; gap: 8px; }
+.btn-action { padding: 10px 16px; border-radius: 8px; font-weight: 800; font-size: 12px; border: none; cursor: pointer; flex: 1; }
+.btn-save { background: var(--c-azul-marino); color: #FFF; flex: 2; }
+.btn-cancel { background: #FFF; border: 1px solid var(--c-gris-linea); color: var(--text-muted); }
 </style>
 </head>
 <body>
 
-<header class="header-bar">
-  <div>
-    <span class="brand-title">CONVECSA ERP 360°</span>
-    <span class="brand-sub"> · THSSB Cockpit</span>
+<!-- PANTALLA DE LOGIN CON PIN CORPORATIVO -->
+<div id="loginOverlay">
+  <div class="login-box">
+    <div class="login-logo">C</div>
+    <div class="login-title">CONVECSA ERP 360°</div>
+    <div class="login-sub">Control de Obra · THSSB</div>
+    <form onsubmit="validarAcceso(event)">
+      <select id="userSelector" style="width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #CBD5E1; font-weight: 700; margin-bottom: 12px; font-family: inherit;">
+        <option value="SUPER_ADMIN|Jorge Orosco">Jorge Orosco (Super Admin)</option>
+        <option value="RESIDENTE|Ing. Residente">Ing. Residente (Producción)</option>
+        <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (Capataz Pintura)</option>
+        <option value="CAPATAZ|Mauro Bardales">M. Bardales (Capataz SCF)</option>
+      </select>
+      <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric" required>
+      <button type="submit" class="btn-action btn-save" style="width: 100%;">INGRESAR AL SISTEMA</button>
+    </form>
+    <div style="font-size: 11px; color: var(--text-muted); margin-top: 14px;">PIN por defecto: <b>1234</b></div>
   </div>
+</div>
 
-  <div class="filter-group">
-    <div class="pills-wrap">
-      <button class="pill-btn" onclick="setPeriodo('DIA', this)">Día</button>
-      <button class="pill-btn" onclick="setPeriodo('SEMANA', this)">Sem</button>
-      <button class="pill-btn active" onclick="setPeriodo('MES', this)">Mes</button>
+<!-- CABECERA PRINCIPAL -->
+<header class="topbar">
+  <div class="brand-pill">
+    <div class="brand-icon">C</div>
+    <div>
+      <div class="brand-title">CONVECSA ERP 360°</div>
+      <div class="brand-sub">Torre Hospitalaria San Borja · 17 Niveles</div>
     </div>
-
-    <div class="pills-wrap">
-      <button class="pill-btn active" onclick="setModulo('CONSOLIDADO', this)">Global</button>
-      <button class="pill-btn" onclick="setModulo('PINTURA', this)">🎨 PT</button>
-      <button class="pill-btn" onclick="setModulo('SCF', this)">🔥 SCF</button>
-    </div>
+  </div>
+  <div class="top-actions">
+    <span id="sessionUserBadge" style="background: var(--c-celeste-claro); color: var(--c-azul-marino); padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">Jorge Orosco</span>
+    <button onclick="cerrarSesion()" style="background:none; border:none; color:var(--status-red); font-size:11px; font-weight:800; cursor:pointer;">Salir</button>
   </div>
 </header>
 
-<main class="canvas-container">
-  
-  <section class="row-kpis">
-    <div class="kpi-card c-rose">
-      <div class="kpi-title">EFICIENCIA DEL MES</div>
-      <div class="kpi-body">
-        <div class="kpi-number" id="kpiEficVal">104.5%</div>
-        <canvas id="gaugeC" class="gauge-canvas" width="70" height="36"></canvas>
+<!-- CONTENEDOR MAESTRO DE LA APLICACIÓN (CON SCROLL FLUIDO) -->
+<div class="app-layout" id="pdfReportContent">
+
+  <!-- BARRA DE CONTROL Y BOTONES DE EXPORTACIÓN -->
+  <section class="control-bar">
+    <div class="group-controls">
+      <div class="pills-box">
+        <button class="pill-btn" onclick="setPeriodo('DIA', this)">Día</button>
+        <button class="pill-btn" onclick="setPeriodo('SEMANA', this)">Semana</button>
+        <button class="pill-btn active" onclick="setPeriodo('MES', this)">Mes</button>
+        <button class="pill-btn" onclick="setPeriodo('TODO', this)">Todo</button>
       </div>
-      <div class="kpi-foot">
-        <span class="tag-badge ganancia" id="kpiEficBadge">Ganancia</span>
-        <span>Meta: 100%</span>
+
+      <div class="pills-box">
+        <button class="pill-btn active" onclick="setModulo('CONSOLIDADO', this)">Global</button>
+        <button class="pill-btn" onclick="setModulo('PINTURA', this)">🎨 Pintura</button>
+        <button class="pill-btn" onclick="setModulo('SCF', this)">🔥 SCF</button>
+      </div>
+    </div>
+
+    <!-- BOTONES DE EXPORTACIÓN A EXCEL Y PDF -->
+    <div class="group-controls">
+      <button class="btn-export btn-excel" onclick="exportarExcelConFormulas()">
+        <span>📊</span> Exportar Excel (.XLSX)
+      </button>
+      <button class="btn-export btn-pdf" onclick="exportarReportePDF()">
+        <span>📄</span> Descargar RDO (PDF)
+      </button>
+      <button class="btn-export" style="background: var(--c-azul-marino); color: #FFF;" onclick="sincronizarConSheets()">
+        <span>🔄</span> Sincronizar
+      </button>
+    </div>
+  </section>
+
+  <!-- 1. KPIS SUPERIORES -->
+  <section class="kpi-grid">
+    <div class="kpi-card c-rose">
+      <div class="kpi-header-lbl" id="lblEficTitulo">EFICIENCIA DEL MES</div>
+      <div class="kpi-main-val">
+        <div class="kpi-val-txt" id="valEficiencia">104.5%</div>
+        <canvas id="gaugeCanvas" width="90" height="46"></canvas>
+      </div>
+      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); display:flex; gap:6px; align-items:center;">
+        <span class="kpi-tag-status ganancia" id="badgeEstadoEfic">Ganancia</span>
+        <span>Meta Target: 100%</span>
       </div>
     </div>
 
     <div class="kpi-card c-amber">
-      <div class="kpi-title">HH PERDIDAS</div>
-      <div class="kpi-body">
-        <div class="kpi-number" id="kpiPerdidasVal">1.00<span style="font-size:12px;"> h</span></div>
+      <div class="kpi-header-lbl">HH PERDIDAS ACUMULADAS</div>
+      <div class="kpi-main-val">
+        <div class="kpi-val-txt" id="valHHPerdidas">1.00<span style="font-size: 18px;"> hrs</span></div>
       </div>
-      <div class="kpi-foot">
-        <span>S/. 143 impacto</span>
+      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">
+        <span id="valImpactoSoles">S/. 143 impacto estimado</span> (S/. 142.50/h)
       </div>
     </div>
 
     <div class="kpi-card c-emerald">
-      <div class="kpi-title">EFICIENCIA SEMANAL</div>
-      <div class="kpi-body">
-        <div class="kpi-number" id="kpiSemanalVal">104.5%</div>
+      <div class="kpi-header-lbl">EFICIENCIA SEMANAL</div>
+      <div class="kpi-main-val">
+        <div class="kpi-val-txt" id="valEficSemanal">104.5%</div>
       </div>
-      <div class="kpi-foot">
-        <span style="color:var(--status-green); font-weight:800; margin-left:auto;">6 operarios</span>
+      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); display:flex; justify-content:space-between;">
+        <span>Todas las semanas</span>
+        <span style="color: var(--status-green); font-weight: 800;" id="valOperariosTotal">6 operarios activos</span>
       </div>
     </div>
   </section>
 
-  <!-- CONTROL DE VISTA SMARTPHONE -->
-  <div class="mobile-view-tabs">
-    <button class="m-tab-btn active" onclick="switchMobileCards('TOP', this)">📈 Tendencia & Elementos</button>
-    <button class="m-tab-btn" onclick="switchMobileCards('BOTTOM', this)">🏢 Pisos & Actividades</button>
-  </div>
-
-  <div class="charts-wrapper">
-    
-    <div class="row-charts-top" id="blockTopCharts">
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Evolución Semanal</div>
-          <span class="chart-tag tag-blue">3 SEM</span>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="chartEvolucion"></canvas>
-        </div>
+  <!-- 2. GRÁFICOS SUPERIORES -->
+  <section class="charts-grid-top">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Evolución por Semana (Eficiencia %)</div>
+        <span style="font-size: 10px; font-weight: 800; background: #EFF6FF; color: #2563EB; padding: 2px 6px; border-radius: 4px;">3 SEMANAS</span>
       </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Por Elemento</div>
-          <span class="chart-tag tag-red">META 100%</span>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="chartElemento"></canvas>
-        </div>
+      <div class="canvas-holder">
+        <canvas id="chartEvolucionSem"></canvas>
       </div>
     </div>
 
-    <div class="row-charts-bottom" id="blockBottomCharts">
-      <div class="chart-card" id="cardHHCompMobile">
-        <div class="chart-header">
-          <div class="chart-title">HH Gan vs Real</div>
-          <span class="chart-tag tag-green">SEM</span>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="chartHH"></canvas>
-        </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Eficiencia por Elemento</div>
+        <span style="font-size: 10px; font-weight: 800; background: #FFF1F2; color: #E11D48; padding: 2px 6px; border-radius: 4px;">VS META 100%</span>
       </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Por Nivel (17 Pisos)</div>
-          <span class="chart-tag tag-blue">PISOS</span>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="chartNivel"></canvas>
-        </div>
+      <div class="canvas-holder">
+        <canvas id="chartPorElemento"></canvas>
       </div>
+    </div>
+  </section>
 
-      <div class="chart-card">
-        <div class="chart-header">
-          <div class="chart-title">Estado Actividades</div>
-          <span class="chart-tag tag-red">46 ACT</span>
-        </div>
-        <div class="canvas-wrap">
-          <canvas id="chartEstado"></canvas>
-        </div>
+  <!-- 3. GRÁFICOS INFERIORES -->
+  <section class="charts-grid-bottom">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">HH Ganadas vs Reales · Semana</div>
+        <span style="font-size: 10px; font-weight: 800; background: #ECFDF5; color: #059669; padding: 2px 6px; border-radius: 4px;">SEMANAL</span>
+      </div>
+      <div class="canvas-holder">
+        <canvas id="chartHHComp"></canvas>
       </div>
     </div>
 
-  </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Distribución por Nivel</div>
+        <span style="font-size: 10px; font-weight: 800; background: #EFF6FF; color: #2563EB; padding: 2px 6px; border-radius: 4px;">17 PISOS</span>
+      </div>
+      <div class="canvas-holder">
+        <canvas id="chartPorNivel"></canvas>
+      </div>
+    </div>
 
-</main>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Estado de Actividades</div>
+        <span style="font-size: 10px; font-weight: 800; background: #FFF1F2; color: #E11D48; padding: 2px 6px; border-radius: 4px;">BALANCE LEAN</span>
+      </div>
+      <div class="canvas-holder">
+        <canvas id="chartEstadoActs"></canvas>
+      </div>
+    </div>
+  </section>
 
+  <!-- 4. AUDITORÍA DE EFICIENCIA POR TRABAJADOR -->
+  <section class="audit-workers-card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-size: 13.5px; font-weight: 900; color: var(--c-azul-marino);">👷 Auditoría de Eficiencia por Trabajador</div>
+        <div style="font-size: 11px; color: var(--text-muted);">Monitoreo de rendimiento para control de desviaciones y premios de productividad</div>
+      </div>
+      <span id="lblTotalEvaluados" style="font-size: 11px; font-weight: 800; color: var(--status-green);">6 evaluados</span>
+    </div>
+    <div class="workers-grid" id="gridTrabajadores"></div>
+  </section>
+
+  <!-- 5. TABLA DE TRAZABILIDAD Y REGISTROS EN VIVO -->
+  <section class="table-card">
+    <div class="table-header">
+      <div style="font-size: 13px; font-weight: 900; color: var(--c-azul-marino);">📋 Trazabilidad de Registros en Google Sheets</div>
+      <div style="font-size: 11px; color: var(--text-muted);">Enrutado automático a REGISTRO_DIARIO_PINTURA y REGISTRO_DIARIO_SCF</div>
+    </div>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Hora</th>
+            <th>Hoja</th>
+            <th>Operario</th>
+            <th>Nivel (17)</th>
+            <th>Subproceso</th>
+            <th style="text-align: right;">Metrado</th>
+            <th style="text-align: right;">HH Real</th>
+            <th style="text-align: center;">Eficiencia</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tablaBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<!-- BARRA INFERIOR TÁCTIL (MÓVILES) -->
 <nav class="bottom-nav">
   <button class="b-tab active" onclick="setModulo('CONSOLIDADO', this)">
     <span>📊</span><span>Global</span>
@@ -571,149 +565,575 @@ html, body {
 
 <!-- MODAL SMART CAPTURE (17 NIVELES) -->
 <div class="modal-overlay" id="modalCaptura">
-  <div class="modal-content">
-    <div class="modal-header">
-      <b style="color:var(--c-azul-marino); font-size:13px;">✍️ Registrar Avance de Campo</b>
-      <button onclick="cerrarModal()" style="background:none; border:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
+  <div class="modal-box">
+    <div class="modal-head">
+      <div style="font-size: 13.5px; font-weight: 900; color: var(--c-azul-marino);">✍️ Registrar Avance de Campo</div>
+      <button onclick="cerrarModal()" style="background:none; border:none; font-size: 18px; color: var(--text-muted); cursor: pointer;">✕</button>
     </div>
     <div class="modal-body">
-      <div class="f-group">
-        <label>Especialidad:</label>
-        <select id="mEspecialidad">
-          <option value="PINTURA">PINTURA (REGISTRO_DIARIO_PINTURA)</option>
-          <option value="SCF">SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
-        </select>
+      <div class="form-grid">
+        <div class="field-box">
+          <label>Especialidad / Partida:</label>
+          <select id="mEspecialidad" onchange="actualizarCatalogosModal()">
+            <option value="PINTURA">PINTURA (REGISTRO_DIARIO_PINTURA)</option>
+            <option value="SCF">SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
+          </select>
+        </div>
+        <div class="field-box">
+          <label>Operario de Campo:</label>
+          <select id="mTrabajador"></select>
+        </div>
+        <div class="field-box">
+          <label>Nivel de Obra (17 Niveles):</label>
+          <select id="mNivel">
+            <optgroup label="Sótanos (7)">
+              <option value="S7">Sótano 7</option><option value="S6">Sótano 6</option><option value="S5">Sótano 5</option>
+              <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option><option value="S1">Sótano 1</option>
+            </optgroup>
+            <optgroup label="Pisos (9)">
+              <option value="P1">Piso 1</option><option value="P2" selected>Piso 2</option><option value="P3">Piso 3</option>
+              <option value="P4">Piso 4</option><option value="P5">Piso 5</option><option value="P6">Piso 6</option>
+              <option value="P7">Piso 7</option><option value="P8">Piso 8</option><option value="P9">Piso 9</option>
+            </optgroup>
+            <optgroup label="Azotea (1)">
+              <option value="AZ">Azotea</option>
+            </optgroup>
+          </select>
+        </div>
       </div>
-      <div class="f-group">
-        <label>Nivel de Obra (17 Niveles):</label>
-        <select id="mNivel">
-          <option value="S7">Sótano 7</option><option value="S6">Sótano 6</option><option value="S5">Sótano 5</option>
-          <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option>
-          <option value="S1">Sótano 1</option><option value="P1">Piso 1</option><option value="P2" selected>Piso 2</option>
-          <option value="P3">Piso 3</option><option value="P4">Piso 4</option><option value="P5">Piso 5</option>
-          <option value="P6">Piso 6</option><option value="P7">Piso 7</option><option value="P8">Piso 8</option>
-          <option value="P9">Piso 9</option><option value="AZ">Azotea</option>
-        </select>
+
+      <div class="form-grid">
+        <div class="field-box">
+          <label>Elemento Constructivo:</label>
+          <select id="mElemento"></select>
+        </div>
+        <div class="field-box">
+          <label>Subproceso / Rend. Target:</label>
+          <select id="mSubproceso" onchange="recalcularMetricasModal()"></select>
+        </div>
+        <div class="field-box">
+          <label id="lblUnidadModal">Metrado Ejecutado (m²):</label>
+          <input type="number" id="mMetrado" value="45.0" step="0.1" inputmode="decimal" oninput="recalcularMetricasModal()">
+        </div>
       </div>
-      <div class="f-group">
-        <label>Metrado Ejecutado:</label>
-        <input type="number" id="mMetrado" value="45.0" step="0.1">
+
+      <div class="form-grid">
+        <div class="field-box">
+          <label>HH Reales Invertidas:</label>
+          <input type="number" id="mHHReal" value="2.0" step="0.5" inputmode="decimal" oninput="recalcularMetricasModal()">
+        </div>
+        <div class="field-box">
+          <label>Causa Restricción:</label>
+          <select id="mCausa">
+            <option value="Ninguna">Ninguna (Ritmo normal)</option>
+            <option value="Demora Andamios">Demora en entrega/armado andamios</option>
+            <option value="Frente No Liberado">Frente no liberado / Losa sin picar</option>
+            <option value="Interferencia MEP">Interferencia instalaciones MEP</option>
+          </select>
+        </div>
+        <div class="field-box">
+          <label>Detalle / Ubicación:</label>
+          <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7">
+        </div>
       </div>
-      <div class="f-group">
-        <label>HH Reales Invertidas:</label>
-        <input type="number" id="mHHReal" value="2.0" step="0.5">
+
+      <!-- Resumen de cálculo Lean -->
+      <div style="background: var(--c-celeste-claro); border: 1px solid var(--c-azul-cian); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center;">
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">TARGET</div><div style="font-size:15px; font-weight:900;" id="mDispTarget">91.0</div></div>
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">HH GANADAS</div><div style="font-size:15px; font-weight:900;" id="mDispHHGan">8.41 h</div></div>
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">EFICIENCIA</div><div style="font-size:15px; font-weight:900; color:var(--status-green);" id="mDispEficiencia">420.5%</div></div>
+        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">ESTADO</div><div style="font-size:14px; font-weight:900; color:var(--status-green);" id="mDispEstado">GANANCIA</div></div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-s" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn btn-p" onclick="guardarRegistro()">💾 Guardar en Sheets</button>
+    <div class="modal-foot">
+      <button class="btn-action btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-action btn-save" onclick="guardarRegistro()">💾 Guardar en Google Sheets</button>
     </div>
   </div>
 </div>
 
 <script>
+// =========================================================================
+// CONFIGURACIÓN DE URL DE GOOGLE APPS SCRIPT
+// =========================================================================
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
 
+// CATÁLOGOS CONVECSA
+const CATALOGO = {
+  PINTURA: {
+    trabajadores: [
+      "MOLLOCONDO SIMEON HILDER CERAPIO", "AREVALO GUERRERO RAUL", "DELGADO RIVAS LUIS MARTÍN",
+      "BERMUDEZ MARIN DARWIN ENMANUEL", "ISUIZA AMASIFUEN SEGUNDO AMADOR", "VELASQUEZ MUÑOZ YORFRAN JOSE",
+      "VASQUEZ CULQUE FELIX ENRIQUE", "VASQUEZ MARTINEZ GUILLERMO CESAR", "VASQUEZ MARTINEZ CARLOS ALONSO", "VASQUEZ MARTINEZ LUIS MIGUEL"
+    ],
+    elementos: ["MURO", "CIELORASO", "PLENUM", "COLUMNAS", "AISLADORES", "FCR DRYWALL"],
+    subprocesos: [
+      { nombre: "Lijado e Imprimado Muros", rend: 91.0, unidad: "m²/d" },
+      { nombre: "Empaste 2 manos Pasta Fina CPP + lijado", rend: 52.0, unidad: "m²/d" },
+      { nombre: "Pintura American Colors 1ra mano", rend: 182.0, unidad: "m²/d" },
+      { nombre: "Pintura American Colors Acabado", rend: 46.0, unidad: "m²/d" },
+      { nombre: "Lijado e imprimado muros para vinil", rend: 156.0, unidad: "m²/d" },
+      { nombre: "Sellador 2 manos CPP puro", rend: 104.0, unidad: "m²/d" }
+    ],
+    unidad: "m²",
+    hoja: "REGISTRO_DIARIO_PINTURA"
+  },
+  SCF: {
+    trabajadores: [
+      "BARDALES CHUFANDAMA MAURO JUNIOR", "OCUMBE SIQUIHUA NELVA", "VELIZ HERNANDEZ XIOMARA ANTUANE",
+      "GUEVARA HERNANDEZ YADIRA ARIANA", "LANDINEZ VALENCIA JUAN GABRIEL", "VILELA ANCAJAIMA CRISTHIAN", "INOCENTE TORRES CALIXTO AMIRCAR"
+    ],
+    elementos: ["JUNTAS", "PUERTA CORTAFUEGO", "TUBERIAS NO METALICAS", "TUBERÍAS METÁLICAS", "BANDEJA METÁLICA", "DUCTOS", "PASES DE MANGUERA"],
+    subprocesos: [
+      { nombre: "JUNTAS a dos caras interiores", rend: 43.0, unidad: "ml/d" },
+      { nombre: "JUNTAS a una cara interiores", rend: 43.0, unidad: "ml/d" },
+      { nombre: "MARCO PUERTAS a dos caras", rend: 52.0, unidad: "ml/d" },
+      { nombre: "PASE DE MANGUERA acceso a dos caras", rend: 7.0, unidad: "und/d" },
+      { nombre: "TUBERIAS NO METALICAS <2\" dos caras", rend: 18.0, unidad: "und/d" },
+      { nombre: "TUBERIAS METALICAS <2\" dos caras", rend: 18.0, unidad: "und/d" },
+      { nombre: "BANDEJAS METALICAS acceso dos caras", rend: 13.0, unidad: "ml/d" },
+      { nombre: "DUCTOS hasta 23\"x23\" dos caras", rend: 13.0, unidad: "und/d" }
+    ],
+    unidad: "ml / und",
+    hoja: "REGISTRO_DIARIO_SCF"
+  }
+};
+
+let MODULO_ACTIVO = "CONSOLIDADO";
+let PERIODO_ACTIVO = "MES";
+let USUARIO_ACTUAL = { rol: "SUPER_ADMIN", nombre: "Jorge Orosco" };
+
+// REGISTROS INICIALES SINCRONIZABLES
+let LOG_REGISTROS = [
+  { id: "PIN-20260919-01", horaExacta: "2026-09-19 08:30:15", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S7", elemento: "MURO", sub: "Pintura 1ra mano", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, hhGan: 1.85, ef: 185.0, est: "GANANCIA", unidad: "m²" },
+  { id: "PIN-20260919-02", horaExacta: "2026-09-19 09:45:22", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 3.73, ef: 93.3, est: "PERDIDA", unidad: "m²" },
+  { id: "SCF-20260919-03", horaExacta: "2026-09-19 11:10:40", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 4, trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "Juntas a 2 caras", metrado: 18.5, hhReal: 3.5, rendOpt: 43.0, hhGan: 3.66, ef: 104.5, est: "GANANCIA", unidad: "ml" },
+  { id: "PIN-20260918-04", horaExacta: "2026-09-18 13:25:10", fecha: "2026-09-18", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos", metrado: 19.8, hhReal: 1.0, rendOpt: 52.0, hhGan: 0.87, ef: 87.0, est: "PERDIDA", unidad: "m²" },
+  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P9", elemento: "PLENUM", sub: "Tuberías <2\"", metrado: 12.0, hhReal: 4.0, rendOpt: 18.0, hhGan: 3.40, ef: 85.0, est: "PERDIDA", unidad: "und" },
+  { id: "PIN-20260916-06", horaExacta: "2026-09-16 15:00:00", fecha: "2026-09-16", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "BERMUDEZ MARIN DARWIN ENMANUEL", nivel: "AZ", elemento: "COLUMNAS", sub: "Empaste columnas", metrado: 26.0, hhReal: 0.63, rendOpt: 52.0, hhGan: 1.25, ef: 198.4, est: "GANANCIA", unidad: "m²" }
+];
+
+let chEvolucion, chElemento, chHHComp, chNivel, chEstado;
+
+// CONTROL DE AUTENTICACIÓN Y LOGIN CON PIN
+function validarAcceso(e) {
+  e.preventDefault();
+  const pin = document.getElementById('pinInput').value;
+  if (pin === "1234" || pin === "2026") {
+    const userVal = document.getElementById('userSelector').value.split('|');
+    USUARIO_ACTUAL.rol = userVal[0];
+    USUARIO_ACTUAL.nombre = userVal[1];
+    document.getElementById('sessionUserBadge').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
+    document.getElementById('loginOverlay').style.display = 'none';
+    sessionStorage.setItem('convecsa_session', JSON.stringify(USUARIO_ACTUAL));
+  } else {
+    alert("❌ PIN Incorrecto. Intente nuevamente.");
+    document.getElementById('pinInput').value = '';
+  }
+}
+
+function cerrarSesion() {
+  sessionStorage.removeItem('convecsa_session');
+  document.getElementById('pinInput').value = '';
+  document.getElementById('loginOverlay').style.display = 'flex';
+}
+
+// INICIALIZACIÓN
 window.addEventListener('DOMContentLoaded', () => {
+  const ses = sessionStorage.getItem('convecsa_session');
+  if (ses) {
+    USUARIO_ACTUAL = JSON.parse(ses);
+    document.getElementById('sessionUserBadge').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
+    document.getElementById('loginOverlay').style.display = 'none';
+  }
+  inicializarGraficos();
+  actualizarTodo();
+});
+
+function setPeriodo(periodo, btn) {
+  PERIODO_ACTIVO = periodo;
+  btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('lblEficTitulo').innerText = "EFICIENCIA (" + periodo + ")";
+  actualizarTodo();
+}
+
+function setModulo(mod, btn) {
+  MODULO_ACTIVO = mod;
+  btn.parentElement.querySelectorAll('.pill-btn, .b-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  actualizarTodo();
+}
+
+function getDatosFiltrados() {
+  let list = LOG_REGISTROS;
+  if (MODULO_ACTIVO !== "CONSOLIDADO") list = list.filter(r => r.modulo === MODULO_ACTIVO);
+  const hoyStr = new Date().toISOString().split('T')[0];
+  if (PERIODO_ACTIVO === "DIA") list = list.filter(r => r.fecha === hoyStr || r.horaExacta.startsWith(hoyStr));
+  else if (PERIODO_ACTIVO === "SEMANA") list = list.filter(r => r.semana === 7 || r.fecha >= "2026-09-14");
+  else if (PERIODO_ACTIVO === "MES") list = list.filter(r => r.fecha >= "2026-09-01");
+  return list;
+}
+
+function actualizarTodo() {
+  actualizarKPIs();
+  renderizarAuditoriaTrabajadores();
+  renderizarTabla();
+  actualizarGraficos();
+}
+
+function actualizarKPIs() {
+  const datos = getDatosFiltrados();
+  const totHHReal = datos.reduce((acc, r) => acc + r.hhReal, 0);
+  const totHHGan = datos.reduce((acc, r) => acc + r.hhGan, 0);
+  const ef = totHHReal > 0 ? (totHHGan / totHHReal) * 100 : 0;
+  const perdidas = datos.reduce((acc, r) => acc + Math.max(r.hhReal - r.hhGan, 0), 0);
+  const impacto = perdidas * 142.5;
+  const operarios = new Set(datos.map(r => r.trabajador)).size;
+
+  document.getElementById('valEficiencia').innerText = ef.toFixed(1) + "%";
+  document.getElementById('valEficSemanal').innerText = ef.toFixed(1) + "%";
+  document.getElementById('valHHPerdidas').innerHTML = perdidas.toFixed(2) + "<span style='font-size:18px;'> hrs</span>";
+  document.getElementById('valImpactoSoles').innerText = "S/. " + impacto.toFixed(0) + " impacto estimado";
+  document.getElementById('valOperariosTotal').innerText = operarios + " operarios activos";
+
+  const badge = document.getElementById('badgeEstadoEfic');
+  badge.className = ef >= 100 ? "kpi-tag-status ganancia" : "kpi-tag-status perdida";
+  badge.innerText = ef >= 100 ? "Ganancia" : "Pérdida";
+
+  drawGauge(ef);
+}
+
+function drawGauge(pct) {
+  const c = document.getElementById('gaugeCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, 90, 46);
+  const cx = 45, cy = 44, r = 30;
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
+  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 5.5; ctx.stroke();
+
+  const angulo = Math.PI + (Math.min(pct, 150) / 150) * Math.PI;
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, angulo);
+  ctx.strokeStyle = pct >= 100 ? '#10B981' : '#E11D48';
+  ctx.lineWidth = 5.5; ctx.stroke();
+}
+
+function renderizarAuditoriaTrabajadores() {
+  const grid = document.getElementById('gridTrabajadores');
+  grid.innerHTML = '';
+  const datos = getDatosFiltrados();
+
+  const mapa = {};
+  datos.forEach(r => {
+    if (!mapa[r.trabajador]) mapa[r.trabajador] = { nombre: r.trabajador, hhReal: 0, hhGan: 0, metrado: 0, unidad: r.unidad };
+    mapa[r.trabajador].hhReal += r.hhReal;
+    mapa[r.trabajador].hhGan += r.hhGan;
+    mapa[r.trabajador].metrado += r.metrado;
+  });
+
+  const arr = Object.values(mapa).sort((a,b) => (b.hhGan/b.hhReal) - (a.hhGan/a.hhReal));
+  document.getElementById('lblTotalEvaluados').innerText = arr.length + " evaluados (" + PERIODO_ACTIVO + ")";
+
+  arr.forEach(op => {
+    const ef = op.hhReal > 0 ? (op.hhGan / op.hhReal) * 100 : 0;
+    const esGan = ef >= 100;
+    const col = esGan ? '#059669' : '#DC2626';
+    const card = document.createElement('div');
+    card.className = 'worker-item';
+    card.innerHTML = `
+      <div class="worker-top">
+        <span class="worker-name">${op.nombre}</span>
+        <span style="font-size:10px; font-weight:900; color:${col}; background:${esGan ? '#D1FAE5' : '#FEE2E2'}; padding:2px 6px; border-radius:5px;">
+          ${ef.toFixed(1)}% ${esGan ? 'GANANCIA' : 'PÉRDIDA'}
+        </span>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+        <span>Metrado: <b>${op.metrado.toFixed(1)} ${op.unidad}</b></span>
+        <span>HH Real: <b>${op.hhReal.toFixed(1)}h</b> (Meta: ${op.hhGan.toFixed(1)}h)</span>
+      </div>
+      <div class="worker-bar-bg"><div class="worker-bar-fill" style="width:${Math.min(ef, 100)}%; background:${col};"></div></div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderizarTabla() {
+  const t = document.getElementById('tablaBody');
+  t.innerHTML = '';
+  getDatosFiltrados().forEach(r => {
+    const isGan = r.est === "GANANCIA";
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><b>${r.id}</b></td>
+      <td><span style="font-size:10px; font-family:monospace;">${r.horaExacta.split(' ')[1]}</span></td>
+      <td><span style="background:#E3F2FD; color:#0052CC; padding:2px 5px; border-radius:4px; font-weight:800; font-size:9.5px;">${r.hoja || r.modulo}</span></td>
+      <td><b>${r.trabajador}</b></td>
+      <td><span style="background:#F1F5F9; font-weight:900; padding:2px 5px; border-radius:4px;">${r.nivel}</span></td>
+      <td>${r.sub}</td>
+      <td style="text-align:right; font-weight:800;">${r.metrado.toFixed(1)} ${r.unidad}</td>
+      <td style="text-align:right; font-family:monospace;">${r.hhReal.toFixed(2)}h</td>
+      <td style="text-align:center; font-weight:900; color:${isGan ? '#059669':'#DC2626'};">${r.ef}%</td>
+      <td><span class="kpi-tag-status ${isGan ? 'ganancia':'perdida'}">${r.est}</span></td>
+    `;
+    t.appendChild(tr);
+  });
+}
+
+function inicializarGraficos() {
   Chart.defaults.font.family = 'Plus Jakarta Sans';
   Chart.defaults.color = '#64748B';
 
-  const cg = document.getElementById('gaugeC').getContext('2d');
-  cg.beginPath();
-  cg.arc(35, 32, 24, Math.PI, 2 * Math.PI);
-  cg.strokeStyle = '#E2E8F0'; cg.lineWidth = 4; cg.stroke();
-  cg.beginPath();
-  cg.arc(35, 32, 24, Math.PI, 1.7 * Math.PI);
-  cg.strokeStyle = '#10B981'; cg.lineWidth = 4; cg.stroke();
-
-  new Chart(document.getElementById('chartEvolucion'), {
+  // 1. Línea Evolución
+  chEvolucion = new Chart(document.getElementById('chartEvolucionSem'), {
     type: 'line',
     data: {
       labels: ['Sem 3', 'Sem 4', 'Sem 7'],
       datasets: [
-        { label: 'Efic %', data: [66.5, 66.7, 58.7], borderColor: '#6366F1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.3, pointRadius: 3 },
-        { label: 'Meta', data: [100, 100, 100], borderColor: '#10B981', borderDash: [4, 4], pointRadius: 0 }
+        { label: 'Eficiencia %', data: [66.5, 66.7, 58.7], borderColor: '#6366F1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.35, pointRadius: 4 },
+        { label: 'Meta 100%', data: [100, 100, 100], borderColor: '#10B981', borderDash: [5, 4], pointRadius: 0 }
       ]
     },
-    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160, ticks: { font: { size: 8 } } }, x: { ticks: { font: { size: 8 } } } }, plugins: { legend: { display: false } } }
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160 } } }
   });
 
-  new Chart(document.getElementById('chartElemento'), {
+  // 2. Barras por Elemento
+  chElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
     data: {
-      labels: ['MURO', 'CIELO', 'PLEN', 'COL'],
-      datasets: [{ data: [136, 48, 48.5, 160], backgroundColor: ['#10B981', '#EF4444', '#EF4444', '#10B981'], borderRadius: 3 }]
+      labels: ['MURO', 'CIELORASO', 'PLENUM', 'COLUMNAS'],
+      datasets: [{ label: 'Efic %', data: [136, 48, 48.5, 160], backgroundColor: ['#10B981', '#EF4444', '#EF4444', '#10B981'], borderRadius: 4 }]
     },
-    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { min: 0, max: 160, ticks: { font: { size: 8 } } }, y: { ticks: { font: { size: 8 } } } }, plugins: { legend: { display: false } } }
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
   });
 
-  new Chart(document.getElementById('chartHH'), {
+  // 3. HH Comparativo
+  chHHComp = new Chart(document.getElementById('chartHHComp'), {
     type: 'bar',
     data: {
-      labels: ['S3', 'S4', 'S7'],
+      labels: ['Sem 3', 'Sem 4', 'Sem 7'],
       datasets: [
-        { label: 'Gan', data: [15.2, 2.1, 27.4], backgroundColor: '#818CF8', borderRadius: 3 },
-        { label: 'Real', data: [22.8, 3.1, 46.7], backgroundColor: '#F87171', borderRadius: 3 }
+        { label: 'HH Ganadas', data: [15.2, 2.1, 27.4], backgroundColor: '#818CF8', borderRadius: 4 },
+        { label: 'HH Reales', data: [22.8, 3.1, 46.7], backgroundColor: '#F87171', borderRadius: 4 }
       ]
     },
-    options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { font: { size: 8 } } }, x: { ticks: { font: { size: 8 } } } }, plugins: { legend: { display: false } } }
+    options: { responsive: true, maintainAspectRatio: false }
   });
 
-  new Chart(document.getElementById('chartNivel'), {
+  // 4. Distribución por Nivel
+  chNivel = new Chart(document.getElementById('chartPorNivel'), {
     type: 'doughnut',
     data: {
       labels: ['S1', 'P1', 'P2', 'P4', 'P3'],
       datasets: [{ data: [12, 18, 52, 14, 26], backgroundColor: ['#6366F1', '#38BDF8', '#10B981', '#F59E0B', '#EF4444'] }]
     },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+    options: { responsive: true, maintainAspectRatio: false, cutout: '65%' }
   });
 
-  new Chart(document.getElementById('chartEstado'), {
+  // 5. Estado Actividades
+  chEstado = new Chart(document.getElementById('chartEstadoActs'), {
     type: 'doughnut',
     data: {
       labels: ['Pérdida', 'Ganancia'],
       datasets: [{ data: [27, 19], backgroundColor: ['#EF4444', '#10B981'] }]
     },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '68%', plugins: { legend: { display: false } } }
+    options: { responsive: true, maintainAspectRatio: false, cutout: '66%' }
   });
-});
+}
 
-function switchMobileCards(view, btn) {
-  btn.parentElement.querySelectorAll('.m-tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function actualizarGraficos() {
+  if (!chEstado) return;
+  const d = getDatosFiltrados();
+  const gan = d.filter(r => r.est === "GANANCIA").length;
+  const per = d.filter(r => r.est === "PERDIDA").length;
+  chEstado.data.datasets[0].data = [per || 0, gan || 1];
+  chEstado.update();
+}
 
-  const bTop = document.getElementById('blockTopCharts');
-  const bBot = document.getElementById('blockBottomCharts');
+// =========================================================================
+// FUNCIONALIDAD: EXPORTAR A EXCEL (.XLSX) CON TODAS LAS FÓRMULAS VIVAS
+// =========================================================================
+function exportarExcelConFormulas() {
+  const datos = getDatosFiltrados();
+  const fechaHoy = new Date().toISOString().split('T')[0];
 
-  if (view === 'TOP') {
-    bTop.style.display = 'grid';
-    bBot.style.display = 'none';
-  } else {
-    bTop.style.display = 'none';
-    bBot.style.display = 'grid';
+  // Matriz de datos con fórmulas de Excel
+  const wsData = [
+    ["CONVECSA S.A.C. - REPORTE DIARIO DE OBRA Y EVALUACIÓN LEAN"],
+    ["PROYECTO: TORRE HOSP. SAN BORJA (THSSB)", "", "FECHA:", fechaHoy],
+    [""],
+    ["ID_REGISTRO", "TIMESTAMP", "FECHA", "HOJA", "OPERARIO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO", "UNIDAD", "HH_REAL", "REND_OPT", "HH_GANADAS", "EFICIENCIA", "ESTADO"]
+  ];
+
+  datos.forEach((r, idx) => {
+    const rowNum = idx + 5;
+    wsData.push([
+      r.id,
+      r.horaExacta,
+      r.fecha,
+      r.hoja || r.modulo,
+      r.trabajador,
+      r.nivel,
+      r.elemento,
+      r.sub,
+      r.metrado,
+      r.unidad,
+      r.hhReal,
+      r.rendOpt,
+      { f: `I${rowNum}*(17/L${rowNum})` }, // Fórmula viva de HH Ganadas
+      { f: `M${rowNum}/K${rowNum}` },       // Fórmula viva de Eficiencia
+      { f: `IF(N${rowNum}>=1,"GANANCIA","PERDIDA")` } // Fórmula viva de Estado
+    ]);
+  });
+
+  // Fila de Totales
+  const lastRow = wsData.length;
+  wsData.push([
+    "TOTALES", "", "", "", "", "", "", "",
+    { f: `SUM(I5:I${lastRow})` }, "m²",
+    { f: `SUM(K5:K${lastRow})` }, "",
+    { f: `SUM(M5:M${lastRow})` },
+    { f: `AVERAGE(N5:N${lastRow})` },
+    ""
+  ]);
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  XLSX.utils.book_append_sheet(wb, ws, "RDO_LEAN_THSSB");
+  XLSX.writeFile(wb, `RDO_CONVECSA_THSSB_${fechaHoy}.xlsx`);
+}
+
+// =========================================================================
+// FUNCIONALIDAD: DESCARGAR REPORTE DIARIO EN PDF OFICIAL
+// =========================================================================
+function exportarReportePDF() {
+  const el = document.getElementById('pdfReportContent');
+  const opt = {
+    margin: 6,
+    filename: `RDO_OFICIAL_CONVECSA_${new Date().toISOString().split('T')[0]}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+  };
+  html2pdf().set(opt).from(el).save();
+}
+
+// MODAL DE REGISTRO
+function abrirModal() {
+  actualizarCatalogosModal();
+  document.getElementById('modalCaptura').classList.add('open');
+}
+function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
+
+function actualizarCatalogosModal() {
+  const esp = document.getElementById('mEspecialidad').value;
+  const cfg = CATALOGO[esp];
+  const sT = document.getElementById('mTrabajador'); sT.innerHTML = '';
+  cfg.trabajadores.forEach(t => sT.innerHTML += `<option value="${t}">${t}</option>`);
+  const sE = document.getElementById('mElemento'); sE.innerHTML = '';
+  cfg.elementos.forEach(e => sE.innerHTML += `<option value="${e}">${e}</option>`);
+  const sS = document.getElementById('mSubproceso'); sS.innerHTML = '';
+  cfg.subprocesos.forEach(s => sS.innerHTML += `<option value="${s.nombre}|${s.rend}|${s.unidad}">${s.nombre} (${s.rend} ${s.unidad})</option>`);
+  document.getElementById('lblUnidadModal').innerText = `Metrado Ejecutado (${cfg.unidad}):`;
+  recalcularMetricasModal();
+}
+
+function recalcularMetricasModal() {
+  const subData = document.getElementById('mSubproceso').value.split('|');
+  const rendOpt = parseFloat(subData[1]) || 52.0;
+  const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
+  const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
+  const hhGan = metrado * (17.0 / rendOpt);
+  const ef = (hhGan / hhReal) * 100;
+
+  document.getElementById('mDispTarget').innerText = rendOpt.toFixed(1);
+  document.getElementById('mDispHHGan').innerText = hhGan.toFixed(2) + " h";
+  document.getElementById('mDispEficiencia').innerText = ef.toFixed(1) + "%";
+  document.getElementById('mDispEficiencia').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
+  document.getElementById('mDispEstado').innerText = ef >= 100 ? "GANANCIA" : "PERDIDA";
+  document.getElementById('mDispEstado').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
+}
+
+function guardarRegistro() {
+  const esp = document.getElementById('mEspecialidad').value;
+  const cfg = CATALOGO[esp];
+  const trabajador = document.getElementById('mTrabajador').value;
+  const nivel = document.getElementById('mNivel').value;
+  const elemento = document.getElementById('mElemento').value;
+  const subData = document.getElementById('mSubproceso').value.split('|');
+  const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
+  const hhReal = parseFloat(document.getElementById('mHHReal').value) || 1.0;
+  const rendOpt = parseFloat(subData[1]);
+  const unidad = subData[2] ? subData[2].split('/')[0] : "m²";
+
+  const now = new Date();
+  const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  const hhGan = metrado * (17.0 / rendOpt);
+  const ef = (hhGan / hhReal) * 100;
+  const estado = ef >= 100 ? "GANANCIA" : "PERDIDA";
+
+  const nuevoItem = {
+    id: (esp === "SCF" ? "SCF-" : "PIN-") + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0'),
+    horaExacta: timeStr,
+    fecha: timeStr.split(' ')[0],
+    modulo: esp,
+    hoja: cfg.hoja,
+    semana: 7,
+    trabajador: trabajador,
+    nivel: nivel,
+    elemento: elemento,
+    sub: subData[0],
+    metrado: metrado,
+    hhReal: hhReal,
+    rendOpt: rendOpt,
+    hhGan: hhGan,
+    ef: parseFloat(ef.toFixed(1)),
+    est: estado,
+    unidad: unidad
+  };
+
+  LOG_REGISTROS.unshift(nuevoItem);
+  actualizarTodo();
+  cerrarModal();
+
+  // Envío a Google Sheets en segundo plano
+  const payload = {
+    fecha: timeStr.split(' ')[0],
+    modulo: esp,
+    usuarioEmail: USUARIO_ACTUAL.nombre,
+    trabajador: trabajador,
+    nivel: nivel,
+    elemento: elemento,
+    subproceso: subData[0],
+    rendOpt: rendOpt,
+    metrado: metrado,
+    hhReal: hhReal,
+    causa: document.getElementById('mCausa').value,
+    detalle: document.getElementById('mObs').value
+  };
+
+  if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
+    fetch(ENDPOINT_APPS_SCRIPT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    });
   }
 }
 
-function setPeriodo(periodo, btn) {
-  btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function setModulo(mod, btn) {
-  btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function abrirModal() { document.getElementById('modalCaptura').classList.add('open'); }
-function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
-
-function guardarRegistro() {
-  alert("✅ Registro guardado en tiempo real en Google Sheets.");
-  cerrarModal();
-}
-
 function sincronizarConSheets() {
-  alert("🔄 Datos sincronizados en vivo con el RDO Oficial.");
+  if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
+    fetch(ENDPOINT_APPS_SCRIPT)
+      .then(res => res.json())
+      .then(data => {
+        if (data.registros && data.registros.length > 0) {
+          LOG_REGISTROS = data.registros;
+          actualizarTodo();
+          alert("✅ Sincronización exitosa con las hojas de Google Sheets.");
+        }
+      }).catch(() => alert("Modo local activo."));
+  }
 }
 </script>
 </body>
