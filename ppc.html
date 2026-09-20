@@ -15,6 +15,7 @@
   --bg-surface: #091322;
   --bg-sidebar: #060E1A;
   --bg-card: rgba(13, 24, 44, 0.85);
+  --card-item-bg: rgba(0, 0, 0, 0.25);
   --border-glass: rgba(0, 150, 225, 0.2);
   --text-main: #F1F5F9;
   --text-muted: #94A3B8;
@@ -23,6 +24,12 @@
   --c-green: #00E676;
   --c-red: #FF1744;
   --c-amber: #FFB300;
+  --status-green-text: #00E676;
+  --status-green-bg: rgba(0, 230, 118, 0.15);
+  --status-green-border: rgba(0, 230, 118, 0.35);
+  --status-red-text: #FF1744;
+  --status-red-bg: rgba(255, 23, 68, 0.15);
+  --status-red-border: rgba(255, 23, 68, 0.35);
   --radius-card: 12px;
 }
 
@@ -31,10 +38,20 @@
   --bg-surface: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   --bg-card: #FFFFFF;
-  --border-glass: #CBD5E1;
+  --card-item-bg: #F1F5F9;
+  --border-glass: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #475569;
   --c-cyan: #0052CC;
+  --c-green: #047857;
+  --c-red: #B91C1C;
+  --c-amber: #B45309;
+  --status-green-text: #047857;
+  --status-green-bg: #DCFCE7;
+  --status-green-border: #86EFAC;
+  --status-red-text: #B91C1C;
+  --status-red-bg: #FEE2E2;
+  --status-red-border: #FCA5A5;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -71,13 +88,20 @@ body::before {
 
 .app-shell { display: flex; width: 100%; min-height: 100vh; }
 
-/* 1. BARRA LATERAL IZQUIERDA FIJA PERMANENTE */
+/* BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) */
 .convecsa-sidebar {
   width: 86px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
   display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px;
   position: fixed; top: 0; left: 0; bottom: 0; height: 100vh; z-index: 200; flex-shrink: 0;
 }
 @media (max-width: 1023px) { .convecsa-sidebar { display: none; } }
+
+.cockpit-area {
+  flex: 1; display: flex; flex-direction: column; min-width: 0;
+}
+@media (min-width: 1024px) {
+  .cockpit-area { margin-left: 86px; }
+}
 
 .sidebar-nav-item {
   width: 74px; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -91,40 +115,29 @@ body::before {
 .sidebar-nav-item svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8; fill: none; }
 .sidebar-nav-label { font-size: 9px; font-weight: 500; text-align: center; }
 
-/* ÁREA DE COCKPIT CON MARGEN RESPECTO A LA SIDEBAR FIJA */
-.cockpit-area {
-  flex: 1; display: flex; flex-direction: column; min-width: 0;
+/* TOPBAR Y STRIP DE COMANDOS ENCABEZADO STICKY */
+.sticky-header-wrapper {
+  position: sticky; top: 0; z-index: 180;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-glass);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
 }
-@media (min-width: 1024px) {
-  .cockpit-area { margin-left: 86px; }
-}
-
-/* TOPBAR */
 .topbar-cyber {
-  background: var(--bg-surface); border-bottom: 1px solid var(--border-glass);
   padding: 10px 18px; display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 90;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 .status-beacon {
   width: 8px; height: 8px; background: var(--c-green);
   border-radius: 50%; box-shadow: 0 0 10px var(--c-green);
 }
 
-.cockpit-canvas {
-  width: 100%; max-width: 1440px; margin: 0 auto; padding: 14px;
-  display: flex; flex-direction: column; gap: 14px; padding-bottom: 90px;
-}
-
-/* 2. BARRA SUPERIOR PERMANENTE EN 1 SOLA FILA RESPONSIVA (STICKY) */
 .command-strip {
-  background: var(--bg-surface); border-bottom: 1px solid var(--border-glass);
-  padding: 10px 18px; display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; position: sticky; top: 0; z-index: 150; backdrop-filter: blur(16px);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.35); overflow-x: auto; white-space: nowrap;
+  padding: 8px 18px; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; overflow-x: auto; white-space: nowrap;
 }
 .command-strip::-webkit-scrollbar { height: 3px; }
 .command-strip::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 4px; }
-
 .btn-group-cyber { display: flex; gap: 4px; background: rgba(0,0,0,0.2); padding: 3px; border-radius: 8px; }
 .cmd-btn {
   border: none; background: transparent; padding: 5px 12px; border-radius: 6px;
@@ -135,6 +148,11 @@ body::before {
 .date-picker-cyber {
   padding: 5px 8px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-glass);
   border-radius: 6px; color: var(--text-main); font-family: inherit; font-size: 11px; outline: none;
+}
+
+.cockpit-canvas {
+  width: 100%; max-width: 1440px; margin: 0 auto; padding: 14px;
+  display: flex; flex-direction: column; gap: 14px; padding-bottom: 90px;
 }
 
 /* CARDS */
@@ -164,7 +182,7 @@ body::before {
 }
 .badge-subtle { padding: 2px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 600; }
 
-/* MODALES */
+/* MODALES SEGUROS PARA IPAD / IPHONE */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 99999 !important; display: none;
@@ -214,6 +232,7 @@ body::before {
   display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
 }
 
+/* BARRA DE PROGRESO DE REGISTRO */
 .save-progress-container {
   flex: 1; display: none; flex-direction: column; gap: 3px; min-width: 140px;
 }
@@ -249,7 +268,7 @@ body::before {
 input:checked + .slider-switch { background-color: var(--c-green); }
 input:checked + .slider-switch:before { transform: translateX(18px); }
 
-/* BARRA INFERIOR MOBILE */
+/* BARRA INFERIOR MOBILE CON BOTÓN REGISTRAR TÁCTIL BLINDADO */
 .mobile-bottom-bar {
   position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
   background: var(--bg-surface); border-top: 1px solid var(--border-glass);
@@ -291,7 +310,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
 <div class="app-shell">
   
-  <!-- BARRA LATERAL IZQUIERDA FIJA -->
+  <!-- BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) -->
   <aside class="convecsa-sidebar">
     <button class="sidebar-nav-item active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
       <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
@@ -332,42 +351,27 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   </aside>
 
   <div class="cockpit-area">
-    <header class="topbar-cyber">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="status-beacon"></div>
-        <div>
-          <div style="font-size:13px; font-weight:700;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
-          <div style="font-size:10px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
-        </div>
-      </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button class="btn-cyber-action" onclick="toggleTheme()" style="background:rgba(0,150,225,0.12); color:var(--c-cyan);" title="Alternar tema">
-          <span id="iconTemaTopbar">⚡</span> <span id="lblTemaTopbar" style="font-size:10.5px;">Auto</span>
-        </button>
-        <span id="userBadgeOnline" style="font-size:11px; font-weight:600; margin-left:4px;">Jorge Orosco</span>
-        <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-size:11px; font-weight:600; cursor:pointer;">Salir</button>
-      </div>
-    </header>
-
-    <main class="cockpit-canvas" id="cockpitPrintArea">
-      
-      <!-- MONITOR CONTRACTUAL DE PLAZO -->
-      <section id="panelAlertaPlazo" style="background:rgba(255,179,0,0.1); border:1px solid var(--c-amber); border-radius:var(--radius-card); padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    
+    <!-- ENCABEZADO SUPERIOR FIJO Y PERMANENTE AL HACER SCROLL -->
+    <div class="sticky-header-wrapper">
+      <header class="topbar-cyber">
         <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:18px;">⏱️</span>
+          <div class="status-beacon"></div>
           <div>
-            <div style="font-size:11px; font-weight:700; color:var(--c-amber);" id="txtPlazoTitulo">CONTROL CONTRACTUAL DE PLAZO: 9 MESES (INICIO: 15/09/2026)</div>
-            <div style="font-size:10px; color:var(--text-muted);" id="txtPlazoSub">Mes de Ejecución: Mes 1 de 9 · Fin Contractual: 15/06/2027</div>
+            <div style="font-size:13px; font-weight:700;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
+            <div style="font-size:10px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
           </div>
         </div>
-        <div style="display:flex; gap:14px; align-items:center; font-family:'JetBrains Mono'; font-size:11px;">
-          <span>Programado: <b style="color:var(--c-cyan);" id="txtPgmPct">11.1%</b></span>
-          <span>Real: <b style="color:var(--c-green);" id="txtRealPct">0.0%</b></span>
-          <span id="badgeDesvioPlazo" style="padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(0,230,118,0.2); color:var(--c-green);">EN PLAZO</span>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="btn-cyber-action" onclick="toggleTheme()" style="background:rgba(0,150,225,0.12); color:var(--c-cyan);" title="Alternar tema">
+            <span id="iconTemaTopbar">⚡</span> <span id="lblTemaTopbar" style="font-size:10.5px;">Auto</span>
+          </button>
+          <span id="userBadgeOnline" style="font-size:11px; font-weight:600; margin-left:4px;">Jorge Orosco</span>
+          <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-size:11px; font-weight:600; cursor:pointer;">Salir</button>
         </div>
-      </section>
+      </header>
 
-      <!-- BARRA SUPERIOR PERMANENTE EN 1 SOLA FILA (STICKY) -->
+      <!-- BARRA DE FILTROS DÍA / SEMANA / MES / AÑO SIEMPRE VISIBLE EN 1 SOLA FILA -->
       <section class="command-strip">
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:nowrap;">
           <div class="btn-group-cyber">
@@ -387,6 +391,25 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
         <div style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--text-muted);" id="lblFiltroEspecialidadActiva">
           ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b>
+        </div>
+      </section>
+    </div>
+
+    <main class="cockpit-canvas" id="cockpitPrintArea">
+      
+      <!-- MONITOR CONTRACTUAL DE PLAZO -->
+      <section id="panelAlertaPlazo" style="background:rgba(255,179,0,0.1); border:1px solid var(--c-amber); border-radius:var(--radius-card); padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px;">⏱️</span>
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--c-amber);" id="txtPlazoTitulo">CONTROL CONTRACTUAL DE PLAZO: 9 MESES (INICIO: 15/09/2026)</div>
+            <div style="font-size:10px; color:var(--text-muted);" id="txtPlazoSub">Mes de Ejecución: Mes 1 de 9 · Fin Contractual: 15/06/2027</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:14px; align-items:center; font-family:'JetBrains Mono'; font-size:11px;">
+          <span>Programado: <b style="color:var(--c-cyan);" id="txtPgmPct">11.1%</b></span>
+          <span>Real: <b style="color:var(--c-green);" id="txtRealPct">0.0%</b></span>
+          <span id="badgeDesvioPlazo" style="padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(0,230,118,0.2); color:var(--c-green);">EN PLAZO</span>
         </div>
       </section>
 
@@ -468,7 +491,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
           <table class="cyber-table">
             <thead>
               <tr>
-                <th style="width:115px;">FECHA Y HORA</th>
+                <th style="width:115px;">FECHA, HORA Y USUARIO</th>
                 <th>PERSONAL</th>
                 <th style="width:65px; text-align:center;">NIVEL</th>
                 <th>SUBPROCESO</th>
@@ -487,7 +510,9 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   </div>
 </div>
 
-<!-- MODAL SMART CAPTURE PROTEGIDO -->
+<!-- =========================================================================
+     MODAL SMART CAPTURE: CAMPOS 100% PRE-CARGADOS Y PROTEGIDO PARA CAPATACES
+     ========================================================================= -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
     <div class="m-head-c">
@@ -513,6 +538,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       <div class="form-row-2col">
         <div class="field-cyber">
           <label>Operario Responsable:</label>
+          <!-- Pre-poblado estático garantizado para que nunca aparezca en blanco -->
           <select id="mTrabajador">
             <option value="BARDALES CHUFANDAMA MAURO JUNIOR">BARDALES CHUFANDAMA MAURO JUNIOR (OPERARIO)</option>
             <option value="OCUMBE SIQUIHUA NELVA">OCUMBE SIQUIHUA NELVA (OPERARIO)</option>
@@ -545,6 +571,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       <div class="form-row-2col">
         <div class="field-cyber">
           <label>Elemento Constructivo:</label>
+          <!-- Pre-poblado estático garantizado -->
           <select id="mElemento">
             <option value="JUNTAS" selected>JUNTAS</option>
             <option value="PASES DE MANGUERA">PASES DE MANGUERA</option>
@@ -563,6 +590,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
       <div class="field-cyber">
         <label>Partida / Subproceso Oficial (Target):</label>
+        <!-- Pre-poblado estático garantizado con nomenclatura limpia 01, 02... -->
         <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;">
           <option value="01|JUNTAS a dos caras interiores|30.0|ml" selected>01 JUNTAS a dos caras interiores (30.0 ml/día)</option>
           <option value="02|JUNTAS a una cara interiores|30.0|ml">02 JUNTAS a una cara interiores (30.0 ml/día)</option>
@@ -799,7 +827,7 @@ const FECHA_INICIO_OBRA = new Date("2026-09-15T00:00:00");
 const PLAZO_MESES = 9;
 const FECHA_FIN_OBRA = new Date("2027-06-15T00:00:00");
 
-// RECURSOS BASE CON RECUPERACIÓN AUTOMÁTICA
+// RECURSOS BASE
 const RECURSOS_DEFAULT = [
   { id: 1, nombre: "BARDALES CHUFANDAMA MAURO JUNIOR", modulo: "SCF", cargo: "OPERARIO", activo: true },
   { id: 2, nombre: "OCUMBE SIQUIHUA NELVA", modulo: "SCF", cargo: "OPERARIO", activo: true },
@@ -920,6 +948,7 @@ function logout() {
   document.getElementById('loginOverlay').style.display = 'flex';
 }
 
+// INICIALIZACIÓN
 window.addEventListener('DOMContentLoaded', () => {
   const hoyStr = new Date().toISOString().split('T')[0];
   document.getElementById('mFecha').value = hoyStr;
@@ -934,7 +963,7 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginOverlay').style.display = 'none';
   }
 
-  // Sanitización automática de LocalStorage
+  // Sanitización de LocalStorage
   try {
     const mLocal = localStorage.getItem('convecsa_metrados_thssb');
     if (mLocal) {
@@ -960,7 +989,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setInterval(() => { sincronizarConSheets(false); }, 25000);
 });
 
-// TEMA TRI-ESTADO (OSCURO / CLARO / AUTO)
+// TEMA TRI-ESTADO
 let MODO_TEMA = localStorage.getItem('convecsa_theme_mode') || 'auto';
 
 function toggleTheme() {
@@ -1156,22 +1185,26 @@ function renderizarAuditoria() {
   arr.forEach(op => {
     const ef = op.hhReal > 0 ? (op.hhGan / op.hhReal) * 100 : 0;
     const esGan = ef >= 100;
-    const col = esGan ? '#00E676' : '#FF1744';
+    const colText = esGan ? 'var(--status-green-text)' : 'var(--status-red-text)';
+    const colBg = esGan ? 'var(--status-green-bg)' : 'var(--status-red-bg)';
+    const colBorder = esGan ? 'var(--status-green-border)' : 'var(--status-red-border)';
+    const barCol = esGan ? 'var(--c-green)' : 'var(--c-red)';
+
     const card = document.createElement('div');
-    card.style.cssText = "background:rgba(0,0,0,0.2); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:5px;";
+    card.style.cssText = "background:var(--card-item-bg); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:flex; flex-direction:column; gap:5px;";
     card.innerHTML = `
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-weight:600; font-size:11.5px;">${op.nombre}</span>
-        <span style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:700; color:${col}; background:${esGan ? 'rgba(0,230,118,0.15)' : 'rgba(255,23,68,0.15)'}; padding:1px 6px; border-radius:4px;">
+        <span style="font-weight:600; font-size:11.5px; color:var(--text-main);">${op.nombre}</span>
+        <span style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:700; color:${colText}; background:${colBg}; border:1px solid ${colBorder}; padding:1px 6px; border-radius:4px;">
           ${ef.toFixed(1)}% ${esGan ? 'GANANCIA' : 'PÉRDIDA'}
         </span>
       </div>
       <div style="display:flex; justify-content:space-between; font-size:10.5px; color:var(--text-muted); font-family:'JetBrains Mono';">
-        <span>METRADO: <b>${op.metrado.toFixed(1)} ${op.unidad}</b></span>
-        <span>HH REAL: <b>${op.hhReal.toFixed(1)}h</b></span>
+        <span>METRADO: <b style="color:var(--text-main);">${op.metrado.toFixed(1)} ${op.unidad}</b></span>
+        <span>HH REAL: <b style="color:var(--text-main);">${op.hhReal.toFixed(1)}h</b></span>
       </div>
-      <div style="width:100%; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
-        <div style="width:${Math.min(ef, 100)}%; height:100%; background:${col};"></div>
+      <div style="width:100%; height:4px; background:rgba(0,0,0,0.1); border-radius:2px; overflow:hidden;">
+        <div style="width:${Math.min(ef, 100)}%; height:100%; background:${barCol};"></div>
       </div>
     `;
     grid.appendChild(card);
@@ -1197,7 +1230,7 @@ function renderizarTabla() {
   t.innerHTML = '';
   const datos = getDatosFiltrados();
   
-  // Resumen QA/QC sobre la cabecera
+  // Actualizar resumen QA/QC en cabecera
   const tot = datos.length;
   const proto = datos.filter(r => r.qaqc === "PROTOCOLIZADO").length;
   const pend = tot - proto;
@@ -1210,24 +1243,27 @@ function renderizarTabla() {
   datos.forEach(r => {
     const isGan = r.est === "GANANCIA";
     const horaFormateada = formatearHora24(r.horaExacta);
+    const nombreCompleto = r.usuario || r.usuarioEmail || (USUARIO_ACTUAL ? USUARIO_ACTUAL.nombre : "Jorge");
+    const primerNombre = String(nombreCompleto).trim().split(' ')[0] || "Jorge";
     const isProto = r.qaqc === "PROTOCOLIZADO";
-    const btnQABg = isProto ? "rgba(0, 230, 118, 0.15)" : "rgba(255, 179, 0, 0.15)";
-    const btnQACol = isProto ? "var(--c-green)" : "var(--c-amber)";
-    const btnQABorder = isProto ? "rgba(0, 230, 118, 0.4)" : "rgba(255, 179, 0, 0.4)";
+    const btnQABg = isProto ? "var(--status-green-bg)" : "rgba(255, 179, 0, 0.15)";
+    const btnQACol = isProto ? "var(--status-green-text)" : "var(--c-amber)";
+    const btnQABorder = isProto ? "var(--status-green-border)" : "rgba(255, 179, 0, 0.4)";
     const btnQATxt = isProto ? "✅ Protocolizado" : "⏳ Pendiente";
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>
-        <div style="font-family:'JetBrains Mono'; font-size:11px; font-weight:600; color:var(--text-main);">${r.fecha}</div>
-        <div style="font-family:'JetBrains Mono'; font-size:10px; color:var(--c-cyan); font-weight:600; letter-spacing:0.3px;">${horaFormateada}</div>
+        <div style="font-family:'JetBrains Mono'; font-size:11px; font-weight:600; color:var(--text-main); line-height:1.2;">${r.fecha}</div>
+        <div style="font-family:'JetBrains Mono'; font-size:10px; color:var(--c-cyan); font-weight:600; letter-spacing:0.3px; line-height:1.2;">${horaFormateada}</div>
+        <div style="font-size:9px; color:var(--text-muted); opacity:0.85; line-height:1.1; margin-top:2px;">👤 ${primerNombre}</div>
       </td>
       <td><b style="color:var(--text-main); font-size:11.5px;">${r.trabajador}</b></td>
       <td style="text-align:center;"><span style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; font-family:'JetBrains Mono'; font-weight:600; font-size:10.5px;">${r.nivel}</span></td>
       <td style="font-size:11px;">${r.sub}</td>
       <td style="text-align:right; font-family:'JetBrains Mono'; font-weight:600;">${r.metrado.toFixed(1)} <span style="font-size:10px; color:var(--text-muted);">${r.unidad}</span></td>
       <td style="text-align:right; font-family:'JetBrains Mono';">${r.hhReal.toFixed(2)}h</td>
-      <td style="text-align:center; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'}; font-weight:700;">${r.ef}%</td>
+      <td style="text-align:center; font-family:'JetBrains Mono'; color:${isGan ? 'var(--status-green-text)':'var(--status-red-text)'}; font-weight:700;">${r.ef}%</td>
       <td style="text-align:center;">
         <input type="date" value="${r.liberacion || ''}" style="padding:3px 6px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); border-radius:5px; color:var(--text-main); font-family:'JetBrains Mono'; font-size:10.5px; outline:none;" onchange="actualizarFechaLiberacion('${r.id}', this.value)" title="Programar fecha de liberación de frente">
       </td>
@@ -1330,7 +1366,7 @@ function actualizarGraficos() {
   chartEstado.update();
 }
 
-// APERTURA DEL MODAL BLINDADA PARA IPAD Y CELULAR
+// APERTURA BLINDADA PARA MODALES
 function abrirModal() {
   const modal = document.getElementById('modalCaptura');
   if (modal) {
@@ -1344,11 +1380,11 @@ function abrirModal() {
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
-// CARGA DE CATÁLOGOS CON FORMATO LIMPIO
 function cargarCatalogosModal() {
   const esp = document.getElementById('mEspecialidad').value || "SCF";
   const cfg = CATALOGO[esp] || CATALOGO.SCF;
   
+  // 1. Operario Responsable
   const sT = document.getElementById('mTrabajador');
   if (sT) {
     let activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo !== false);
@@ -1361,6 +1397,7 @@ function cargarCatalogosModal() {
     });
   }
   
+  // 2. Elemento Constructivo
   const sE = document.getElementById('mElemento');
   if (sE && cfg.elementos) {
     sE.innerHTML = '';
@@ -1369,6 +1406,7 @@ function cargarCatalogosModal() {
     });
   }
   
+  // 3. Subprocesos Oficiales
   const sS = document.getElementById('mSubproceso');
   if (sS) {
     let subprocesos = METRADOS_PRESUPUESTO[esp];
@@ -1407,16 +1445,14 @@ function recalcularModal() {
     }
   }
 
-  // Jornada de análisis
+  // Jornada y cálculo universal: L-V (8.5 h) y Sábados (5.5 h)
   const jornadaTurno = esSabado ? 5.5 : 8.5;
-
-  // Target diario proporcional de la jornada
   const targetDia = (rendNominal / 8.5) * jornadaTurno;
 
-  // HH Ganadas contractuales: 1 HH = Rendimiento / 8.5 h
+  // HH Ganadas estándar: 1 HH = Rendimiento contractual / 8.5 h
   const hhGan = rendNominal > 0 ? metrado * (8.5 / rendNominal) : 0;
   
-  // Eficiencia real respecto a las HH invertidas
+  // Eficiencia real frente a las HH efectivamente invertidas
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const esGanancia = ef >= 100;
 
@@ -1456,6 +1492,15 @@ function guardarRegistro() {
   progBar.style.width = '40%';
   progTxt.innerText = "⏳ Escribiendo en base de datos...";
 
+  // Detección de sábado y horas ganadas universales
+  let esSabado = false;
+  if (fechaSel) {
+    const parts = fechaSel.split('-');
+    if (parts.length === 3) {
+      esSabado = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getDay() === 6;
+    }
+  }
+  const jornadaTurno = esSabado ? 5.5 : 8.5;
   const hhGan = rendNominal > 0 ? metrado * (8.5 / rendNominal) : 0;
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const estado = ef >= 100 ? "GANANCIA" : "PERDIDA";
@@ -1486,7 +1531,8 @@ function guardarRegistro() {
     est: estado,
     unidad: unidad,
     liberacion: "",
-    qaqc: "PENDIENTE"
+    qaqc: "PENDIENTE",
+    usuario: USUARIO_ACTUAL.nombre
   };
 
   LOG_REGISTROS.unshift(nuevoItem);
@@ -1522,7 +1568,7 @@ function guardarRegistro() {
       progTxt.innerText = "✅ ¡Registro guardado exitosamente!";
       
       document.getElementById('mMetrado').value = '';
-      document.getElementById('mMetrado').placeholder = "Ej: 18.0";
+      document.getElementById('mMetrado').placeholder = "Ej: 15.0";
       document.getElementById('mHHReal').value = '';
       document.getElementById('mHHReal').placeholder = "Ej: 5.5";
       document.getElementById('mObs').value = '';
