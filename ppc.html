@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
@@ -31,9 +31,9 @@
   --bg-surface: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   --bg-card: #FFFFFF;
-  --border-glass: #E2E8F0;
+  --border-glass: #CBD5E1;
   --text-main: #0F172A;
-  --text-muted: #64748B;
+  --text-muted: #475569;
   --c-cyan: #0052CC;
 }
 
@@ -55,7 +55,7 @@ body::before {
 /* LOGIN CON PIN */
 #loginOverlay {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.95);
-  backdrop-filter: blur(16px); z-index: 1000; display: flex;
+  backdrop-filter: blur(16px); z-index: 9999; display: flex;
   align-items: center; justify-content: center; padding: 16px;
 }
 .login-box {
@@ -73,16 +73,17 @@ body::before {
 
 /* BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) */
 .convecsa-sidebar {
-  width: 84px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
+  width: 86px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
   display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px;
   position: sticky; top: 0; height: 100vh; z-index: 120; flex-shrink: 0;
 }
 @media (max-width: 1023px) { .convecsa-sidebar { display: none; } }
 
 .sidebar-nav-item {
-  width: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 74px; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid transparent;
   background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+  touch-action: manipulation;
 }
 .sidebar-nav-item:hover, .sidebar-nav-item.active {
   color: var(--text-main); background: rgba(0, 150, 225, 0.1); border-color: var(--c-cyan);
@@ -142,7 +143,7 @@ body::before {
 .kpi-big-num { font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 700; line-height: 1; }
 .chart-holder-responsive { position: relative; height: 215px; width: 100%; }
 
-/* TABLA EN VIVO */
+/* TABLA EN VIVO ESTILIZADA (9 COLUMNAS LIMPIAS) */
 .cyber-table { width: 100%; border-collapse: collapse; min-width: 820px; }
 .cyber-table th {
   padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -153,7 +154,7 @@ body::before {
 }
 .badge-subtle { padding: 2px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 600; }
 
-/* MODALES */
+/* MODALES SEGUROS PARA IPAD / IPHONE */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 99999 !important; display: none;
@@ -162,6 +163,14 @@ body::before {
 }
 @media (min-width: 640px) { .cyber-modal-mask { align-items: center; padding: 20px; } }
 .cyber-modal-mask.open { display: flex !important; }
+
+/* MODAL RECURSOS CON Z-INDEX SUPERIOR PARA APARECER AL FRENTE */
+#modalRecurso {
+  z-index: 100005 !important;
+}
+#modalRecurso.open {
+  display: flex !important;
+}
 
 .cyber-modal-window {
   background: var(--bg-surface); border: 1px solid var(--c-cyan);
@@ -178,9 +187,18 @@ body::before {
 
 .field-cyber { display: flex; flex-direction: column; gap: 4px; width: 100%; }
 .field-cyber label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 600; color: var(--c-cyan); text-transform: uppercase; }
-.field-cyber input, .field-cyber select {
-  width: 100%; padding: 8px 10px; background: rgba(0,0,0,0.25);
-  border: 1px solid var(--border-glass); border-radius: 6px; font-family: inherit; font-size: 11.5px; color: var(--text-main); outline: none;
+
+/* ESTILOS ASEGURADOS PARA SELECTORES Y OPTIONS EN SAFARI / IOS / IPADOS */
+.field-cyber select, .field-cyber input {
+  width: 100%; min-height: 38px; padding: 8px 10px; background: rgba(0,0,0,0.35);
+  border: 1px solid var(--border-glass); border-radius: 6px; font-family: inherit; font-size: 11.5px;
+  color: var(--text-main); outline: none; -webkit-appearance: none; appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%2300E5FF" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat; background-position: right 8px center;
+}
+.field-cyber select option {
+  background-color: #0B1528 !important; color: #FFFFFF !important;
+  font-size: 12px; padding: 6px;
 }
 
 .m-foot-c {
@@ -188,7 +206,7 @@ body::before {
   display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
 }
 
-/* BARRA DE PROGRESO */
+/* BARRA DE PROGRESO DE REGISTRO */
 .save-progress-container {
   flex: 1; display: none; flex-direction: column; gap: 3px; min-width: 140px;
 }
@@ -202,6 +220,7 @@ body::before {
 .btn-cyber-action {
   display: inline-flex; align-items: center; gap: 5px; padding: 7px 12px;
   border-radius: 6px; font-family: inherit; font-size: 10.5px; font-weight: 600; border: none; cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 .btn-cyber-add { background: var(--c-azul); color: #FFF; }
 .btn-cyber-recurso { background: rgba(0, 150, 225, 0.15); border: 1px solid var(--c-cyan); color: var(--c-cyan); }
@@ -223,7 +242,7 @@ body::before {
 input:checked + .slider-switch { background-color: var(--c-green); }
 input:checked + .slider-switch:before { transform: translateX(18px); }
 
-/* BARRA INFERIOR MOBILE */
+/* BARRA INFERIOR MOBILE CON BOTÓN REGISTRAR TÁCTIL BLINDADO */
 .mobile-bottom-bar {
   position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
   background: var(--bg-surface); border-top: 1px solid var(--border-glass);
@@ -234,16 +253,14 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 .m-tab-btn {
   border: none; background: transparent; display: flex; flex-direction: column; align-items: center;
   gap: 2px; font-size: 9px; font-weight: 600; color: var(--text-muted); cursor: pointer;
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent;
 }
 .m-tab-btn.active { color: var(--c-cyan); }
 .m-fab-btn {
-  background: var(--c-azul); color: #FFF; width: 42px; height: 42px;
+  background: var(--c-azul); color: #FFF; width: 44px; height: 44px;
   border-radius: 50%; border: none; font-size: 20px; display: flex; align-items: center;
   justify-content: center; margin-top: -16px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,82,204,0.5);
   touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none;
-}
-.sidebar-nav-item, .m-tab-btn, .btn-cyber-action {
-  touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor: pointer;
 }
 </style>
 </head>
@@ -301,9 +318,9 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       <span class="sidebar-nav-label">PDF</span>
     </button>
-    <button class="sidebar-nav-item" onclick="toggleTheme()" title="Tema Claro / Oscuro" style="margin-top:auto;">
+    <button class="sidebar-nav-item" onclick="toggleTheme()" title="Cambiar Tema (Oscuro / Claro / Auto)" style="margin-top:auto;">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2"/></svg>
-      <span class="sidebar-nav-label">Tema</span>
+      <span class="sidebar-nav-label" id="lblTemaSidebar">Tema</span>
     </button>
   </aside>
 
@@ -316,8 +333,12 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
           <div style="font-size:10px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:10px;">
-        <span id="userBadgeOnline" style="font-size:11px; font-weight:600;">Jorge Orosco</span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <!-- BOTÓN TEMA TRI-ESTADO (PARA TABLETS Y COMPUTADORAS) -->
+        <button class="btn-cyber-action" onclick="toggleTheme()" style="background:rgba(0,150,225,0.12); color:var(--c-cyan);" title="Alternar entre Oscuro, Claro y Automático según clima/luz">
+          <span id="iconTemaTopbar">⚡</span> <span id="lblTemaTopbar" style="font-size:10.5px;">Auto</span>
+        </button>
+        <span id="userBadgeOnline" style="font-size:11px; font-weight:600; margin-left:4px;">Jorge Orosco</span>
         <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-size:11px; font-weight:600; cursor:pointer;">Salir</button>
       </div>
     </header>
@@ -429,7 +450,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         <div class="grid-responsive-3" id="gridTrabajadores"></div>
       </section>
 
-      <!-- TABLA EN VIVO -->
+      <!-- TABLA EN VIVO ESTILIZADA (9 COLUMNAS LIMPIAS) -->
       <section class="chart-card-box" style="overflow:hidden;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
           <div style="font-size:12.5px; font-weight:700; color:var(--text-main);">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
@@ -461,7 +482,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 </div>
 
 <!-- =========================================================================
-     MODAL SMART CAPTURE (PROTEGIDO SIN BOTÓN METRADO)
+     MODAL SMART CAPTURE: CAMPOS 100% PRE-CARGADOS Y PROTEGIDO PARA CAPATACES
      ========================================================================= -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
@@ -479,7 +500,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         <div class="field-cyber">
           <label>Partida / Especialidad:</label>
           <select id="mEspecialidad" onchange="cargarCatalogosModal()">
-            <option value="SCF">SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
+            <option value="SCF" selected>SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
             <option value="PINTURA">PINTURA Y ACABADOS (REGISTRO_DIARIO_PINTURA)</option>
           </select>
         </div>
@@ -488,7 +509,16 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       <div class="form-row-2col">
         <div class="field-cyber">
           <label>Operario Responsable:</label>
-          <select id="mTrabajador"></select>
+          <!-- Pre-poblado estático garantizado -->
+          <select id="mTrabajador">
+            <option value="BARDALES CHUFANDAMA MAURO JUNIOR">BARDALES CHUFANDAMA MAURO JUNIOR (OPERARIO)</option>
+            <option value="OCUMBE SIQUIHUA NELVA">OCUMBE SIQUIHUA NELVA (OPERARIO)</option>
+            <option value="VELIZ HERNANDEZ XIOMARA ANTUANE">VELIZ HERNANDEZ XIOMARA ANTUANE (OPERARIO)</option>
+            <option value="GUEVARA HERNANDEZ YADIRA ARIANA">GUEVARA HERNANDEZ YADIRA ARIANA (OPERARIO)</option>
+            <option value="LANDINEZ VALENCIA JUAN GABRIEL">LANDINEZ VALENCIA JUAN GABRIEL (OPERARIO)</option>
+            <option value="VILELA ANCAJAIMA CRISTHIAN">VILELA ANCAJAIMA CRISTHIAN (OPERARIO)</option>
+            <option value="INOCENTE TORRES CALIXTO AMIRCAR">INOCENTE TORRES CALIXTO AMIRCAR (OPERARIO)</option>
+          </select>
         </div>
         <div class="field-cyber">
           <label>Nivel de Obra (17 Niveles):</label>
@@ -512,17 +542,34 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       <div class="form-row-2col">
         <div class="field-cyber">
           <label>Elemento Constructivo:</label>
-          <select id="mElemento"></select>
+          <!-- Pre-poblado estático garantizado -->
+          <select id="mElemento">
+            <option value="JUNTAS" selected>JUNTAS</option>
+            <option value="PASES DE MANGUERA">PASES DE MANGUERA</option>
+            <option value="TUBERIAS NO METALICAS">TUBERIAS NO METALICAS</option>
+            <option value="TUBERÍAS METÁLICAS">TUBERÍAS METÁLICAS</option>
+            <option value="BANDEJAS METÁLICAS">BANDEJAS METÁLICAS</option>
+            <option value="DUCTOS">DUCTOS</option>
+            <option value="VANOS DE INSPECCIÓN">VANOS DE INSPECCIÓN</option>
+          </select>
         </div>
         <div class="field-cyber">
-          <label id="lblUnidadModal">Metrado Ejecutado:</label>
-          <input type="number" id="mMetrado" placeholder="Ej: 18.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+          <label id="lblUnidadModal">Metrado Ejecutado (ml):</label>
+          <input type="number" id="mMetrado" placeholder="Ej: 15.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
         </div>
       </div>
 
       <div class="field-cyber">
         <label>Partida / Subproceso Oficial (Target):</label>
-        <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;"></select>
+        <!-- Pre-poblado estático garantizado con nomenclatura limpia 01, 02... -->
+        <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;">
+          <option value="01|JUNTAS a dos caras interiores|30.0|ml" selected>01 JUNTAS a dos caras interiores (30.0 ml/día)</option>
+          <option value="02|JUNTAS a una cara interiores|30.0|ml">02 JUNTAS a una cara interiores (30.0 ml/día)</option>
+          <option value="03|PASE DE MANGUERA acceso a dos caras|7.0|und">03 PASE DE MANGUERA acceso a dos caras (7.0 und/día)</option>
+          <option value="04|TUBERIAS NO METALICAS <2&quot; acceso a dos caras|21.0|pto">04 TUBERIAS NO METALICAS &lt;2" acceso a dos caras (21.0 pto/día)</option>
+          <option value="11|TUBERIAS METALICAS <2&quot; acceso a dos caras|21.0|und">11 TUBERIAS METALICAS &lt;2" acceso a dos caras (21.0 und/día)</option>
+          <option value="21|DUCTOS hasta 23&quot;x23&quot; acceso a dos caras|9.0|und">21 DUCTOS hasta 23"x23" acceso a dos caras (9.0 und/día)</option>
+        </select>
       </div>
 
       <div class="form-row-2col">
@@ -546,20 +593,21 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7 / Sala Técnica">
       </div>
 
-      <!-- PANEL LEAN CALIBRADO -->
+      <!-- PANEL LEAN CALIBRADO (FÓRMULA EXACTA CUADRILLA CONVECSA) -->
       <div style="background:rgba(0,150,225,0.06); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
-        <div><div style="font-size:9px; color:var(--c-cyan);">TARGET/DÍA</div><div style="font-size:13px; font-weight:700;" id="dispTarget">30.0</div></div>
+        <div><div style="font-size:9px; color:var(--c-cyan);">TARGET/DÍA</div><div style="font-size:13px; font-weight:700;" id="dispTarget">30.0 ml</div></div>
         <div><div style="font-size:9px; color:var(--c-cyan);">HH GANADAS</div><div style="font-size:13px; font-weight:700;" id="dispHHGan">0.00 h</div></div>
         <div><div style="font-size:9px; color:var(--c-cyan);">EFICIENCIA</div><div style="font-size:13px; font-weight:700;" id="dispEficiencia">0.0%</div></div>
         <div><div style="font-size:9px; color:var(--c-cyan);">ESTADO</div><div style="font-size:12px; font-weight:700;" id="dispEstado">---</div></div>
       </div>
     </div>
 
-    <!-- BOTONES: RETIRADO METRADO -->
+    <!-- BOTONES INFERIORES PROTEGIDOS -->
     <div class="m-foot-c">
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()">Cerrar</button>
-        <button class="btn-cyber-action btn-cyber-recurso" onclick="abrirModalRecurso()">➕ RECURSOS</button>
+        <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()" type="button">Cerrar</button>
+        <!-- Botón con evento táctil blindado -->
+        <button class="btn-cyber-action btn-cyber-recurso" onclick="abrirModalRecurso()" ontouchend="abrirModalRecurso()" type="button">➕ RECURSOS</button>
       </div>
 
       <div class="save-progress-container" id="saveProgressBox">
@@ -569,15 +617,15 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         </div>
       </div>
 
-      <button class="btn-cyber-action btn-cyber-add" id="btnGuardar" onclick="guardarRegistro()">💾 GUARDAR REGISTRO</button>
+      <button class="btn-cyber-action btn-cyber-add" id="btnGuardar" onclick="guardarRegistro()" type="button">💾 GUARDAR REGISTRO</button>
     </div>
   </div>
 </div>
 
 <!-- =========================================================================
-     MODAL GESTIÓN DE RECURSOS (TEXTO VISIBLE, ON/OFF Y BOTÓN ELIMINAR)
+     MODAL GESTIÓN DE RECURSOS CON PRIORIDAD Z-INDEX Y BOTÓN ELIMINAR
      ========================================================================= -->
-<div class="cyber-modal-mask" id="modalRecurso" style="z-index: 700;">
+<div class="cyber-modal-mask" id="modalRecurso">
   <div class="cyber-modal-window" style="max-width: 580px;">
     <div class="m-head-c">
       <div style="font-size:12.5px; font-weight:700; color:var(--c-cyan);">👷 GESTIÓN DE RECURSOS (ON: ACTIVO / OFF: CESADO / 🗑️ ELIMINAR)</div>
@@ -610,7 +658,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
           <label>Nombres y Apellidos Completos:</label>
           <div style="display:flex; gap:6px;">
             <input type="text" id="rNombre" placeholder="Ej: OROPEZA MELENDEZ WYLL JOSE" style="flex:1;">
-            <button class="btn-cyber-action btn-cyber-add" onclick="guardarNuevoRecurso()">AGREGAR</button>
+            <button class="btn-cyber-action btn-cyber-add" onclick="guardarNuevoRecurso()" type="button">AGREGAR</button>
           </div>
         </div>
       </div>
@@ -623,7 +671,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
     </div>
     <div class="m-foot-c" style="justify-content: flex-end;">
-      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModalRecurso()">Cerrar</button>
+      <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModalRecurso()" type="button">Cerrar</button>
     </div>
   </div>
 </div>
@@ -631,7 +679,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 <!-- =========================================================================
      MODAL METRADOS CONTRACTUALES & BASE CURVA S (DESDE BARRA LATERAL)
      ========================================================================= -->
-<div class="cyber-modal-mask" id="modalMetrados" style="z-index: 700;">
+<div class="cyber-modal-mask" id="modalMetrados" style="z-index: 100000 !important;">
   <div class="cyber-modal-window" style="max-width: 880px;">
     <div class="m-head-c">
       <div style="font-size:12.5px; font-weight:700; color:var(--c-amber);">📐 METRADOS CONTRACTUALES & BASE CURVA S (THSSB)</div>
@@ -649,7 +697,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         </div>
       </div>
 
-      <!-- FORMULARIO DIRECTO INTEGRADO -->
+      <!-- FORMULARIO DIRECTO INTEGRADO (CERO PROMPTS INVASIVOS) -->
       <div id="boxNuevaPartidaDirecta" style="display:none; background:rgba(0,150,225,0.08); border:1px solid var(--c-cyan); border-radius:8px; padding:10px; margin-top:8px;">
         <div style="font-size:11px; font-weight:700; color:var(--c-cyan); margin-bottom:6px;">+ INGRESAR NUEVA PARTIDA A LA BASE:</div>
         <div style="display:grid; grid-template-columns: 80px 1fr 60px 100px 90px auto; gap:6px; align-items:center;">
@@ -691,7 +739,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 <!-- =========================================================================
      MODAL ELEGANTE: CONTROL DE PLAZO CONTRACTUAL Y REPROGRAMACIÓN (SIN ALERTS)
      ========================================================================= -->
-<div class="cyber-modal-mask" id="modalPlazoReprogramacion" style="z-index: 800;">
+<div class="cyber-modal-mask" id="modalPlazoReprogramacion" style="z-index: 100010 !important;">
   <div class="cyber-modal-window" style="max-width: 520px;">
     <div class="m-head-c">
       <div style="font-size:13px; font-weight:700; color:var(--c-amber);">⏱️ CONTROL DE PLAZO CONTRACTUAL (THSSB)</div>
@@ -725,27 +773,27 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       </div>
     </div>
     <div class="m-foot-c" style="justify-content:flex-end;">
-      <button class="btn-cyber-action btn-cyber-add" onclick="cerrarModalPlazoContractual()">ENTENDIDO</button>
+      <button class="btn-cyber-action btn-cyber-add" onclick="cerrarModalPlazoContractual()" type="button">ENTENDIDO</button>
     </div>
   </div>
 </div>
 
-<!-- BARRA INFERIOR MOBILE -->
+<!-- BARRA INFERIOR MOBILE CON BOTÓN TEMA TRI-ESTADO Y REGISTRAR BLINDADO -->
 <nav class="mobile-bottom-bar">
-  <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('PINTURA', this)">
+  <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('PINTURA', this)" type="button">
     <span>🎨</span><span>Pintura</span>
   </button>
-  <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('SCF', this)">
+  <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('SCF', this)" type="button">
     <span>🔥</span><span>Sellos</span>
   </button>
   <button class="m-fab-btn" onclick="abrirModal()" ontouchend="abrirModal()" type="button" title="Registrar Avance">
     ➕
   </button>
-  <button class="m-tab-btn" onclick="abrirModalMetrados()">
+  <button class="m-tab-btn" onclick="abrirModalMetrados()" type="button">
     <span>📐</span><span>Curva S</span>
   </button>
-  <button class="m-tab-btn" onclick="exportarExcelConFormulas()">
-    <span>📊</span><span>Excel</span>
+  <button class="m-tab-btn" onclick="toggleTheme()" type="button">
+    <span id="iconTemaMobile">⚡</span><span id="lblTemaMobile">Tema</span>
   </button>
 </nav>
 
@@ -812,7 +860,7 @@ let METRADOS_PRESUPUESTO = {
 const CATALOGO = {
   SCF: {
     elementos: ["JUNTAS", "PASES DE MANGUERA", "TUBERIAS NO METALICAS", "TUBERÍAS METÁLICAS", "BANDEJAS METÁLICAS", "DUCTOS", "VANOS DE INSPECCIÓN"],
-    unidad: "ml / und / pto",
+    unidad: "ml",
     hoja: "REGISTRO_DIARIO_SCF"
   },
   PINTURA: {
@@ -830,7 +878,7 @@ let LOG_REGISTROS = [];
 
 let chartEvolucion, chartElemento, chartHH, chartNivel, chartEstado;
 
-// CONTROL TECLADO: SALIR CON ESC
+// CERRAR MODALES CON LA TECLA ESCAPE
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     cerrarModal();
@@ -1202,7 +1250,9 @@ function actualizarGraficos() {
   chartEstado.update();
 }
 
-// APERTURA DEL MODAL BLINDADA PARA IPAD Y CELULAR
+// =========================================================================
+// APERTURA DEL MODAL BLINDADA (ABRE PRIMERO PARA QUE NUNCA QUEDE BLOQUEADO)
+// =========================================================================
 function abrirModal() {
   const modal = document.getElementById('modalCaptura');
   if (modal) {
@@ -1216,36 +1266,69 @@ function abrirModal() {
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
-// CARGA DE CATÁLOGOS CON FORMATO LIMPIO ("01 JUNTAS ...")
+// =========================================================================
+// CARGA DE CATÁLOGOS CON FALLBACK INFALIBLE PARA IPAD / IPHONE
+// =========================================================================
 function cargarCatalogosModal() {
-  const esp = document.getElementById('mEspecialidad').value;
-  const cfg = CATALOGO[esp];
+  const esp = document.getElementById('mEspecialidad').value || "SCF";
+  const cfg = CATALOGO[esp] || CATALOGO.SCF;
   
-  const sT = document.getElementById('mTrabajador'); sT.innerHTML = '';
-  const activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo !== false);
-  activos.forEach(t => sT.innerHTML += `<option value="${t.nombre}">${t.nombre} (${t.cargo})</option>`);
+  // 1. Operario Responsable
+  const sT = document.getElementById('mTrabajador');
+  if (sT) {
+    let activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo !== false);
+    if (activos.length === 0) {
+      activos = RECURSOS_DEFAULT.filter(r => r.modulo === esp);
+    }
+    sT.innerHTML = '';
+    activos.forEach(t => {
+      sT.innerHTML += `<option value="${t.nombre}">${t.nombre} (${t.cargo})</option>`;
+    });
+  }
   
-  const sE = document.getElementById('mElemento'); sE.innerHTML = '';
-  cfg.elementos.forEach(e => sE.innerHTML += `<option value="${e}">${e}</option>`);
+  // 2. Elemento Constructivo
+  const sE = document.getElementById('mElemento');
+  if (sE && cfg.elementos) {
+    sE.innerHTML = '';
+    cfg.elementos.forEach(e => {
+      sE.innerHTML += `<option value="${e}">${e}</option>`;
+    });
+  }
   
-  const sS = document.getElementById('mSubproceso'); sS.innerHTML = '';
-  const subprocesos = METRADOS_PRESUPUESTO[esp] || [];
-  subprocesos.forEach(s => {
-    sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">${s.item} ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
-  });
+  // 3. Subprocesos Oficiales (con código limpio 01, 02...)
+  const sS = document.getElementById('mSubproceso');
+  if (sS) {
+    let subprocesos = METRADOS_PRESUPUESTO[esp];
+    if (!subprocesos || subprocesos.length === 0) {
+      subprocesos = METRADOS_DEFAULT[esp] || [];
+    }
+    sS.innerHTML = '';
+    subprocesos.forEach(s => {
+      sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">${s.item} ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
+    });
+  }
   
-  document.getElementById('lblUnidadModal').innerText = `Metrado (${cfg.unidad}):`;
+  const lblU = document.getElementById('lblUnidadModal');
+  if (lblU) lblU.innerText = `Metrado (${cfg.unidad}):`;
+  
   recalcularModal();
 }
 
-// CÁLCULO CALIBRADO DE EFICIENCIA (SÁBADO Y L-V)
+// =========================================================================
+// CÁLCULO DE EFICIENCIA LEAN CONVECSA (CALIBRADO AL 100%)
+// Lunes a Viernes: Base Cuadrilla = 17.0 HH | Sábados: Base Cuadrilla = 11.0 HH
+// =========================================================================
 function recalcularModal() {
-  const subVal = document.getElementById('mSubproceso').value.split('|');
+  const sS = document.getElementById('mSubproceso');
+  if (!sS || !sS.value) return;
+
+  const subVal = sS.value.split('|');
   const rendNominal = parseFloat(subVal[2]) || 30.0;
   const unidad = subVal[3] || "ml";
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
 
+  // Detección segura de día sábado en Safari / iOS / Android
   const fVal = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
   let esSabado = false;
   if (fVal) {
@@ -1254,11 +1337,18 @@ function recalcularModal() {
       esSabado = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getDay() === 6;
     }
   }
-  const jornadaHoras = esSabado ? 5.5 : 8.5;
 
-  const targetDia = (rendNominal / 8.5) * jornadaHoras;
-  const hhGan = rendNominal > 0 ? metrado * (8.5 / rendNominal) : 0;
+  // Base horaria de cuadrilla CONVECSA
+  const baseCuadrilla = esSabado ? 11.0 : 17.0;
+  const jornadaTurno = esSabado ? 5.5 : 8.5;
+
+  // Target diario visible según la jornada
+  const targetDia = (rendNominal / 8.5) * jornadaTurno;
+
+  // Horas Hombre Ganadas según estándar de cuadrilla
+  const hhGan = rendNominal > 0 ? metrado * (baseCuadrilla / rendNominal) : 0;
   
+  // Eficiencia real respecto a las HH invertidas
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const esGanancia = ef >= 100;
 
@@ -1298,7 +1388,17 @@ function guardarRegistro() {
   progBar.style.width = '40%';
   progTxt.innerText = "⏳ Escribiendo en base de datos...";
 
-  const hhGan = rendNominal > 0 ? metrado * (8.5 / rendNominal) : 0;
+  // Detección de sábado
+  let esSabado = false;
+  if (fechaSel) {
+    const parts = fechaSel.split('-');
+    if (parts.length === 3) {
+      esSabado = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getDay() === 6;
+    }
+  }
+  const baseCuadrilla = esSabado ? 11.0 : 17.0;
+
+  const hhGan = rendNominal > 0 ? metrado * (baseCuadrilla / rendNominal) : 0;
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const estado = ef >= 100 ? "GANANCIA" : "PERDIDA";
 
@@ -1364,7 +1464,7 @@ function guardarRegistro() {
       progTxt.innerText = "✅ ¡Registro guardado exitosamente!";
       
       document.getElementById('mMetrado').value = '';
-      document.getElementById('mMetrado').placeholder = "Ej: 18.0";
+      document.getElementById('mMetrado').placeholder = "Ej: 15.0";
       document.getElementById('mHHReal').value = '';
       document.getElementById('mHHReal').placeholder = "Ej: 5.5";
       document.getElementById('mObs').value = '';
@@ -1388,16 +1488,29 @@ function guardarRegistro() {
   }
 }
 
-// GESTIÓN DE RECURSOS (TEXTO VISIBLE, ON/OFF Y BOTÓN ELIMINAR)
+// =========================================================================
+// GESTIÓN DE RECURSOS (APERTURA CON Z-INDEX SUPERIOR Y BOTÓN ELIMINAR)
+// =========================================================================
 function abrirModalRecurso() {
-  document.getElementById('rNombre').value = '';
-  renderizarListaRecursos();
-  document.getElementById('modalRecurso').classList.add('open');
+  const m = document.getElementById('modalRecurso');
+  if (m) {
+    m.classList.add('open');
+    try {
+      document.getElementById('rNombre').value = '';
+      renderizarListaRecursos();
+    } catch (e) {
+      console.warn(e);
+    }
+  }
 }
-function cerrarModalRecurso() { document.getElementById('modalRecurso').classList.remove('open'); }
+function cerrarModalRecurso() {
+  const m = document.getElementById('modalRecurso');
+  if (m) m.classList.remove('open');
+}
 
 function renderizarListaRecursos() {
   const cont = document.getElementById('listaRecursosContainer');
+  if (!cont) return;
   cont.innerHTML = '';
   RECURSOS_SISTEMA.forEach(r => {
     const item = document.createElement('div');
@@ -1413,7 +1526,7 @@ function renderizarListaRecursos() {
           <input type="checkbox" ${r.activo ? 'checked' : ''} onchange="toggleEstadoRecurso(${r.id}, this.checked)">
           <span class="slider-switch"></span>
         </label>
-        <button onclick="eliminarRecurso(${r.id})" title="Eliminar recurso" style="background:none; border:none; color:var(--c-red); font-size:14px; cursor:pointer; padding:2px 4px;">🗑️</button>
+        <button onclick="eliminarRecurso(${r.id})" title="Eliminar recurso" type="button" style="background:none; border:none; color:var(--c-red); font-size:14px; cursor:pointer; padding:2px 4px;">🗑️</button>
       </div>
     `;
     cont.appendChild(item);
@@ -1478,7 +1591,9 @@ function guardarNuevoRecurso() {
   }
 }
 
+// =========================================================================
 // GESTIÓN DE METRADOS CONTRACTUALES & BASE DE CURVA S
+// =========================================================================
 function abrirModalMetrados() {
   cambiarTabMetrados(TAB_METRADOS_ACTUAL);
   document.getElementById('modalMetrados').classList.add('open');
@@ -1610,7 +1725,7 @@ function exportarExcelConFormulas() {
     wsData.push([
       r.id, r.horaExacta, r.fecha, r.hoja || r.modulo, r.trabajador, r.nivel, r.elemento, r.sub,
       r.metrado, r.unidad, r.hhReal, r.rendOpt,
-      { f: `(I${row}*(8.5/L${row}))` },
+      { f: `(I${row}*(17.0/L${row}))` },
       { f: `M${row}/K${row}` },
       { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` },
       r.liberacion || "",
