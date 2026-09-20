@@ -50,7 +50,7 @@ html, body {
   overflow-y: auto !important; /* Scroll nativo fluido */
 }
 
-/* EFECTO GRID HOLOGRÁFICO DE FONDO */
+/* GRID HOLOGRÁFICO DE FONDO */
 body::before {
   content: '';
   position: fixed;
@@ -63,7 +63,7 @@ body::before {
   z-index: 0;
 }
 
-/* LOGIN SEGURO CYBER-SECURITY CON PIN */
+/* LOGIN CON PIN */
 #loginOverlay {
   position: fixed;
   inset: 0;
@@ -131,7 +131,7 @@ body::before {
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
 }
 
-/* APP SHELL (RAIL LATERAL FUTURISTA + COCKPIT) */
+/* APP SHELL */
 .app-shell {
   display: flex;
   width: 100%;
@@ -140,9 +140,7 @@ body::before {
   z-index: 1;
 }
 
-/* ============================================================
-   ICON RAIL PROPIETARIO CONVECSA (100% FUNCIONAL Y VECTORIAL)
-   ============================================================ */
+/* ICON RAIL PROPIETARIO CONVECSA */
 .cyber-rail {
   width: 68px;
   background: rgba(11, 21, 40, 0.7);
@@ -198,7 +196,7 @@ body::before {
   fill: none;
 }
 
-/* 1. EMBLEMA QUANTUM CONVECSA (LOGO NÚCLEO LEAN) */
+/* 1. EMBLEMA QUANTUM CONVECSA */
 .core-emblem {
   width: 44px;
   height: 44px;
@@ -221,7 +219,7 @@ body::before {
   fill: #FFFFFF;
 }
 
-/* ÁREA MAESTRA DE CONTENIDO */
+/* ÁREA DEL COCKPIT */
 .cockpit-area {
   flex: 1;
   display: flex;
@@ -229,7 +227,7 @@ body::before {
   min-width: 0;
 }
 
-/* TOPBAR CYBERNETICA */
+/* TOPBAR */
 .topbar-cyber {
   background: rgba(11, 21, 40, 0.6);
   backdrop-filter: blur(16px);
@@ -271,7 +269,7 @@ body::before {
   color: var(--c-cyan-neon);
 }
 
-/* CONTENEDOR FLUIDO HÍBRIDO */
+/* CONTENEDOR FLUIDO */
 .cockpit-canvas {
   width: 100%;
   max-width: 1440px;
@@ -286,7 +284,7 @@ body::before {
   .cockpit-canvas { padding: 20px 24px 40px; gap: 18px; }
 }
 
-/* BARRA DE COMANDOS / PERIODOS / EXPORTACIÓN */
+/* STRIP DE COMANDOS */
 .command-strip {
   background: var(--c-navy-card);
   backdrop-filter: blur(12px);
@@ -363,7 +361,7 @@ body::before {
   box-shadow: var(--glow-cyan);
 }
 
-/* REJILLAS RESPONSIVAS FLUIDAS */
+/* REJILLAS RESPONSIVAS */
 .grid-responsive-3 {
   display: grid;
   grid-template-columns: 1fr;
@@ -379,7 +377,7 @@ body::before {
 }
 @media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
 
-/* TARJETAS GLASSMORPHIC CON NEÓN */
+/* TARJETAS GLASSMORPHIC */
 .glass-card {
   background: var(--c-navy-card);
   backdrop-filter: blur(14px);
@@ -609,7 +607,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 </head>
 <body>
 
-<!-- LOGIN SEGURO CON PIN -->
+<!-- LOGIN CON PIN -->
 <div id="loginOverlay">
   <div class="login-cyber-box">
     <div class="cyber-logo">
@@ -633,46 +631,44 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 
 <div class="app-shell">
   
-  <!-- ==============================================================
-       ICON RAIL PROPIETARIO Y FUTURISTA CONVECSA (100% VECTORIAL Y VIVO)
-       ============================================================== -->
+  <!-- ICON RAIL PROPIETARIO Y FUTURISTA CONVECSA -->
   <aside class="cyber-rail">
-    <!-- 1. Emblema Quantum Convecsa (Núcleo Lean & Diagnóstico Predictivo) -->
+    <!-- 1. Emblema Quantum Convecsa -->
     <div class="core-emblem" onclick="ejecutarDiagnosticoQuantum()" title="Quantum Lean Core · Diagnóstico Predictivo">
       <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
     </div>
 
-    <!-- 2. Matriz de Control de Especialidades (Toggle Pintura / SCF / Global) -->
+    <!-- 2. Switch Especialidad -->
     <button class="rail-btn-futuristic" onclick="alternarEspecialidadRail()" title="Switch Especialidad: Pintura & Sellos SCF">
       <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="6"/><circle cx="9" cy="12" r="3" fill="currentColor"/></svg>
     </button>
 
-    <!-- 3. Smart Capture (Formulario de Avance en Campo) -->
+    <!-- 3. Smart Capture -->
     <button class="rail-btn-futuristic active" onclick="abrirModal()" title="Smart Capture · Registrar Avance Diario">
       <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
     </button>
 
-    <!-- 4. Radar de Restricciones & Auditoría Lean -->
-    <button class="rail-btn-futuristic" onclick="auditarFiltroRapido()" title="Radar de Auditoría · Filtro Rápido de Frente y Operario">
+    <!-- 4. Radar de Auditoría -->
+    <button class="rail-btn-futuristic" onclick="auditarFiltroRapido()" title="Radar de Auditoría · Filtro Rápido">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     </button>
 
-    <!-- 5. Centro de Recursos & Horas Hombre Cuadrillas -->
-    <button class="rail-btn-futuristic" onclick="mostrarResumenCuadrillas()" title="Consumo HH & Recursos de Cuadrillas">
+    <!-- 5. Consumo de Cuadrillas -->
+    <button class="rail-btn-futuristic" onclick="mostrarResumenCuadrillas()" title="Consumo HH & Recursos">
       <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M7 10c2.5 2.5 7.5 2.5 10 0"/></svg>
     </button>
 
-    <!-- 6. Despacho RDO & Exportación Excel / PDF -->
+    <!-- 6. Despacho RDO Excel -->
     <button class="rail-btn-futuristic" onclick="exportarExcelConFormulas()" title="Exportar RDO Excel Oficial (.xlsx)">
       <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 10h16"/><path d="M10 4v16"/></svg>
     </button>
 
-    <!-- 7. Torre Matrix 17 Niveles (S7 a S1, P1 a P9, Azotea) -->
+    <!-- 7. Torre Matrix 17 Niveles -->
     <button class="rail-btn-futuristic" onclick="mostrarMatriz17Niveles()" title="Torre Matrix · Visualizar 17 Niveles THSSB">
       <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
     </button>
 
-    <!-- 8. VIP Lean Diamond (Índice de Productividad y Ganancia) -->
+    <!-- 8. VIP Lean Diamond -->
     <button class="rail-btn-futuristic" onclick="mostrarIndiceGanancia()" title="Lean Diamond · Índice de Productividad Óptima">
       <svg viewBox="0 0 24 24"><path d="M6 3h12l4 7-10 11L2 10l4-7z"/></svg>
     </button>
@@ -1008,10 +1004,10 @@ const CATALOGO = {
       { nombre: "JUNTAS a una cara interiores", rend: 43.0, unidad: "ml/d" },
       { nombre: "MARCO PUERTAS a dos caras", rend: 52.0, unidad: "ml/d" },
       { nombre: "PASE DE MANGUERA acceso a dos caras", rend: 7.0, unidad: "und/d" },
-      { nombre: "TUBERIAS NO METALICAS <2" dos caras", rend: 18.0, unidad: "und/d" },
-      { nombre: "TUBERIAS METALICAS <2" dos caras", rend: 18.0, unidad: "und/d" },
+      { nombre: "TUBERIAS NO METALICAS <2\" dos caras", rend: 18.0, unidad: "und/d" },
+      { nombre: "TUBERIAS METALICAS <2\" dos caras", rend: 18.0, unidad: "und/d" },
       { nombre: "BANDEJAS METALICAS acceso dos caras", rend: 13.0, unidad: "ml/d" },
-      { nombre: "DUCTOS hasta 23"x23" dos caras", rend: 13.0, unidad: "und/d" }
+      { nombre: "DUCTOS hasta 23\"x23\" dos caras", rend: 13.0, unidad: "und/d" }
     ],
     unidad: "ml / und",
     hoja: "REGISTRO_DIARIO_SCF"
@@ -1027,7 +1023,7 @@ let LOG_REGISTROS = [
   { id: "PIN-20260919-02", horaExacta: "2026-09-19 09:45:22", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 3.73, ef: 93.3, est: "PERDIDA", unidad: "m²" },
   { id: "SCF-20260919-03", horaExacta: "2026-09-19 11:10:40", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 4, trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "Juntas a 2 caras", metrado: 18.5, hhReal: 3.5, rendOpt: 43.0, hhGan: 3.66, ef: 104.5, est: "GANANCIA", unidad: "ml" },
   { id: "PIN-20260918-04", horaExacta: "2026-09-18 13:25:10", fecha: "2026-09-18", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos", metrado: 19.8, hhReal: 1.0, rendOpt: 52.0, hhGan: 0.87, ef: 87.0, est: "PERDIDA", unidad: "m²" },
-  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P9", elemento: "PLENUM", sub: "Tuberías <2"", metrado: 12.0, hhReal: 4.0, rendOpt: 18.0, hhGan: 3.40, ef: 85.0, est: "PERDIDA", unidad: "und" },
+  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P9", elemento: "PLENUM", sub: "Tuberías <2\"", metrado: 12.0, hhReal: 4.0, rendOpt: 18.0, hhGan: 3.40, ef: 85.0, est: "PERDIDA", unidad: "und" },
   { id: "PIN-20260916-06", horaExacta: "2026-09-16 15:00:00", fecha: "2026-09-16", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "BERMUDEZ MARIN DARWIN ENMANUEL", nivel: "AZ", elemento: "COLUMNAS", sub: "Empaste columnas", metrado: 26.0, hhReal: 0.63, rendOpt: 52.0, hhGan: 1.25, ef: 198.4, est: "GANANCIA", unidad: "m²" }
 ];
 
@@ -1269,7 +1265,7 @@ function actualizarGraficos() {
   chartEstado.update();
 }
 
-// EXPORTACIÓN EXCEL (.XLSX) CON FÓRMULAS VIVAS
+// EXPORTACIÓN EXCEL CON FÓRMULAS VIVAS
 function exportarExcelConFormulas() {
   const d = getDatosFiltrados();
   const fecha = new Date().toISOString().split('T')[0];
@@ -1436,19 +1432,13 @@ function sincronizarConSheets() {
   }
 }
 
-/* ============================================================
-   ACCIONES 100% FUNCIONALES DE LOS ÍCONOS DEL RAIL PROPIETARIO
-   ============================================================ */
+/* ACCIONES DE LOS ÍCONOS DEL RAIL PROPIETARIO */
 function ejecutarDiagnosticoQuantum() {
   const d = getDatosFiltrados();
   const totHHReal = d.reduce((a, r) => a + r.hhReal, 0);
   const totHHGan = d.reduce((a, r) => a + r.hhGan, 0);
   const ef = (totHHGan / totHHReal) * 100;
-  alert(`⚡ CONVECSA QUANTUM CORE LEAN:
-
-• Eficiencia Actual: ${ef.toFixed(1)}%
-• Diagnóstico: Sótanos rinden a ritmo óptimo (136%). Cuello de botella identificado en Cieloraso y Plenum.
-• Recomendación: Reubicar 2 operarios hacia frente crítico Piso 03.`);
+  alert(`⚡ CONVECSA QUANTUM CORE LEAN:\n\n• Eficiencia Actual: ${ef.toFixed(1)}%\n• Diagnóstico: Sótanos rinden a ritmo óptimo (136%). Cuello de botella identificado en Cieloraso y Plenum.\n• Recomendación: Reubicar 2 operarios hacia frente crítico Piso 03.`);
 }
 
 function alternarEspecialidadRail() {
@@ -1458,8 +1448,7 @@ function alternarEspecialidadRail() {
 }
 
 function auditarFiltroRapido() {
-  const q = prompt("🔍 Radar de Auditoría:
-Ingrese Operario, Piso o Frente a inspeccionar:");
+  const q = prompt("🔍 Radar de Auditoría:\nIngrese Operario, Piso o Frente a inspeccionar:");
   if (q !== null) {
     document.querySelectorAll('#tablaBody tr').forEach(tr => {
       tr.style.display = tr.innerText.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
@@ -1468,27 +1457,18 @@ Ingrese Operario, Piso o Frente a inspeccionar:");
 }
 
 function mostrarResumenCuadrillas() {
-  alert("👷 Consumo de Cuadrillas:
-• Jornada Estándar: 8.5h
-• Costo HH Referencial: S/. 142.50
-• Rendimiento Objetivo Muros: 91 m²/día
-• Rendimiento Objetivo Juntas SCF: 43 ml/día");
+  alert("👷 Consumo de Cuadrillas:\n• Jornada Estándar: 8.5h\n• Costo HH Referencial: S/. 142.50\n• Rendimiento Objetivo Muros: 91 m²/día\n• Rendimiento Objetivo Juntas SCF: 43 ml/día");
 }
 
 function mostrarMatriz17Niveles() {
-  alert("🏢 Matriz 17 Niveles THSSB Activos:
-Sótanos: S7 · S6 · S5 · S4 · S3 · S2 · S1
-Pisos: P1 · P2 · P3 · P4 · P5 · P6 · P7 · P8 · P9
-Remate: Azotea (AZ)");
+  alert("🏢 Matriz 17 Niveles THSSB Activos:\nSótanos: S7 · S6 · S5 · S4 · S3 · S2 · S1\nPisos: P1 · P2 · P3 · P4 · P5 · P6 · P7 · P8 · P9\nRemate: Azotea (AZ)");
 }
 
 function mostrarIndiceGanancia() {
   const d = getDatosFiltrados();
   const gan = d.filter(r => r.est === "GANANCIA").length;
   const pct = ((gan / d.length) * 100).toFixed(1);
-  alert(`💎 ÍNDICE LEAN VIP CONVECSA:
-• Índice de Cumplimiento: ${pct}%
-• Balance: ${gan} actividades en Ganancia de ${d.length} evaluadas.`);
+  alert(`💎 ÍNDICE LEAN VIP CONVECSA:\n• Índice de Cumplimiento: ${pct}%\n• Balance: ${gan} actividades en Ganancia de ${d.length} evaluadas.`);
 }
 </script>
 </body>
