@@ -62,6 +62,7 @@ body::before {
   z-index: 0;
 }
 
+/* LOGIN SEGURO */
 #loginOverlay {
   position: fixed;
   inset: 0;
@@ -81,7 +82,7 @@ body::before {
   width: 100%;
   max-width: 380px;
   text-align: center;
-  box-shadow: 0 0 35px rgba(0, 229, 255, 0.2), inset 0 0 20px rgba(0, 82, 204, 0.3);
+  box-shadow: 0 0 35px rgba(0, 229, 255, 0.2);
 }
 .cyber-logo {
   width: 58px; height: 58px; margin: 0 auto 12px;
@@ -96,7 +97,6 @@ body::before {
   border: 1.5px solid var(--c-border-glass); border-radius: 10px; color: var(--c-cyan-neon);
   margin: 14px 0; outline: none;
 }
-.pin-digital:focus { border-color: var(--c-cyan-neon); box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); }
 
 .app-shell {
   display: flex;
@@ -106,35 +106,36 @@ body::before {
   z-index: 1;
 }
 
-/* BARRA LATERAL PROPIETARIA (GERENCIA, PROYECTOS, INVENTARIO, ETC.) */
+/* ==============================================================
+   BARRA LATERAL IZQUIERDA (6 ACCESOS PRINCIPALES)
+   ============================================================== */
 .convecsa-sidebar {
-  width: 82px;
+  width: 90px;
   background: var(--c-navy-sidebar);
   border-right: 1px solid var(--c-border-glass);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 0;
-  gap: 12px;
+  padding: 18px 0;
+  gap: 14px;
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 120;
   flex-shrink: 0;
-  overflow-y: auto;
 }
 @media (max-width: 768px) {
   .convecsa-sidebar { display: none; }
 }
 
 .sidebar-nav-item {
-  width: 68px;
+  width: 76px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 8px 4px;
+  gap: 5px;
+  padding: 10px 4px;
   border-radius: 12px;
   border: 1px solid transparent;
   background: transparent;
@@ -142,7 +143,6 @@ body::before {
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
-  position: relative;
 }
 .sidebar-nav-item:hover {
   color: var(--c-cyan-neon);
@@ -160,24 +160,16 @@ body::before {
   width: 24px;
   height: 24px;
   stroke: currentColor;
-  stroke-width: 1.9;
+  stroke-width: 2;
   fill: none;
 }
 .sidebar-nav-label {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.1px;
   text-align: center;
+  line-height: 1.15;
 }
-.tag-sub-badge {
-  font-size: 8.5px;
-  font-weight: 900;
-  padding: 1px 4px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-.tag-buk { background: #F59E0B; color: #000; }
-.tag-pro { background: #2563EB; color: #FFF; }
 
 .cockpit-area {
   flex: 1;
@@ -186,11 +178,12 @@ body::before {
   min-width: 0;
 }
 
+/* TOPBAR LIMPIA */
 .topbar-cyber {
   background: rgba(9, 19, 34, 0.7);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--c-border-glass);
-  padding: 10px 18px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -209,8 +202,9 @@ body::before {
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 .sys-title { font-size: 14px; font-weight: 900; letter-spacing: 0.3px; color: #FFFFFF; }
-.sys-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--c-cyan-neon); }
+.sys-meta { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--c-cyan-neon); }
 
+/* CONTENEDOR FLUIDO HÍBRIDO */
 .cockpit-canvas {
   width: 100%;
   max-width: 1440px;
@@ -222,9 +216,10 @@ body::before {
   padding-bottom: 90px;
 }
 @media (min-width: 1024px) {
-  .cockpit-canvas { padding: 20px 24px 40px; gap: 18px; }
+  .cockpit-canvas { padding: 18px 24px 40px; gap: 18px; }
 }
 
+/* BARRA DE FILTRO TEMPORAL UNIFICADA (DÍA, SEMANA, MES, AÑO) */
 .command-strip {
   background: var(--c-navy-card);
   backdrop-filter: blur(12px);
@@ -232,12 +227,9 @@ body::before {
   border-radius: var(--radius-lg);
   padding: 10px 14px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-@media (min-width: 860px) {
-  .command-strip { flex-direction: row; justify-content: space-between; align-items: center; }
 }
 .btn-group-cyber {
   display: flex;
@@ -250,7 +242,7 @@ body::before {
 .cmd-btn {
   border: none;
   background: transparent;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 6px;
   font-family: inherit;
   font-size: 11px;
@@ -265,38 +257,7 @@ body::before {
   box-shadow: 0 0 10px rgba(0, 150, 225, 0.5);
 }
 
-.actions-pack { display: flex; gap: 6px; flex-wrap: wrap; }
-.btn-cyber-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 11px;
-  font-weight: 800;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-cyber-excel {
-  background: linear-gradient(135deg, #00C853, #00E676);
-  color: #050B14;
-  font-weight: 900;
-  box-shadow: 0 0 14px rgba(0, 230, 118, 0.3);
-}
-.btn-cyber-pdf {
-  background: linear-gradient(135deg, #D50000, #FF1744);
-  color: #FFFFFF;
-  box-shadow: 0 0 14px rgba(255, 23, 68, 0.3);
-}
-.btn-cyber-add {
-  background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
-  color: #050B14;
-  font-weight: 900;
-  box-shadow: var(--glow-cyan);
-}
-
+/* REJILLAS RESPONSIVAS */
 .grid-responsive-3 {
   display: grid;
   grid-template-columns: 1fr;
@@ -312,6 +273,7 @@ body::before {
 }
 @media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
 
+/* TARJETAS GLASSMORPHIC */
 .glass-card {
   background: var(--c-navy-card);
   backdrop-filter: blur(14px);
@@ -349,9 +311,9 @@ body::before {
   font-weight: 900;
   line-height: 1;
 }
-.card-neon-rose .kpi-big-num { color: var(--c-red-neon); text-shadow: 0 0 18px rgba(255,23,68,0.4); }
-.card-neon-amber .kpi-big-num { color: var(--c-amber-neon); text-shadow: 0 0 18px rgba(255,179,0,0.4); }
-.card-neon-green .kpi-big-num { color: var(--c-green-neon); text-shadow: 0 0 18px rgba(0,230,118,0.4); }
+.card-neon-rose .kpi-big-num { color: var(--c-red-neon); }
+.card-neon-amber .kpi-big-num { color: var(--c-amber-neon); }
+.card-neon-green .kpi-big-num { color: var(--c-green-neon); }
 
 .tag-status-neon {
   padding: 3px 9px;
@@ -452,6 +414,7 @@ td {
 }
 tr:hover { background: rgba(0, 150, 225, 0.06); }
 
+/* BARRA INFERIOR MOBILE */
 .bottom-nav-cyber {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -470,7 +433,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
   border: none; background: transparent; display: flex; flex-direction: column; align-items: center;
   gap: 2px; font-size: 9.5px; font-weight: 800; color: var(--text-secondary); cursor: pointer;
 }
-.nav-tab-m.active { color: var(--c-cyan-neon); text-shadow: var(--glow-cyan); }
+.nav-tab-m.active { color: var(--c-cyan-neon); }
 .nav-fab-add {
   background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
   color: #050B14;
@@ -484,9 +447,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
   cursor: pointer;
 }
 
-/* =========================================================================
-   MODAL REDISEÑADO SIN SCROLL HORIZONTAL (AMPLIADO A FILAS FLUIDAS)
-   ========================================================================= */
+/* MODAL DE REGISTRO FLUIDO (CERO SCROLL HORIZONTAL) */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 600; display: none;
@@ -544,11 +505,30 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 .m-foot-c {
   padding: 12px 18px; border-top: 1px solid var(--c-border-glass); display: flex; gap: 8px; flex-shrink: 0;
 }
+.btn-cyber-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-cyber-add {
+  background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
+  color: #050B14;
+  font-weight: 900;
+  box-shadow: var(--glow-cyan);
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SEGURO DIRECTO -->
+<!-- LOGIN POR PIN -->
 <div id="loginOverlay">
   <div class="login-cyber-box">
     <div class="cyber-logo">
@@ -577,51 +557,50 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 
 <div class="app-shell">
   
-  <!-- BARRA LATERAL PROPIETARIA (GERENCIA, PROYECTOS, INVENTARIO, ETC.) -->
+  <!-- ==============================================================
+       BARRA LATERAL IZQUIERDA CON ÍCONOS SOLICITADOS
+       ============================================================== -->
   <aside class="convecsa-sidebar">
-    <button class="sidebar-nav-item active" id="navGerencia" onclick="mostrarSeccion('GERENCIA', this)" title="Gerencia / Cockpit Principal">
+    
+    <!-- 1. GERENCIA: DASHBOARD -->
+    <button class="sidebar-nav-item active" id="navGerencia" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
       <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
       <span class="sidebar-nav-label">Gerencia</span>
     </button>
 
-    <button class="sidebar-nav-item" id="navProyectos" onclick="mostrarSeccion('PROYECTOS', this)" title="Proyectos / 17 Niveles THSSB">
-      <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-      <span class="sidebar-nav-label">Proyectos</span>
+    <!-- 2. PINTURA -->
+    <button class="sidebar-nav-item" id="navPintura" onclick="seleccionarModuloEspecialidad('PINTURA', this)" title="Pintura: Control Día/Sem/Mes/Año">
+      <svg viewBox="0 0 24 24"><path d="M19 11V4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7"/><path d="M21 11v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+      <span class="sidebar-nav-label">Pintura</span>
     </button>
 
-    <button class="sidebar-nav-item" id="navInventario" onclick="mostrarSeccion('INVENTARIO', this)" title="Inventario / Partidas SCF & Pintura">
-      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-      <span class="sidebar-nav-label">Inventario</span>
+    <!-- 3. SELLOS CORTAFUEGO -->
+    <button class="sidebar-nav-item" id="navSCF" onclick="seleccionarModuloEspecialidad('SCF', this)" title="Sellos Cortafuego: Control Día/Sem/Mes/Año">
+      <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+      <span class="sidebar-nav-label">Sellos Cortafuego</span>
     </button>
 
-    <button class="sidebar-nav-item" id="navCompras" onclick="mostrarSeccion('COMPRAS', this)" title="Compras / Pedidos de Obra">
-      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span class="sidebar-nav-label">Compras</span>
+    <!-- 4. REGISTRAR AVANCE -->
+    <button class="sidebar-nav-item" id="navRegistrar" onclick="abrirModal()" title="Registrar Avance Diario de Obra">
+      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <span class="sidebar-nav-label">Registrar Avance</span>
     </button>
 
-    <button class="sidebar-nav-item" id="navVentas" onclick="mostrarSeccion('VENTAS', this)" title="Ventas / Impacto Económico S/.">
-      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      <span class="sidebar-nav-label">Ventas</span>
+    <!-- 5. EXPORTAR EXCEL -->
+    <button class="sidebar-nav-item" id="navExcel" onclick="exportarExcelConFormulas()" title="Exportar RDO Excel con Fórmulas Vivas">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="sidebar-nav-label">Exportar Excel</span>
     </button>
 
-    <button class="sidebar-nav-item" id="navRRHH" onclick="mostrarSeccion('RRHH', this)" title="RRHH BUK / Productividad Operarios">
-      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span class="sidebar-nav-label">RRHH</span>
-      <span class="tag-sub-badge tag-buk">BUK</span>
+    <!-- 6. DESCARGAR PDF -->
+    <button class="sidebar-nav-item" id="navPDF" onclick="exportarReportePDF()" title="Descargar Reporte Diario de Obra en PDF">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span class="sidebar-nav-label">Descargar PDF</span>
     </button>
 
-    <button class="sidebar-nav-item" id="navSSOMA" onclick="mostrarSeccion('SSOMA', this)" title="SSOMA PRO / Restricciones en Obra">
-      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      <span class="sidebar-nav-label">SSOMA</span>
-      <span class="tag-sub-badge tag-pro">PRO</span>
-    </button>
-
-    <button class="sidebar-nav-item" id="navContable" onclick="mostrarSeccion('CONTABLE', this)" title="Contable / Exportar RDO Oficial">
-      <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
-      <span class="sidebar-nav-label">Contable</span>
-    </button>
   </aside>
 
+  <!-- ÁREA CENTRAL DEL COCKPIT -->
   <div class="cockpit-area">
     
     <!-- TOPBAR -->
@@ -629,8 +608,8 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       <div class="sys-badge">
         <div class="status-beacon"></div>
         <div>
-          <div class="sys-title">CONVECSA CONTROL 360° · SISTEMA DE CONTROL DE PRODUCCIÓN</div>
-          <div class="sys-meta">PROYECTO: THSSB · 17 NIVELES · REPORTE DIARIO DE OBRA LEAN</div>
+          <div class="sys-title" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
+          <div class="sys-meta" id="lblSubtituloArea">TORRE HOSPITALARIA SAN BORJA (THSSB) · CONVECSA S.A.C.</div>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
@@ -639,34 +618,23 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       </div>
     </header>
 
+    <!-- LIENZO FLUIDO PRINCIPAL CON SCROLL SUAVE -->
     <main class="cockpit-canvas" id="cockpitPrintArea">
 
+      <!-- SELECTOR TEMPORAL LIMPIO (DÍA, SEMANA, MES, AÑO) -->
       <section class="command-strip">
-        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:11px; font-weight:800; color:var(--c-cyan-neon); text-transform:uppercase;">PERIODO DE ANÁLISIS:</span>
           <div class="btn-group-cyber">
             <button class="cmd-btn" onclick="filtrarPeriodo('DIA', this)">Día</button>
             <button class="cmd-btn" onclick="filtrarPeriodo('SEMANA', this)">Semana</button>
             <button class="cmd-btn active" onclick="filtrarPeriodo('MES', this)">Mes</button>
-            <button class="cmd-btn" onclick="filtrarPeriodo('TODO', this)">Todo</button>
-          </div>
-
-          <div class="btn-group-cyber">
-            <button class="cmd-btn active" id="btnModConsolidado" onclick="filtrarModulo('CONSOLIDADO', this)">Global</button>
-            <button class="cmd-btn" id="btnModPintura" onclick="filtrarModulo('PINTURA', this)">🎨 Pintura</button>
-            <button class="cmd-btn" id="btnModSCF" onclick="filtrarModulo('SCF', this)">🔥 SCF (Sellos)</button>
+            <button class="cmd-btn" onclick="filtrarPeriodo('ANIO', this)">Año</button>
           </div>
         </div>
 
-        <div class="actions-pack">
-          <button class="btn-cyber-action btn-cyber-excel" onclick="exportarExcelConFormulas()">
-            <span>📊</span> EXPORTAR EXCEL (.XLSX)
-          </button>
-          <button class="btn-cyber-action btn-cyber-pdf" onclick="exportarReportePDF()">
-            <span>📄</span> DESCARGAR RDO (PDF)
-          </button>
-          <button class="btn-cyber-action btn-cyber-add" onclick="abrirModal()">
-            <span>➕</span> REGISTRAR AVANCE
-          </button>
+        <div style="font-family:'JetBrains Mono'; font-size:11px; color:var(--text-secondary);" id="lblFiltroEspecialidadActiva">
+          ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b>
         </div>
       </section>
 
@@ -695,12 +663,12 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
         </div>
 
         <div class="glass-card card-neon-green">
-          <div class="kpi-tag-head">EFICIENCIA SEMANAL</div>
+          <div class="kpi-tag-head">EFICIENCIA DEL PERIODO</div>
           <div class="kpi-numeric-row">
             <div class="kpi-big-num" id="txtSemanalVal">104.5%</div>
           </div>
           <div style="font-size:11px; font-weight:700; color:var(--text-secondary); display:flex; justify-content:space-between;">
-            <span>Todas las semanas</span>
+            <span id="lblSubPeriodo">Todo el periodo activo</span>
             <span style="color:var(--c-green-neon); font-weight:800;" id="txtTotalOperarios">6 operarios activos</span>
           </div>
         </div>
@@ -710,8 +678,8 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       <section class="grid-responsive-2" id="secGraficosTop">
         <div class="chart-card-box">
           <div class="chart-top-bar">
-            <div class="chart-title-cyber">Evolución por Semana (Eficiencia %)</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,150,225,0.15); color:var(--c-cyan-neon); padding:2px 8px; border-radius:5px;">3 SEMANAS</span>
+            <div class="chart-title-cyber">Evolución Temporal de Eficiencia (%)</div>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,150,225,0.15); color:var(--c-cyan-neon); padding:2px 8px; border-radius:5px;" id="badgePeriodoEvol">HISTÓRICO</span>
           </div>
           <div class="chart-holder-responsive">
             <canvas id="chartEvolucion"></canvas>
@@ -720,7 +688,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 
         <div class="chart-card-box">
           <div class="chart-top-bar">
-            <div class="chart-title-cyber">Eficiencia por Elemento</div>
+            <div class="chart-title-cyber">Eficiencia por Elemento / Partida</div>
             <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(255,23,68,0.15); color:var(--c-red-neon); padding:2px 8px; border-radius:5px;">VS META 100%</span>
           </div>
           <div class="chart-holder-responsive">
@@ -733,8 +701,8 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       <section class="grid-responsive-3" id="secGraficosBottom">
         <div class="chart-card-box">
           <div class="chart-top-bar">
-            <div class="chart-title-cyber">HH Ganadas vs Reales · Semana</div>
-            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,230,118,0.15); color:var(--c-green-neon); padding:2px 8px; border-radius:5px;">SEMANAL</span>
+            <div class="chart-title-cyber">HH Ganadas vs Reales</div>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:800; background:rgba(0,230,118,0.15); color:var(--c-green-neon); padding:2px 8px; border-radius:5px;">HORAS HOMBRE</span>
           </div>
           <div class="chart-holder-responsive">
             <canvas id="chartHH"></canvas>
@@ -762,14 +730,14 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
         </div>
       </section>
 
-      <!-- 4. AUDITORÍA DE TRABAJADORES (RRHH BUK) -->
+      <!-- 4. AUDITORÍA DE TRABAJADORES -->
       <section class="chart-card-box" id="secAuditoriaTrabajadores">
         <div class="chart-top-bar">
           <div>
-            <div style="font-size:13.5px; font-weight:900; color:#FFFFFF;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR (RRHH BUK)</div>
-            <div style="font-size:11px; color:var(--text-secondary);">Métricas de productividad individual para bono Lean y control de desvíos</div>
+            <div style="font-size:13.5px; font-weight:900; color:#FFFFFF;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Métricas de rendimiento individual y balance de horas ganadas</div>
           </div>
-          <span id="txtEvaluados" style="font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:800; color:var(--c-green-neon);">6 evaluados</span>
+          <span id="txtEvaluados" style="font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:800; color:var(--c-green-neon);">5 evaluados</span>
         </div>
         <div class="grid-responsive-3" id="gridTrabajadores" style="margin-top:10px;"></div>
       </section>
@@ -777,7 +745,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       <!-- 5. TABLA DE TRAZABILIDAD EN TIEMPO REAL -->
       <section class="cyber-table-panel" id="secTablaTrazabilidad">
         <div style="padding:14px 16px; border-bottom:1px solid var(--c-border-glass); display:flex; justify-content:space-between; align-items:center;">
-          <div style="font-size:13px; font-weight:900; color:var(--c-cyan-neon);">📋 BASE DE DATOS ACTIVA: GOOGLE SHEETS</div>
+          <div style="font-size:13px; font-weight:900; color:var(--c-cyan-neon);">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
           <div style="font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono', monospace;">REGISTRO_DIARIO_PINTURA & REGISTRO_DIARIO_SCF</div>
         </div>
         <div class="table-scroll-wrap">
@@ -808,20 +776,20 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 
 <!-- BARRA INFERIOR MOBILE -->
 <nav class="bottom-nav-cyber">
-  <button class="nav-tab-m active" onclick="filtrarModulo('CONSOLIDADO', this)">
-    <span>📊</span><span>Global</span>
+  <button class="nav-tab-m active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)">
+    <span>📊</span><span>Gerencia</span>
   </button>
-  <button class="nav-tab-m" onclick="filtrarModulo('PINTURA', this)">
+  <button class="nav-tab-m" onclick="seleccionarModuloEspecialidad('PINTURA', this)">
     <span>🎨</span><span>Pintura</span>
   </button>
   <button class="nav-fab-add" onclick="abrirModal()" title="Registrar Avance">
     ➕
   </button>
-  <button class="nav-tab-m" onclick="filtrarModulo('SCF', this)">
+  <button class="nav-tab-m" onclick="seleccionarModuloEspecialidad('SCF', this)">
     <span>🔥</span><span>SCF</span>
   </button>
-  <button class="nav-tab-m" onclick="sincronizarConSheets()">
-    <span>🔄</span><span>Sync</span>
+  <button class="nav-tab-m" onclick="exportarExcelConFormulas()">
+    <span>📥</span><span>Excel</span>
   </button>
 </nav>
 
@@ -856,8 +824,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
           <select id="mNivel">
             <optgroup label="Sótanos (7)">
               <option value="S7">Sótano 7</option><option value="S6">Sótano 6</option><option value="S5">Sótano 5</option>
-              <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option>
-              <option value="S1">Sótano 1</option>
+              <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option><option value="S1">Sótano 1</option>
             </optgroup>
             <optgroup label="Pisos (9)">
               <option value="P1">Piso 1</option><option value="P2" selected>Piso 2</option><option value="P3">Piso 3</option>
@@ -875,7 +842,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
         </div>
       </div>
 
-      <!-- FILA 3: SUBPROCESO OFICIAL TARGET -->
+      <!-- FILA 3: SUBPROCESO OFICIAL TARGET (ANCHO TOTAL) -->
       <div class="field-cyber">
         <label>Partida / Subproceso Oficial (Target):</label>
         <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;"></select>
@@ -930,7 +897,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 // ENDPOINT DE GOOGLE APPS SCRIPT
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
 
-// CATÁLOGO OFICIAL CONVECSA: PARTIDAS SCF SEGÚN TABLA CONTRACTUAL (27 ITEMS)
+// 27 PARTIDAS CONTRACTUALES DE SELLOS CORTAFUEGO + PINTURA
 const CATALOGO = {
   SCF: {
     trabajadores: [
@@ -1030,68 +997,61 @@ window.addEventListener('DOMContentLoaded', () => {
   actualizarTodo();
 });
 
-function mostrarSeccion(seccion, btn) {
-  document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
+// =========================================================================
+// ACCIONES DE LA BARRA LATERAL IZQUIERDA
+// =========================================================================
+function seleccionarModuloEspecialidad(modulo, btn) {
+  MODULO_ACTIVO = modulo;
+  document.querySelectorAll('.sidebar-nav-item, .nav-tab-m').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
-  const secK = document.getElementById('secKPIs');
-  const secGT = document.getElementById('secGraficosTop');
-  const secGB = document.getElementById('secGraficosBottom');
-  const secW = document.getElementById('secAuditoriaTrabajadores');
-  const secT = document.getElementById('secTablaTrazabilidad');
+  const titulos = {
+    CONSOLIDADO: { t: "GERENCIA: DASHBOARD EJECUTIVO", s: "TORRE HOSPITALARIA SAN BORJA (THSSB) · CONSOLIDADO GLOBAL" },
+    PINTURA: { t: "CONTROL DE PINTURA Y RECUBRIMIENTOS", s: "DESEMPEÑO POR DÍA, SEMANA, MES Y AÑO · THSSB" },
+    SCF: { t: "CONTROL DE SELLOS CORTAFUEGO (SCF)", s: "27 PARTIDAS CONTRACTUALES · EVALUACIÓN DÍA, SEMANA, MES Y AÑO" }
+  };
 
-  secK.style.display = 'grid';
-  secGT.style.display = 'grid';
-  secGB.style.display = 'grid';
-  secW.style.display = 'flex';
-  secT.style.display = 'block';
-
-  if (seccion === 'GERENCIA') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else if (seccion === 'PROYECTOS') {
-    secGB.scrollIntoView({ behavior: 'smooth' });
-  } else if (seccion === 'INVENTARIO') {
-    alert("📦 Módulo Inventario: 27 Partidas Oficiales de Sellos Cortafuego (SCF) y Acabados de Pintura listas para registro.");
-  } else if (seccion === 'COMPRAS') {
-    alert("🛒 Módulo Compras: Auditoría de pedidos e insumos de sellos cortafuego.");
-  } else if (seccion === 'VENTAS') {
-    alert("💲 Módulo Ventas / Valorizaciones: Costo HH base S/. 142.50. Horas ganadas listas para cobro mensual.");
-  } else if (seccion === 'RRHH') {
-    secW.scrollIntoView({ behavior: 'smooth' });
-  } else if (seccion === 'SSOMA') {
-    secT.scrollIntoView({ behavior: 'smooth' });
-  } else if (seccion === 'CONTABLE') {
-    exportarExcelConFormulas();
-  }
-}
-
-function filtrarPeriodo(p, btn) {
-  PERIODO_ACTIVO = p;
-  btn.parentElement.querySelectorAll('.cmd-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('lblKpiPeriodo').innerText = "EFICIENCIA (" + p + ")";
+  document.getElementById('lblTituloArea').innerText = titulos[modulo].t;
+  document.getElementById('lblSubtituloArea').innerText = titulos[modulo].s;
+  document.getElementById('lblFiltroEspecialidadActiva').innerHTML = `ESPECIALIDAD: <b>${modulo === 'CONSOLIDADO' ? 'CONSOLIDADO GLOBAL' : (modulo === 'PINTURA' ? 'PINTURA' : 'SELLOS CORTAFUEGO (SCF)')}</b>`;
+  
   actualizarTodo();
 }
 
-function filtrarModulo(m, btn) {
-  MODULO_ACTIVO = m;
-  document.querySelectorAll('.cmd-btn, .nav-tab-m').forEach(b => {
-    if (b.innerText && b.innerText.includes(m === 'CONSOLIDADO' ? 'Global' : (m === 'PINTURA' ? 'Pintura' : 'SCF'))) {
-      b.classList.add('active');
-    } else {
-      b.classList.remove('active');
-    }
-  });
+function filtrarPeriodo(periodo, btn) {
+  PERIODO_ACTIVO = periodo;
+  btn.parentElement.querySelectorAll('.cmd-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const labels = {
+    DIA: "EFICIENCIA DEL DÍA (HOY)",
+    SEMANA: "EFICIENCIA DE LA SEMANA",
+    MES: "EFICIENCIA DEL MES",
+    ANIO: "EFICIENCIA ACUMULADA DEL AÑO"
+  };
+
+  document.getElementById('lblKpiPeriodo').innerText = labels[periodo];
+  document.getElementById('badgePeriodoEvol').innerText = periodo;
+  document.getElementById('lblSubPeriodo').innerText = `Visualizando periodo: ${periodo}`;
   actualizarTodo();
 }
 
 function getDatosFiltrados() {
   let list = LOG_REGISTROS;
   if (MODULO_ACTIVO !== "CONSOLIDADO") list = list.filter(r => r.modulo === MODULO_ACTIVO);
+  
   const hoy = new Date().toISOString().split('T')[0];
-  if (PERIODO_ACTIVO === "DIA") list = list.filter(r => r.fecha === hoy || r.horaExacta.startsWith(hoy));
-  else if (PERIODO_ACTIVO === "SEMANA") list = list.filter(r => r.semana === 7 || r.fecha >= "2026-09-14");
-  else if (PERIODO_ACTIVO === "MES") list = list.filter(r => r.fecha >= "2026-09-01");
+  const anioActual = hoy.split('-')[0];
+
+  if (PERIODO_ACTIVO === "DIA") {
+    list = list.filter(r => r.fecha === hoy || r.horaExacta.startsWith(hoy));
+  } else if (PERIODO_ACTIVO === "SEMANA") {
+    list = list.filter(r => r.semana === 7 || r.fecha >= "2026-09-14");
+  } else if (PERIODO_ACTIVO === "MES") {
+    list = list.filter(r => r.fecha >= "2026-09-01");
+  } else if (PERIODO_ACTIVO === "ANIO") {
+    list = list.filter(r => r.fecha.startsWith(anioActual));
+  }
   return list;
 }
 
@@ -1206,10 +1166,10 @@ function inicializarGraficos() {
   chartEvolucion = new Chart(document.getElementById('chartEvolucion'), {
     type: 'line',
     data: {
-      labels: ['Sem 3', 'Sem 4', 'Sem 7'],
+      labels: ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5'],
       datasets: [
-        { label: 'Efic %', data: [66.5, 66.7, 58.7], borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.12)', fill: true, tension: 0.35, pointRadius: 5, pointBackgroundColor: '#00E5FF' },
-        { label: 'Meta 100%', data: [100, 100, 100], borderColor: '#00E676', borderDash: [6, 4], pointRadius: 0 }
+        { label: 'Efic %', data: [98.5, 112.0, 104.5, 108.0, 115.2], borderColor: '#00E5FF', backgroundColor: 'rgba(0, 229, 255, 0.12)', fill: true, tension: 0.35, pointRadius: 5, pointBackgroundColor: '#00E5FF' },
+        { label: 'Meta 100%', data: [100, 100, 100, 100, 100], borderColor: '#00E676', borderDash: [6, 4], pointRadius: 0 }
       ]
     },
     options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
@@ -1229,10 +1189,10 @@ function inicializarGraficos() {
   chartHH = new Chart(document.getElementById('chartHH'), {
     type: 'bar',
     data: {
-      labels: ['Sem 3', 'Sem 4', 'Sem 7'],
+      labels: ['Sem 1', 'Sem 2', 'Sem 3'],
       datasets: [
-        { label: 'HH Ganadas', data: [15.2, 2.1, 27.4], backgroundColor: '#0096E1', borderRadius: 5 },
-        { label: 'HH Reales', data: [22.8, 3.1, 46.7], backgroundColor: '#FF1744', borderRadius: 5 }
+        { label: 'HH Ganadas', data: [15.2, 21.0, 27.4], backgroundColor: '#0096E1', borderRadius: 5 },
+        { label: 'HH Reales', data: [14.0, 20.5, 24.8], backgroundColor: '#00E676', borderRadius: 5 }
       ]
     },
     options: { responsive: true, maintainAspectRatio: false, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
@@ -1253,7 +1213,7 @@ function inicializarGraficos() {
     type: 'doughnut',
     data: {
       labels: ['Pérdida', 'Ganancia'],
-      datasets: [{ data: [27, 19], backgroundColor: ['#FF1744', '#00E676'], borderWidth: 2, borderColor: '#0B1528' }]
+      datasets: [{ data: [1, 4], backgroundColor: ['#FF1744', '#00E676'], borderWidth: 2, borderColor: '#0B1528' }]
     },
     options: { responsive: true, maintainAspectRatio: false, cutout: '66%' }
   });
@@ -1266,8 +1226,22 @@ function actualizarGraficos() {
   const per = d.filter(r => r.est === "PERDIDA").length;
   chartEstado.data.datasets[0].data = [per || 0, gan || 1];
   chartEstado.update();
+
+  // Actualizar barras por elemento según especialidad activa
+  if (MODULO_ACTIVO === 'PINTURA') {
+    chartElemento.data.labels = ['MURO', 'CIELORASO', 'PLENUM', 'COLUMNAS'];
+    chartElemento.data.datasets[0].data = [136, 48, 48.5, 160];
+  } else if (MODULO_ACTIVO === 'SCF') {
+    chartElemento.data.labels = ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'];
+    chartElemento.data.datasets[0].data = [850, 485, 283, 160];
+  } else {
+    chartElemento.data.labels = ['PINTURA MUROS', 'JUNTAS SCF', 'DUCTOS SCF', 'ACABADOS'];
+    chartElemento.data.datasets[0].data = [136, 850, 283, 160];
+  }
+  chartElemento.update();
 }
 
+// EXPORTACIÓN EXCEL (.XLSX) CON FÓRMULAS VIVAS
 function exportarExcelConFormulas() {
   const d = getDatosFiltrados();
   const fecha = new Date().toISOString().split('T')[0];
@@ -1305,6 +1279,7 @@ function exportarExcelConFormulas() {
   XLSX.writeFile(wb, `RDO_CONVECSA_THSSB_${fecha}.xlsx`);
 }
 
+// EXPORTACIÓN PDF
 function exportarReportePDF() {
   const el = document.getElementById('cockpitPrintArea');
   const opt = {
@@ -1317,6 +1292,7 @@ function exportarReportePDF() {
   html2pdf().set(opt).from(el).save();
 }
 
+// MODAL CAPTURA
 function abrirModal() {
   cargarCatalogosModal();
   document.getElementById('modalCaptura').classList.add('open');
@@ -1348,6 +1324,7 @@ function recalcularModal() {
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
 
+  // Base Lean Cuadrilla Estándar = 17 HH
   const hhGan = metrado * (17.0 / rendOpt);
   const ef = (hhGan / hhReal) * 100;
 
