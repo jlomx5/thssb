@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-main: radial-gradient(circle at 10% 20%, #0A1931 0%, #050B14 100%);
@@ -31,7 +31,7 @@
   --bg-surface: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   --bg-card: #FFFFFF;
-  --border-glass: #CBD5E1;
+  --border-glass: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #64748B;
   --c-cyan: #0052CC;
@@ -156,11 +156,12 @@ body::before {
 /* MODALES */
 .cyber-modal-mask {
   position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
-  backdrop-filter: blur(8px); z-index: 600; display: none;
+  backdrop-filter: blur(8px); z-index: 99999 !important; display: none;
   align-items: flex-end; justify-content: center;
+  touch-action: manipulation;
 }
 @media (min-width: 640px) { .cyber-modal-mask { align-items: center; padding: 20px; } }
-.cyber-modal-mask.open { display: flex; }
+.cyber-modal-mask.open { display: flex !important; }
 
 .cyber-modal-window {
   background: var(--bg-surface); border: 1px solid var(--c-cyan);
@@ -236,9 +237,13 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 }
 .m-tab-btn.active { color: var(--c-cyan); }
 .m-fab-btn {
-  background: var(--c-azul); color: #FFF; width: 38px; height: 38px;
-  border-radius: 50%; border: none; font-size: 18px; display: flex; align-items: center;
-  justify-content: center; margin-top: -14px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,82,204,0.4);
+  background: var(--c-azul); color: #FFF; width: 42px; height: 42px;
+  border-radius: 50%; border: none; font-size: 20px; display: flex; align-items: center;
+  justify-content: center; margin-top: -16px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,82,204,0.5);
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.sidebar-nav-item, .m-tab-btn, .btn-cyber-action {
+  touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor: pointer;
 }
 </style>
 </head>
@@ -733,7 +738,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   <button class="m-tab-btn" onclick="seleccionarModuloEspecialidad('SCF', this)">
     <span>🔥</span><span>Sellos</span>
   </button>
-  <button class="m-fab-btn" onclick="abrirModal()" title="Registrar">
+  <button class="m-fab-btn" onclick="abrirModal()" ontouchend="abrirModal()" type="button" title="Registrar Avance">
     ➕
   </button>
   <button class="m-tab-btn" onclick="abrirModalMetrados()">
@@ -941,6 +946,7 @@ function actualizarTodo() {
   actualizarGraficos();
 }
 
+// MONITOR DE PLAZO CONTRACTUAL
 function actualizarMonitorPlazo() {
   const hoy = new Date();
   const diffDias = Math.max(0, Math.floor((hoy - FECHA_INICIO_OBRA) / (1000 * 60 * 60 * 24)));
@@ -1063,7 +1069,7 @@ function renderizarTabla() {
   t.innerHTML = '';
   const datos = getDatosFiltrados();
   
-  // Actualizar resumen QA/QC sobre la cabecera
+  // Actualizar indicador QA/QC en cabecera de la tabla
   const tot = datos.length;
   const proto = datos.filter(r => r.qaqc === "PROTOCOLIZADO").length;
   const pend = tot - proto;
@@ -1095,10 +1101,10 @@ function renderizarTabla() {
       <td style="text-align:right; font-family:'JetBrains Mono';">${r.hhReal.toFixed(2)}h</td>
       <td style="text-align:center; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'}; font-weight:700;">${r.ef}%</td>
       <td style="text-align:center;">
-        <input type="date" value="${r.liberacion || ''}" style="padding:3px 6px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); border-radius:5px; color:var(--text-main); font-family:'JetBrains Mono'; font-size:10.5px; outline:none;" onchange="actualizarFechaLiberacion('${r.id}', this.value)" title="Programar fecha de inspección y liberación">
+        <input type="date" value="${r.liberacion || ''}" style="padding:3px 6px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); border-radius:5px; color:var(--text-main); font-family:'JetBrains Mono'; font-size:10.5px; outline:none;" onchange="actualizarFechaLiberacion('${r.id}', this.value)" title="Programar fecha de liberación de frente">
       </td>
       <td style="text-align:center;">
-        <button onclick="toggleEstadoQAQC('${r.id}')" style="background:${btnQABg}; border:1px solid ${btnQABorder}; color:${btnQACol}; font-family:'Plus Jakarta Sans'; font-size:10px; font-weight:700; padding:3px 8px; border-radius:5px; cursor:pointer; transition:all 0.2s; white-space:nowrap;" title="Haga clic para alternar estado de calidad">
+        <button onclick="toggleEstadoQAQC('${r.id}')" style="background:${btnQABg}; border:1px solid ${btnQABorder}; color:${btnQACol}; font-family:'Plus Jakarta Sans'; font-size:10px; font-weight:700; padding:3px 8px; border-radius:5px; cursor:pointer; transition:all 0.2s; white-space:nowrap;" title="Haga clic para cambiar entre Pendiente y Protocolizado">
           ${btnQATxt}
         </button>
       </td>
@@ -1196,9 +1202,17 @@ function actualizarGraficos() {
   chartEstado.update();
 }
 
+// APERTURA DEL MODAL BLINDADA PARA IPAD Y CELULAR
 function abrirModal() {
-  cargarCatalogosModal();
-  document.getElementById('modalCaptura').classList.add('open');
+  const modal = document.getElementById('modalCaptura');
+  if (modal) {
+    modal.classList.add('open');
+    try {
+      cargarCatalogosModal();
+    } catch (err) {
+      console.warn("Advertencia al cargar catalogos:", err);
+    }
+  }
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
@@ -1208,7 +1222,7 @@ function cargarCatalogosModal() {
   const cfg = CATALOGO[esp];
   
   const sT = document.getElementById('mTrabajador'); sT.innerHTML = '';
-  const activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo);
+  const activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo !== false);
   activos.forEach(t => sT.innerHTML += `<option value="${t.nombre}">${t.nombre} (${t.cargo})</option>`);
   
   const sE = document.getElementById('mElemento'); sE.innerHTML = '';
@@ -1224,7 +1238,7 @@ function cargarCatalogosModal() {
   recalcularModal();
 }
 
-// CÁLCULO CALIBRADO DE EFICIENCIA
+// CÁLCULO CALIBRADO DE EFICIENCIA (SÁBADO Y L-V)
 function recalcularModal() {
   const subVal = document.getElementById('mSubproceso').value.split('|');
   const rendNominal = parseFloat(subVal[2]) || 30.0;
@@ -1233,7 +1247,13 @@ function recalcularModal() {
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
 
   const fVal = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
-  const esSabado = new Date(fVal + "T00:00:00").getDay() === 6;
+  let esSabado = false;
+  if (fVal) {
+    const parts = fVal.split('-');
+    if (parts.length === 3) {
+      esSabado = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getDay() === 6;
+    }
+  }
   const jornadaHoras = esSabado ? 5.5 : 8.5;
 
   const targetDia = (rendNominal / 8.5) * jornadaHoras;
@@ -1458,7 +1478,7 @@ function guardarNuevoRecurso() {
   }
 }
 
-// METRADOS CONTRACTUALES
+// GESTIÓN DE METRADOS CONTRACTUALES & BASE DE CURVA S
 function abrirModalMetrados() {
   cambiarTabMetrados(TAB_METRADOS_ACTUAL);
   document.getElementById('modalMetrados').classList.add('open');
