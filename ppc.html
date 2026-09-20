@@ -31,9 +31,9 @@
   --bg-surface: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   --bg-card: #FFFFFF;
-  --border-glass: #CBD5E1;
+  --border-glass: #E2E8F0;
   --text-main: #0F172A;
-  --text-muted: #475569;
+  --text-muted: #64748B;
   --c-cyan: #0052CC;
 }
 
@@ -71,16 +71,16 @@ body::before {
 
 .app-shell { display: flex; width: 100%; min-height: 100vh; }
 
-/* BARRA LATERAL */
+/* BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) */
 .convecsa-sidebar {
-  width: 86px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
+  width: 84px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
   display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px;
   position: sticky; top: 0; height: 100vh; z-index: 120; flex-shrink: 0;
 }
 @media (max-width: 1023px) { .convecsa-sidebar { display: none; } }
 
 .sidebar-nav-item {
-  width: 74px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 4px; padding: 8px 4px; border-radius: 10px; border: 1px solid transparent;
   background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
 }
@@ -142,7 +142,7 @@ body::before {
 .kpi-big-num { font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 700; line-height: 1; }
 .chart-holder-responsive { position: relative; height: 215px; width: 100%; }
 
-/* TABLA EN VIVO ESTILIZADA */
+/* TABLA EN VIVO */
 .cyber-table { width: 100%; border-collapse: collapse; min-width: 820px; }
 .cyber-table th {
   padding: 9px 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -151,6 +151,7 @@ body::before {
 .cyber-table td {
   padding: 9px 12px; font-size: 11.5px; border-bottom: 1px solid rgba(255,255,255,0.04);
 }
+.badge-subtle { padding: 2px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 600; }
 
 /* MODALES */
 .cyber-modal-mask {
@@ -451,7 +452,9 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   </div>
 </div>
 
-<!-- MODAL SMART CAPTURE CON CÁLCULO PRECISO PARA SÁBADO -->
+<!-- =========================================================================
+     MODAL SMART CAPTURE (SIN BOTÓN METRADO PARA PROTEGER DE CAPATACES)
+     ========================================================================= -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
     <div class="m-head-c">
@@ -544,12 +547,11 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       </div>
     </div>
 
-    <!-- BOTONES INFERIORES -->
+    <!-- BOTONES INFERIORES: RETIRADO EL BOTÓN METRADO PARA SEGURIDAD -->
     <div class="m-foot-c">
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
         <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()">Cerrar</button>
         <button class="btn-cyber-action btn-cyber-recurso" onclick="abrirModalRecurso()">➕ RECURSOS</button>
-        <button class="btn-cyber-action btn-cyber-metrados" onclick="abrirModalMetrados()">📐 METRADOS & BASE CURVA S</button>
       </div>
 
       <div class="save-progress-container" id="saveProgressBox">
@@ -564,7 +566,9 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   </div>
 </div>
 
-<!-- MODAL GESTIÓN DE RECURSOS CON SWITCH ON/OFF Y ELIMINAR -->
+<!-- =========================================================================
+     MODAL GESTIÓN DE RECURSOS (TEXTO VISIBLE, ON/OFF Y BOTÓN ELIMINAR)
+     ========================================================================= -->
 <div class="cyber-modal-mask" id="modalRecurso" style="z-index: 700;">
   <div class="cyber-modal-window" style="max-width: 580px;">
     <div class="m-head-c">
@@ -616,9 +620,11 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   </div>
 </div>
 
-<!-- MODAL METRADOS CONTRACTUALES & BASE CURVA S CON BOTÓN DE PLAZO -->
+<!-- =========================================================================
+     MODAL METRADOS CONTRACTUALES & BASE CURVA S (ACCESIBLE DESDE BARRA LATERAL)
+     ========================================================================= -->
 <div class="cyber-modal-mask" id="modalMetrados" style="z-index: 700;">
-  <div class="cyber-modal-window" style="max-width: 860px;">
+  <div class="cyber-modal-window" style="max-width: 880px;">
     <div class="m-head-c">
       <div style="font-size:12.5px; font-weight:700; color:var(--c-amber);">📐 METRADOS CONTRACTUALES & BASE CURVA S (THSSB)</div>
       <button onclick="cerrarModalMetrados()" style="background:none; border:none; font-size:16px; color:var(--text-muted); cursor:pointer;">✕</button>
@@ -630,18 +636,18 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
           <button class="cmd-btn" id="btnTabMetradosPIN" onclick="cambiarTabMetrados('PINTURA')">Pintura y Acabados (15 Partidas)</button>
         </div>
         <div style="display:flex; gap:6px;">
-          <button class="btn-cyber-action" style="background:rgba(255,179,0,0.2); border:1px solid var(--c-amber); color:var(--c-amber);" onclick="abrirControlPlazoModal()">⏱️ PLAZO & REPROGRAMACIÓN</button>
+          <button class="btn-cyber-action" style="background:rgba(255,179,0,0.2); border:1px solid var(--c-amber); color:var(--c-amber);" onclick="abrirModalPlazoContractual()">⏱️ PLAZO & REPROGRAMACIÓN</button>
           <button class="btn-cyber-action btn-cyber-add" onclick="activarFilaNuevaPartida()">+ NUEVA PARTIDA</button>
         </div>
       </div>
 
-      <!-- FORMULARIO DIRECTO INTEGRADO (SIN PROMPTS) -->
+      <!-- FORMULARIO DIRECTO INTEGRADO (CERO PROMPTS INVASIVOS) -->
       <div id="boxNuevaPartidaDirecta" style="display:none; background:rgba(0,150,225,0.08); border:1px solid var(--c-cyan); border-radius:8px; padding:10px; margin-top:8px;">
         <div style="font-size:11px; font-weight:700; color:var(--c-cyan); margin-bottom:6px;">+ INGRESAR NUEVA PARTIDA A LA BASE:</div>
         <div style="display:grid; grid-template-columns: 80px 1fr 60px 100px 90px auto; gap:6px; align-items:center;">
-          <input type="text" id="npItem" placeholder="Item (1.02.17)" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px;">
-          <input type="text" id="npDesc" placeholder="Descripción contractual" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px;">
-          <input type="text" id="npUm" placeholder="UM (und)" value="und" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px; text-align:center;">
+          <input type="text" id="npItem" placeholder="Item (28)" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px;">
+          <input type="text" id="npDesc" placeholder="Descripción de partida" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px;">
+          <input type="text" id="npUm" placeholder="UM" value="und" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px; text-align:center;">
           <input type="number" id="npMetrado" placeholder="Metrado Tot" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px; text-align:right;">
           <input type="number" id="npRend" placeholder="Target/día" style="padding:6px; font-size:11px; background:#050B14; border:1px solid var(--border-glass); color:#FFF; border-radius:4px; text-align:right;">
           <div style="display:flex; gap:4px;">
@@ -655,8 +661,8 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         <table class="cyber-table" id="tablaMetradosContractuales">
           <thead>
             <tr>
-              <th style="width:85px;">ITEM</th>
-              <th>DESCRIPCIÓN CONTRACTUAL</th>
+              <th style="width:65px;">ITEM</th>
+              <th>DESCRIPCIÓN DE PARTIDA</th>
               <th style="width:50px;">UM</th>
               <th style="width:100px; text-align:right;">METRADO TOTAL</th>
               <th style="width:90px; text-align:right;">EJECUTADO</th>
@@ -670,6 +676,48 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
     <div class="m-foot-c" style="justify-content:space-between;">
       <span style="font-size:10.5px; color:var(--text-muted);">* Metrados vinculados a la Curva S y programación de obra a 9 meses.</span>
       <button class="btn-cyber-action btn-cyber-add" onclick="guardarMetradosEnNube()">💾 GUARDAR CAMBIOS</button>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     MODAL ELEGANTE: CONTROL DE PLAZO CONTRACTUAL Y REPROGRAMACIÓN (CERO ALERTS)
+     ========================================================================= -->
+<div class="cyber-modal-mask" id="modalPlazoReprogramacion" style="z-index: 800;">
+  <div class="cyber-modal-window" style="max-width: 520px;">
+    <div class="m-head-c">
+      <div style="font-size:13px; font-weight:700; color:var(--c-amber);">⏱️ CONTROL DE PLAZO CONTRACTUAL (THSSB)</div>
+      <button onclick="cerrarModalPlazoContractual()" style="background:none; border:none; font-size:16px; color:var(--text-muted); cursor:pointer;">✕</button>
+    </div>
+    <div class="m-body-c" style="gap:12px;">
+      <div style="background:rgba(0,0,0,0.25); border:1px solid var(--border-glass); border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; justify-content:space-between; font-size:11.5px;">
+          <span style="color:var(--text-muted);">Proyecto:</span>
+          <b>Torre Hospitalaria San Borja (THSSB)</b>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:11.5px;">
+          <span style="color:var(--text-muted);">Fecha de Inicio:</span>
+          <b>15/09/2026</b>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:11.5px;">
+          <span style="color:var(--text-muted);">Plazo Contractual:</span>
+          <b style="color:var(--c-cyan);">9 Meses Calendario</b>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:11.5px;">
+          <span style="color:var(--text-muted);">Fecha de Término Contractual:</span>
+          <b>15/06/2027</b>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,179,0,0.08); border:1px solid rgba(255,179,0,0.3); border-radius:8px; padding:12px;">
+        <div style="font-size:11px; font-weight:700; color:var(--c-amber); margin-bottom:4px;">REGLA DE REPROGRAMACIÓN CONTRACTUAL:</div>
+        <p style="font-size:10.5px; color:var(--text-main); line-height:1.4;">
+          Si al aproximarse el <b>Mes 9</b> el avance físico real acumulado es inferior al 100% (por ejemplo 60%), el sistema audita las interferencias y demoras de frentes registradas para emitir el sustento de ampliación de plazo y balance de recursos.
+        </p>
+      </div>
+    </div>
+    <div class="m-foot-c" style="justify-content:flex-end;">
+      <button class="btn-cyber-action btn-cyber-add" onclick="cerrarModalPlazoContractual()">ENTENDIDO</button>
     </div>
   </div>
 </div>
@@ -696,79 +744,60 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 <script>
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbz3YRpjCuxyEG3A4dd3w76vtj9AFljg91owcoF0es3Xrcrq7X0u4h7W2xvne6cF-l4soA/exec";
 
-// FECHAS CONTRACTUALES DE OBRA
+// FECHAS CONTRACTUALES
 const FECHA_INICIO_OBRA = new Date("2026-09-15T00:00:00");
 const PLAZO_MESES = 9;
 const FECHA_FIN_OBRA = new Date("2027-06-15T00:00:00");
 
-// RECURSOS CON ESTADO (ACTIVO / CESADO)
-let RECURSOS_SISTEMA = [
-  { id: 1, nombre: "BARDALES CHUFANDAMA MAURO JUNIOR", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 2, nombre: "OCUMBE SIQUIHUA NELVA", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 3, nombre: "VELIZ HERNANDEZ XIOMARA ANTUANE", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 4, nombre: "GUEVARA HERNANDEZ YADIRA ARIANA", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 5, nombre: "LANDINEZ VALENCIA JUAN GABRIEL", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 6, nombre: "VILELA ANCAJAIMA CRISTHIAN", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 7, nombre: "INOCENTE TORRES CALIXTO AMIRCAR", modulo: "SCF", cargo: "OPERARIO", activo: true },
-  { id: 8, nombre: "MOLLOCONDO SIMEON HILDER CERAPIO", modulo: "PINTURA", cargo: "CAPATAZ", activo: true },
-  { id: 9, nombre: "AREVALO GUERRERO RAUL", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 10, nombre: "DELGADO RIVAS LUIS MARTÍN", modulo: "PINTURA", cargo: "OFICIAL", activo: true },
-  { id: 11, nombre: "BERMUDEZ MARIN DARWIN ENMANUEL", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 12, nombre: "ISUIZA AMASIFUEN SEGUNDO AMADOR", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 13, nombre: "VELASQUEZ MUÑOZ YORFRAN JOSE", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 14, nombre: "VASQUEZ CULQUE FELIX ENRIQUE", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 15, nombre: "VASQUEZ MARTINEZ GUILLERMO CESAR", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 16, nombre: "VASQUEZ MARTINEZ CARLOS ALONSO", modulo: "PINTURA", cargo: "OPERARIO", activo: true },
-  { id: 17, nombre: "VASQUEZ MARTINEZ LUIS MIGUEL", modulo: "PINTURA", cargo: "OPERARIO", activo: true }
-];
-
-// METRADOS CONTRACTUALES BASE PARA CURVA S
+// =========================================================================
+// CATÁLOGO DE SUBPROCESOS CON NOMENCLATURA LIMPIA Y ORDENADA ("01 ...", "02 ...")
+// =========================================================================
 let METRADOS_PRESUPUESTO = {
   SCF: [
-    { item: "1.02.01", nombre: "SCF en JUNTAS a dos caras interiores", unidad: "ml", metradoContractual: 5788.31, rend: 30.0 },
-    { item: "1.02.02", nombre: "SCF en JUNTAS a una cara interiores", unidad: "ml", metradoContractual: 10138.64, rend: 30.0 },
-    { item: "1.02.03", nombre: "SCF en PASE DE MANGUERA acceso a dos caras", unidad: "und", metradoContractual: 43.00, rend: 7.0 },
-    { item: "1.02.04", nombre: "SCF en TUBERIAS NO METALICAS <2\" acceso a dos caras", unidad: "pto", metradoContractual: 133.00, rend: 21.0 },
-    { item: "1.02.04.01", nombre: "SCF en TUBERIAS NO METALICAS <2\" acceso a una cara", unidad: "pto", metradoContractual: 69.00, rend: 21.0 },
-    { item: "1.02.05", nombre: "SCF en TUBERIAS NO METALICAS <4\" acceso a dos caras", unidad: "pto", metradoContractual: 234.00, rend: 11.0 },
-    { item: "1.02.05.01", nombre: "SCF en TUBERIAS NO METALICAS <4\" acceso a una cara", unidad: "pto", metradoContractual: 58.00, rend: 14.0 },
-    { item: "1.02.06", nombre: "SCF en TUBERIAS NO METALICAS <6\" acceso a dos caras", unidad: "pto", metradoContractual: 341.00, rend: 7.0 },
-    { item: "1.02.06.01", nombre: "SCF en TUBERIAS NO METALICAS <6\" acceso a una cara", unidad: "pto", metradoContractual: 23.00, rend: 14.0 },
-    { item: "1.02.07", nombre: "SCF en TUBERIAS NO METALICAS <8\" acceso a dos caras", unidad: "pto", metradoContractual: 247.00, rend: 7.0 },
-    { item: "1.02.08", nombre: "SCF en TUBERIAS METALICAS <2\" acceso a dos caras", unidad: "und", metradoContractual: 2900.00, rend: 21.0 },
-    { item: "1.02.08.01", nombre: "SCF en TUBERIAS METALICAS <2\" acceso a una cara", unidad: "und", metradoContractual: 94.00, rend: 40.0 },
-    { item: "1.02.09", nombre: "SCF en TUBERIAS METALICAS <4\" acceso a dos caras", unidad: "und", metradoContractual: 206.00, rend: 21.0 },
-    { item: "1.02.09.01", nombre: "SCF en TUBERIAS METALICAS <4\" acceso a una cara", unidad: "und", metradoContractual: 39.00, rend: 40.0 },
-    { item: "1.02.10", nombre: "SCF en TUBERIAS METALICAS <10\" acceso a dos caras", unidad: "und", metradoContractual: 152.00, rend: 21.0 },
-    { item: "1.02.10.01", nombre: "SCF en TUBERIAS METALICAS <10\" acceso a una cara", unidad: "und", metradoContractual: 74.00, rend: 40.0 },
-    { item: "1.02.11", nombre: "SCF en TUBERIAS METALICAS >10\" acceso a dos caras", unidad: "und", metradoContractual: 2.00, rend: 21.0 },
-    { item: "1.02.11.01", nombre: "SCF en TUBERIAS METALICAS >10\" acceso a una cara", unidad: "und", metradoContractual: 4.00, rend: 40.0 },
-    { item: "1.02.12", nombre: "SCF en BANDEJAS METALICAS acceso a dos caras", unidad: "und", metradoContractual: 139.00, rend: 11.0 },
-    { item: "1.02.12.01", nombre: "SCF en BANDEJAS METALICAS acceso a una cara", unidad: "und", metradoContractual: 17.00, rend: 18.0 },
-    { item: "1.02.13", nombre: "SCF en DUCTOS hasta 23\"x23\" acceso a dos caras", unidad: "und", metradoContractual: 530.00, rend: 9.0 },
-    { item: "1.02.13.01", nombre: "SCF en DUCTOS hasta 23\"x23\" acceso a una cara", unidad: "und", metradoContractual: 189.20, rend: 18.0 },
-    { item: "1.02.14", nombre: "SCF en DUCTOS hasta 30\"x30\" acceso a dos caras", unidad: "und", metradoContractual: 53.00, rend: 9.0 },
-    { item: "1.02.14.01", nombre: "SCF en DUCTOS hasta 30\"x30\" acceso a una cara", unidad: "und", metradoContractual: 40.00, rend: 18.0 },
-    { item: "1.02.15", nombre: "SCF en DUCTOS hasta 100\"x100\" acceso a dos caras", unidad: "und", metradoContractual: 45.00, rend: 7.0 },
-    { item: "1.02.15.01", nombre: "SCF en DUCTOS hasta 100\"x100\" acceso a una cara", unidad: "und", metradoContractual: 43.00, rend: 14.0 },
-    { item: "1.02.16", nombre: "SCF en VANOS DE INSPECCIÓN, MONTANTES (solo Instalación)", unidad: "und", metradoContractual: 163.00, rend: 5.0 }
+    { item: "01", nombre: "JUNTAS a dos caras interiores", unidad: "ml", metradoContractual: 5788.31, rend: 30.0 },
+    { item: "02", nombre: "JUNTAS a una cara interiores", unidad: "ml", metradoContractual: 10138.64, rend: 30.0 },
+    { item: "03", nombre: "PASE DE MANGUERA acceso a dos caras", unidad: "und", metradoContractual: 43.00, rend: 7.0 },
+    { item: "04", nombre: "TUBERIAS NO METALICAS <2\" acceso a dos caras", unidad: "pto", metradoContractual: 133.00, rend: 21.0 },
+    { item: "05", nombre: "TUBERIAS NO METALICAS <2\" acceso a una cara", unidad: "pto", metradoContractual: 69.00, rend: 21.0 },
+    { item: "06", nombre: "TUBERIAS NO METALICAS <4\" acceso a dos caras", unidad: "pto", metradoContractual: 234.00, rend: 11.0 },
+    { item: "07", nombre: "TUBERIAS NO METALICAS <4\" acceso a una cara", unidad: "pto", metradoContractual: 58.00, rend: 14.0 },
+    { item: "08", nombre: "TUBERIAS NO METALICAS <6\" acceso a dos caras", unidad: "pto", metradoContractual: 341.00, rend: 7.0 },
+    { item: "09", nombre: "TUBERIAS NO METALICAS <6\" acceso a una cara", unidad: "pto", metradoContractual: 23.00, rend: 14.0 },
+    { item: "10", nombre: "TUBERIAS NO METALICAS <8\" acceso a dos caras", unidad: "pto", metradoContractual: 247.00, rend: 7.0 },
+    { item: "11", nombre: "TUBERIAS METALICAS <2\" acceso a dos caras", unidad: "und", metradoContractual: 2900.00, rend: 21.0 },
+    { item: "12", nombre: "TUBERIAS METALICAS <2\" acceso a una cara", unidad: "und", metradoContractual: 94.00, rend: 40.0 },
+    { item: "13", nombre: "TUBERIAS METALICAS <4\" acceso a dos caras", unidad: "und", metradoContractual: 206.00, rend: 21.0 },
+    { item: "14", nombre: "TUBERIAS METALICAS <4\" acceso a una cara", unidad: "und", metradoContractual: 39.00, rend: 40.0 },
+    { item: "15", nombre: "TUBERIAS METALICAS <10\" acceso a dos caras", unidad: "und", metradoContractual: 152.00, rend: 21.0 },
+    { item: "16", nombre: "TUBERIAS METALICAS <10\" acceso a una cara", unidad: "und", metradoContractual: 74.00, rend: 40.0 },
+    { item: "17", nombre: "TUBERIAS METALICAS >10\" acceso a dos caras", unidad: "und", metradoContractual: 2.00, rend: 21.0 },
+    { item: "18", nombre: "TUBERIAS METALICAS >10\" acceso a una cara", unidad: "und", metradoContractual: 4.00, rend: 40.0 },
+    { item: "19", nombre: "BANDEJAS METALICAS acceso a dos caras", unidad: "und", metradoContractual: 139.00, rend: 11.0 },
+    { item: "20", nombre: "BANDEJAS METALICAS acceso a una cara", unidad: "und", metradoContractual: 17.00, rend: 18.0 },
+    { item: "21", nombre: "DUCTOS hasta 23\"x23\" acceso a dos caras", unidad: "und", metradoContractual: 530.00, rend: 9.0 },
+    { item: "22", nombre: "DUCTOS hasta 23\"x23\" acceso a una cara", unidad: "und", metradoContractual: 189.20, rend: 18.0 },
+    { item: "23", nombre: "DUCTOS hasta 30\"x30\" acceso a dos caras", unidad: "und", metradoContractual: 53.00, rend: 9.0 },
+    { item: "24", nombre: "DUCTOS hasta 30\"x30\" acceso a una cara", unidad: "und", metradoContractual: 40.00, rend: 18.0 },
+    { item: "25", nombre: "DUCTOS hasta 100\"x100\" acceso a dos caras", unidad: "und", metradoContractual: 45.00, rend: 7.0 },
+    { item: "26", nombre: "DUCTOS hasta 100\"x100\" acceso a una cara", unidad: "und", metradoContractual: 43.00, rend: 14.0 },
+    { item: "27", nombre: "VANOS DE INSPECCIÓN, MONTANTES (solo Instalación)", unidad: "und", metradoContractual: 163.00, rend: 5.0 }
   ],
   PINTURA: [
-    { item: "1.02.01", nombre: "PINTURA PATO EN CIELORRASOS EN FONDOS DE LOSA NO CUBIERTOS POR FCR", unidad: "m2", metradoContractual: 0.76, rend: 91.0 },
-    { item: "1.02.02", nombre: "PINTURA EPOXICA EN CIELOS RASOS EN CTO DE LIMPIEZA, RESIDUOS", unidad: "m2", metradoContractual: 416.19, rend: 46.0 },
-    { item: "1.02.03", nombre: "PINTURA AMERICAN COLORS EN FCR DE DRYWALL (2 manos imp + 2 manos)", unidad: "m2", metradoContractual: 7025.50, rend: 182.0 },
-    { item: "1.02.05", nombre: "PINTURA LATEX EN CARAS LATERALES Y FONDO DE VIGA", unidad: "m2", metradoContractual: 149.71, rend: 52.0 },
-    { item: "1.02.06", nombre: "PINTURA LATEX EN FONDO DE ESCALERAS (Empastado + 2 manos)", unidad: "m2", metradoContractual: 618.08, rend: 52.0 },
-    { item: "1.02.07", nombre: "PINTURA LATEX EN CARA LATERAL DE ESCALERA (Empastado + 2 manos)", unidad: "m2", metradoContractual: 55.27, rend: 52.0 },
-    { item: "1.02.08", nombre: "CIELO RASO PINTADO COLOR NEGRO SEGÚN MUESTRA DETRÁS FALSO CIELO", unidad: "m2", metradoContractual: 76.25, rend: 91.0 },
-    { item: "1.03.01", nombre: "PINTURA AMERICAN COLORS EN MUROS INTERIORES (Empastado + lijado)", unidad: "m2", metradoContractual: 162.91, rend: 52.0 },
-    { item: "1.03.02", nombre: "PINTURA AMERICAN COLORS EN MUROS EXTERIORES", unidad: "m2", metradoContractual: 1833.68, rend: 46.0 },
-    { item: "1.03.03", nombre: "EMPASTE EN MUROS PARA COLOCACIÓN DE VINIL (Tekno Moistek + 2 capas)", unidad: "m2", metradoContractual: 18985.90, rend: 156.0 },
-    { item: "2.01.01", nombre: "PINTURA EPOXICA SOBRE FCR YESO MOLD REY - AMBIENTES MÉDICOS", unidad: "m2", metradoContractual: 1167.93, rend: 46.0 },
-    { item: "2.02.01", nombre: "PINTURA EN MUROS - SÓTANOS (2 AL 6) AMERICAN COLORS", unidad: "m2", metradoContractual: 12557.51, rend: 182.0 },
-    { item: "2.02.02", nombre: "PINTURA LATEX PATO EN MUROS - PLENUM (2 manos imprimante + 2 manos)", unidad: "m2", metradoContractual: 16648.19, rend: 104.0 },
-    { item: "2.03.01", nombre: "RETOQUES DE PINTURA AMERICAN COLORS (1 MANO)", unidad: "m2", metradoContractual: 1431.88, rend: 182.0 },
-    { item: "2.03.02", nombre: "RETOQUES DE PINTURA LATEX PATO (1 MANO)", unidad: "m2", metradoContractual: 1404.41, rend: 182.0 }
+    { item: "01", nombre: "Pintura Pato en cielorrasos fondos de losa no cubiertos por FCR", unidad: "m2", metradoContractual: 0.76, rend: 91.0 },
+    { item: "02", nombre: "Pintura Epóxica en cielos rasos cto limpieza y residuos", unidad: "m2", metradoContractual: 416.19, rend: 46.0 },
+    { item: "03", nombre: "Pintura American Colors en FCR Drywall (2 imp + 2 manos)", unidad: "m2", metradoContractual: 7025.50, rend: 182.0 },
+    { item: "04", nombre: "Pintura Látex en caras laterales y fondo de viga", unidad: "m2", metradoContractual: 149.71, rend: 52.0 },
+    { item: "05", nombre: "Pintura Látex en fondo de escaleras (Empastado + 2 manos)", unidad: "m2", metradoContractual: 618.08, rend: 52.0 },
+    { item: "06", nombre: "Pintura Látex en cara lateral de escalera (Empastado + 2 manos)", unidad: "m2", metradoContractual: 55.27, rend: 52.0 },
+    { item: "07", nombre: "Cielo Raso pintado color negro detrás de falso cielo", unidad: "m2", metradoContractual: 76.25, rend: 91.0 },
+    { item: "08", nombre: "Pintura American Colors en muros interiores (Empastado + lijado)", unidad: "m2", metradoContractual: 162.91, rend: 52.0 },
+    { item: "09", nombre: "Pintura American Colors en muros exteriores", unidad: "m2", metradoContractual: 1833.68, rend: 46.0 },
+    { item: "10", nombre: "Empaste en muros para colocación de vinil (Moistek + 2 capas)", unidad: "m2", metradoContractual: 18985.90, rend: 156.0 },
+    { item: "11", nombre: "Pintura Epóxica sobre FCR Yeso Mold Rey - Ambientes Médicos", unidad: "m2", metradoContractual: 1167.93, rend: 46.0 },
+    { item: "12", nombre: "Pintura en muros - Sótanos (2 al 6) American Colors", unidad: "m2", metradoContractual: 12557.51, rend: 182.0 },
+    { item: "13", nombre: "Pintura Látex Pato en muros - Plenum (2 manos imp + 2 manos)", unidad: "m2", metradoContractual: 16648.19, rend: 104.0 },
+    { item: "14", nombre: "Retoques de pintura American Colors (1 mano)", unidad: "m2", metradoContractual: 1431.88, rend: 182.0 },
+    { item: "15", nombre: "Retoques de pintura Látex Pato (1 mano)", unidad: "m2", metradoContractual: 1404.41, rend: 182.0 }
   ]
 };
 
@@ -830,7 +859,6 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginOverlay').style.display = 'none';
   }
 
-  // Cargar metrados y recursos de LocalStorage
   const mLocal = localStorage.getItem('convecsa_metrados_thssb');
   if (mLocal) METRADOS_PRESUPUESTO = JSON.parse(mLocal);
 
@@ -931,7 +959,7 @@ function actualizarMonitorPlazo() {
 
   const bDesvio = document.getElementById('badgeDesvioPlazo');
   if (mesActual >= 9 && realPct < 95.0) {
-    bDesvio.innerText = "⚠️ DESVÍO DE PLAZO - REPROGRAMACIÓN REQUERIDA";
+    bDesvio.innerText = "⚠️ REPROGRAMACIÓN CONTRACTUAL REQUERIDA";
     bDesvio.style.background = "rgba(255, 23, 68, 0.25)";
     bDesvio.style.color = "#FF1744";
   } else if (realPct < (pgmPct - 10)) {
@@ -945,11 +973,11 @@ function actualizarMonitorPlazo() {
   }
 }
 
-function abrirControlPlazoModal() {
-  const hoy = new Date();
-  const diffDias = Math.max(0, Math.floor((hoy - FECHA_INICIO_OBRA) / (1000 * 60 * 60 * 24)));
-  const mesActual = Math.min(PLAZO_MESES, Math.ceil(diffDias / 30.41)) || 1;
-  alert(`⏱️ CONTROL DE PLAZO CONTRACTUAL CONVECSA:\n\n• Proyecto: Torre Hospitalaria San Borja (THSSB)\n• Fecha de Inicio: 15/09/2026\n• Plazo de Ejecución: 9 Meses\n• Fecha Término: 15/06/2027\n• Estado Actual: Mes ${mesActual} de 9\n\nRegla de Reprogramación: Si al mes 9 el avance físico es menor al 100%, el sistema consolida el metrado pendiente para emitir el Adicional de Plazo.`);
+function abrirModalPlazoContractual() {
+  document.getElementById('modalPlazoReprogramacion').classList.add('open');
+}
+function cerrarModalPlazoContractual() {
+  document.getElementById('modalPlazoReprogramacion').classList.remove('open');
 }
 
 function actualizarKPIs() {
@@ -1064,7 +1092,7 @@ function inicializarGraficos() {
 
   chartElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
-    data: { labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'], datasets: [{ label: 'Efic %', data: [100.0, 95.0, 104.5, 98.0], backgroundColor: ['#00E676', '#FF1744', '#00E676', '#FF1744'], borderRadius: 4 }] },
+    data: { labels: ['01 JUNTAS', '04 TUBERIAS', '21 DUCTOS', '19 BANDEJAS'], datasets: [{ label: 'Efic %', data: [100.0, 95.0, 104.5, 98.0], backgroundColor: ['#00E676', '#FF1744', '#00E676', '#FF1744'], borderRadius: 4 }] },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
   });
 
@@ -1102,11 +1130,13 @@ function abrirModal() {
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
+// =========================================================================
+// CARGA DE CATÁLOGOS CON NOMENCLATURA LIMPIA: "01 JUNTAS ... (30 ml/día)"
+// =========================================================================
 function cargarCatalogosModal() {
   const esp = document.getElementById('mEspecialidad').value;
   const cfg = CATALOGO[esp];
   
-  // Filtrar solo operarios ACTIVOS
   const sT = document.getElementById('mTrabajador'); sT.innerHTML = '';
   const activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo);
   activos.forEach(t => sT.innerHTML += `<option value="${t.nombre}">${t.nombre} (${t.cargo})</option>`);
@@ -1117,14 +1147,14 @@ function cargarCatalogosModal() {
   const sS = document.getElementById('mSubproceso'); sS.innerHTML = '';
   const subprocesos = METRADOS_PRESUPUESTO[esp] || [];
   subprocesos.forEach(s => {
-    sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">[${s.item}] ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
+    sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">${s.item} ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
   });
   
   document.getElementById('lblUnidadModal').innerText = `Metrado (${cfg.unidad}):`;
   recalcularModal();
 }
 
-// MATEMÁTICA CALIBRADA: SÁBADO (5.5H) VS LUNES A VIERNES (8.5H)
+// CÁLCULO CALIBRADO
 function recalcularModal() {
   const subVal = document.getElementById('mSubproceso').value.split('|');
   const rendNominal = parseFloat(subVal[2]) || 30.0;
@@ -1132,18 +1162,13 @@ function recalcularModal() {
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
 
-  // Detección de día sábado
   const fVal = document.getElementById('mFecha').value || new Date().toISOString().split('T')[0];
   const esSabado = new Date(fVal + "T00:00:00").getDay() === 6;
   const jornadaHoras = esSabado ? 5.5 : 8.5;
 
-  // Target proporcional de la jornada
   const targetDia = (rendNominal / 8.5) * jornadaHoras;
-
-  // HH Ganadas contractuales: 1 HH = Rendimiento / 8.5
   const hhGan = rendNominal > 0 ? metrado * (8.5 / rendNominal) : 0;
   
-  // Eficiencia real frente a las HH efectivamente invertidas
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const esGanancia = ef >= 100;
 
@@ -1192,6 +1217,9 @@ function guardarRegistro() {
   const pref = esp === "SCF" ? "SCF-" : "PIN-";
   const idReg = pref + fechaSel.replace(/-/g, '') + "-" + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0');
 
+  // Guardar con formato limpio ordenado: "01 JUNTAS a dos caras..."
+  const subprocesoNombreLimpio = `${subData[0]} ${subData[1]}`;
+
   const nuevoItem = {
     id: idReg,
     horaExacta: timeStr,
@@ -1202,7 +1230,7 @@ function guardarRegistro() {
     trabajador: trabajador,
     nivel: nivel,
     elemento: elemento,
-    sub: `[${subData[0]}] ${subData[1]}`,
+    sub: subprocesoNombreLimpio,
     metrado: metrado,
     hhReal: hhReal,
     rendOpt: rendNominal,
@@ -1222,7 +1250,7 @@ function guardarRegistro() {
     trabajador: trabajador,
     nivel: nivel,
     elemento: elemento,
-    subproceso: `[${subData[0]}] ${subData[1]}`,
+    subproceso: subprocesoNombreLimpio,
     rendOpt: rendNominal,
     metrado: metrado,
     hhReal: hhReal,
@@ -1242,7 +1270,6 @@ function guardarRegistro() {
       progBar.style.width = '100%';
       progTxt.innerText = "✅ ¡Registro guardado exitosamente!";
       
-      // Reseteo limpio de campos sin cerrar el diálogo
       document.getElementById('mMetrado').value = '';
       document.getElementById('mMetrado').placeholder = "Ej: 18.0";
       document.getElementById('mHHReal').value = '';
@@ -1268,7 +1295,9 @@ function guardarRegistro() {
   }
 }
 
-// GESTIÓN DE RECURSOS CON SWITCH ON / OFF Y BOTÓN ELIMINAR
+// =========================================================================
+// GESTIÓN DE RECURSOS (TEXTO VISIBLE, ON/OFF Y BOTÓN ELIMINAR)
+// =========================================================================
 function abrirModalRecurso() {
   document.getElementById('rNombre').value = '';
   renderizarListaRecursos();
@@ -1281,10 +1310,10 @@ function renderizarListaRecursos() {
   cont.innerHTML = '';
   RECURSOS_SISTEMA.forEach(r => {
     const item = document.createElement('div');
-    item.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); border:1px solid var(--border-glass); border-radius:6px; padding:7px 10px;";
+    item.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); border:1px solid var(--border-glass); border-radius:6px; padding:8px 10px;";
     item.innerHTML = `
       <div style="flex:1; min-width:0; padding-right:8px;">
-        <div style="font-size:11px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.nombre}</div>
+        <div style="font-size:11.5px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.nombre}</div>
         <div style="font-size:9.5px; color:var(--text-muted); font-family:'JetBrains Mono';">${r.modulo} · ${r.cargo}</div>
       </div>
       <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
@@ -1293,7 +1322,7 @@ function renderizarListaRecursos() {
           <input type="checkbox" ${r.activo ? 'checked' : ''} onchange="toggleEstadoRecurso(${r.id}, this.checked)">
           <span class="slider-switch"></span>
         </label>
-        <button onclick="eliminarRecurso(${r.id})" title="Eliminar recurso duplicado" style="background:none; border:none; color:var(--c-red); font-size:14px; cursor:pointer; padding:2px 4px;">🗑️</button>
+        <button onclick="eliminarRecurso(${r.id})" title="Eliminar recurso" style="background:none; border:none; color:var(--c-red); font-size:14px; cursor:pointer; padding:2px 4px;">🗑️</button>
       </div>
     `;
     cont.appendChild(item);
@@ -1311,7 +1340,7 @@ function toggleEstadoRecurso(id, estado) {
 }
 
 function eliminarRecurso(id) {
-  if (confirm("¿Desea eliminar este operario de la lista? (Nota: Sus registros históricos en la tabla de datos no se perderán)")) {
+  if (confirm("¿Desea eliminar este operario de la lista de recursos?")) {
     RECURSOS_SISTEMA = RECURSOS_SISTEMA.filter(r => r.id !== id);
     localStorage.setItem('convecsa_recursos_thssb', JSON.stringify(RECURSOS_SISTEMA));
     renderizarListaRecursos();
@@ -1358,7 +1387,9 @@ function guardarNuevoRecurso() {
   }
 }
 
+// =========================================================================
 // GESTIÓN DE METRADOS CONTRACTUALES & BASE DE CURVA S
+// =========================================================================
 function abrirModalMetrados() {
   cambiarTabMetrados(TAB_METRADOS_ACTUAL);
   document.getElementById('modalMetrados').classList.add('open');
@@ -1379,14 +1410,14 @@ function renderizarTablaMetrados() {
 
   lista.forEach((p, idx) => {
     const ejec = LOG_REGISTROS
-      .filter(r => r.sub && r.sub.includes(p.item))
+      .filter(r => r.sub && r.sub.startsWith(p.item))
       .reduce((acc, r) => acc + r.metrado, 0);
     const pct = p.metradoContractual > 0 ? (ejec / p.metradoContractual) * 100 : 0;
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td style="font-family:'JetBrains Mono'; font-weight:600;">
-        <input type="text" value="${p.item}" style="width:75px; background:transparent; border:none; color:inherit; font-family:inherit; font-size:11px;" onchange="actualizarMetradoItem(${idx}, 'item', this.value)">
+        <input type="text" value="${p.item}" style="width:55px; background:transparent; border:none; color:inherit; font-family:inherit; font-size:11px;" onchange="actualizarMetradoItem(${idx}, 'item', this.value)">
       </td>
       <td>
         <input type="text" value="${p.nombre}" style="width:100%; background:transparent; border:none; color:inherit; font-family:inherit; font-size:11px;" onchange="actualizarMetradoItem(${idx}, 'nombre', this.value)">
@@ -1406,7 +1437,6 @@ function actualizarMetradoItem(idx, campo, valor) {
   METRADOS_PRESUPUESTO[TAB_METRADOS_ACTUAL][idx][campo] = valor;
 }
 
-// FORMULARIO DIRECTO PARA NUEVA PARTIDA (SIN PROMPT NATIVO)
 function activarFilaNuevaPartida() {
   const box = document.getElementById('boxNuevaPartidaDirecta');
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
@@ -1444,13 +1474,13 @@ function guardarPartidaDirecta() {
 
 function guardarMetradosEnNube() {
   localStorage.setItem('convecsa_metrados_thssb', JSON.stringify(METRADOS_PRESUPUESTO));
-  alert("✅ Metrados contractuales actualizados.");
+  alert("✅ Metrados contractuales actualizados correctamente.");
   cerrarModalMetrados();
   cargarCatalogosModal();
   actualizarMonitorPlazo();
 }
 
-// SINCRONIZACIÓN
+// SINCRONIZACIÓN Y EXPORTACIÓN
 function sincronizarConSheets(manual) {
   const btnRail = document.getElementById('btnSyncRail');
   if (btnRail && manual) btnRail.style.transform = 'rotate(180deg)';
