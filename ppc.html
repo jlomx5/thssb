@@ -2,20 +2,19 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>CONVECSA ERP 360° – Sistema Integral THSSB</title>
-<!-- Librerías para Gráficos, Exportación Excel y PDF -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<title>CONVECSA ERP 360° – Sistema THSSB</title>
+<!-- Librerías de Gráficos, Excel y PDF -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --c-azul-marino: #0052CC;
   --c-azul-real: #0096E1;
-  --c-azul-cian: #8CD2F5;
   --c-celeste-claro: #E3F2FD;
-  --c-gris-suave: #F8FAFC;
+  --c-gris-fondo: #F4F6F9;
   --c-gris-linea: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #64748B;
@@ -23,135 +22,124 @@
   --status-green-bg: #D1FAE5;
   --status-red: #DC2626;
   --status-red-bg: #FEE2E2;
-  --radius-lg: 16px;
-  --radius-md: 12px;
+  --radius-card: 12px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-/* ARQUITECTURA RESPONSIVA HÍBRIDA CON SCROLL FLUIDO */
+/* 1. ESTRUCTURA GLOBAL CON SCROLL FLUIDO */
 html, body {
   width: 100%;
   min-height: 100vh;
-  background-color: #F1F5F9;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--c-gris-fondo);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
   color: var(--text-main);
   overflow-x: hidden;
-  overflow-y: auto; /* Permite scroll natural en todos los dispositivos */
+  overflow-y: auto !important; /* Scroll natural garantizado */
 }
 
-/* PANTALLA DE LOGIN CON PIN CORPORATIVO */
+/* 2. PANTALLA DE ACCESO (LOGIN POR PIN) */
 #loginOverlay {
   position: fixed;
   inset: 0;
-  background: linear-gradient(135deg, #0052CC 0%, #002B66 100%);
+  background: linear-gradient(135deg, #0052CC 0%, #001E4D 100%);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
 }
-.login-box {
+.login-card {
   background: #FFFFFF;
-  border-radius: var(--radius-lg);
-  padding: 30px 24px;
+  border-radius: 16px;
+  padding: 26px 20px;
   width: 100%;
-  max-width: 380px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  max-width: 360px;
   text-align: center;
+  box-shadow: 0 16px 32px rgba(0,0,0,0.25);
 }
-.login-logo {
-  width: 52px;
-  height: 52px;
-  background: var(--c-azul-marino);
-  color: #FFFFFF;
-  border-radius: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  font-weight: 900;
-  margin-bottom: 12px;
+.login-icon {
+  width: 48px; height: 48px; background: var(--c-azul-marino); color: #FFF;
+  border-radius: 10px; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; margin-bottom: 10px;
 }
-.login-title { font-size: 18px; font-weight: 900; color: var(--c-azul-marino); margin-bottom: 4px; }
-.login-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
-.pin-input {
+.pin-box {
   width: 100%;
-  padding: 12px;
-  font-size: 20px;
+  padding: 10px;
+  font-size: 22px;
   font-weight: 900;
-  letter-spacing: 8px;
+  letter-spacing: 6px;
   text-align: center;
   border: 2px solid var(--c-gris-linea);
-  border-radius: 10px;
-  margin-bottom: 16px;
+  border-radius: 8px;
+  margin: 12px 0;
   outline: none;
 }
-.pin-input:focus { border-color: var(--c-azul-real); }
+.pin-box:focus { border-color: var(--c-azul-real); }
 
-/* TOPBAR */
+/* 3. BARRA SUPERIOR */
 .topbar {
   background: #FFFFFF;
   border-bottom: 2px solid var(--c-azul-marino);
-  padding: 10px 16px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 82, 204, 0.06);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
 }
-.brand-pill { display: flex; align-items: center; gap: 10px; }
-.brand-icon {
-  width: 34px; height: 34px; background: var(--c-azul-marino); color: #FFF;
-  border-radius: 8px; display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 16px;
+.brand-box { display: flex; align-items: center; gap: 8px; }
+.brand-ico {
+  width: 32px; height: 32px; background: var(--c-azul-marino); color: #FFF;
+  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 15px;
 }
-.brand-title { font-size: 14px; font-weight: 900; color: var(--c-azul-marino); }
-.brand-sub { font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
-.top-actions { display: flex; align-items: center; gap: 8px; }
+.brand-name { font-size: 13.5px; font-weight: 900; color: var(--c-azul-marino); }
+.brand-tag { font-size: 10px; color: var(--text-muted); display: none; }
+@media (min-width: 640px) { .brand-tag { display: inline; } }
 
-/* CONTENEDOR PRINCIPAL HÍBRIDO */
-.app-layout {
+/* 4. CONTENEDOR PRINCIPAL FLUIDO */
+.main-wrapper {
   width: 100%;
-  max-width: 1440px;
+  max-width: 1380px;
   margin: 0 auto;
-  padding: 14px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-bottom: 85px; /* Espacio para barra inferior en móvil */
+  gap: 14px;
+  padding-bottom: 85px; /* Espacio para barra táctil de móvil */
 }
 @media (min-width: 1024px) {
-  .app-layout { padding: 22px; padding-bottom: 40px; }
+  .main-wrapper { padding: 18px 24px 30px; }
 }
 
-/* BARRA DE CONTROL Y EXPORTACIÓN */
-.control-bar {
+/* 5. BARRA DE CONTROL Y BOTONES */
+.control-strip {
   background: #FFFFFF;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   border: 1px solid var(--c-gris-linea);
-  padding: 12px 16px;
+  padding: 10px 14px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 @media (min-width: 768px) {
-  .control-bar { flex-direction: row; justify-content: space-between; align-items: center; }
+  .control-strip { flex-direction: row; justify-content: space-between; align-items: center; }
 }
-.group-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.pills-box {
+.filter-pills-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.pills-group {
   display: flex;
   background: #F1F5F9;
-  padding: 3px;
+  padding: 2px;
   border-radius: 8px;
   gap: 2px;
 }
 .pill-btn {
   border: none;
   background: transparent;
-  padding: 5px 12px;
+  padding: 5px 10px;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 800;
@@ -160,136 +148,112 @@ html, body {
 }
 .pill-btn.active { background: var(--c-azul-marino); color: #FFFFFF; }
 
-.btn-export {
+.export-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn-ui {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   padding: 6px 12px;
   border-radius: 8px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
 }
-.btn-excel { background: #10B981; color: #FFFFFF; }
-.btn-pdf { background: #E11D48; color: #FFFFFF; }
-.btn-export:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-excel { background: #10B981; color: #FFF; }
+.btn-pdf { background: #E11D48; color: #FFF; }
+.btn-sync { background: var(--c-azul-marino); color: #FFF; }
 
-/* SECCIÓN 1: KPIS */
-.kpi-grid {
+/* 6. GRID TOTALMENTE RESPONSIVO (MÓVIL = 1 COL, TABLET = 2 COL, PC = 3 COL) */
+.grid-responsive-3 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
 }
-@media (min-width: 640px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 640px) { .grid-responsive-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .grid-responsive-3 { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
 
-.kpi-card {
+.grid-responsive-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
+
+.kpi-card-box {
   background: #FFFFFF;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   border: 1px solid var(--c-gris-linea);
-  padding: 16px;
+  padding: 14px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-.c-rose::before { background: #F43F5E; }
-.c-amber::before { background: #F59E0B; }
-.c-emerald::before { background: #10B981; }
+.kpi-card-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3.5px; }
+.b-rose::before { background: #F43F5E; }
+.b-amber::before { background: #F59E0B; }
+.b-emerald::before { background: #10B981; }
 
-.kpi-header-lbl { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-.kpi-main-val { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 0; }
-.kpi-val-txt { font-size: 34px; font-weight: 900; line-height: 1; }
-.c-rose .kpi-val-txt { color: #E11D48; }
-.c-amber .kpi-val-txt { color: #D97706; }
-.c-emerald .kpi-val-txt { color: #059669; }
+.kpi-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+.kpi-row-val { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 0; }
+.kpi-num-txt { font-size: 32px; font-weight: 900; line-height: 1; }
+.b-rose .kpi-num-txt { color: #E11D48; }
+.b-amber .kpi-num-txt { color: #D97706; }
+.b-emerald .kpi-num-txt { color: #059669; }
 
-.kpi-tag-status { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 800; }
-.kpi-tag-status.perdida { background: #FFE4E6; color: #E11D48; }
-.kpi-tag-status.ganancia { background: #D1FAE5; color: #059669; }
+.tag-badge { padding: 2px 7px; border-radius: 6px; font-size: 9.5px; font-weight: 800; }
+.tag-badge.ganancia { background: #D1FAE5; color: #059669; }
+.tag-badge.perdida { background: #FFE4E6; color: #E11D48; }
 
-/* SECCIÓN 2: GRÁFICOS (ADAPTACIÓN HÍBRIDA) */
-.charts-grid-top {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-@media (min-width: 900px) { .charts-grid-top { grid-template-columns: 1fr 1fr; } }
-
-.charts-grid-bottom {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-@media (min-width: 900px) { .charts-grid-bottom { grid-template-columns: 1.2fr 0.9fr 0.9fr; } }
-
-.chart-card {
+/* 7. TARJETAS DE GRÁFICOS */
+.chart-box {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  border-radius: var(--radius-card);
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   display: flex;
   flex-direction: column;
 }
-.chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.chart-title { font-size: 12.5px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
-.chart-title::before { content: ''; width: 3.5px; height: 14px; background: var(--c-azul-marino); border-radius: 2px; }
-.canvas-holder { position: relative; height: 210px; width: 100%; }
+.chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.chart-title-txt { font-size: 12px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+.chart-title-txt::before { content: ''; width: 3px; height: 12px; background: var(--c-azul-marino); border-radius: 2px; }
+.chart-wrap { position: relative; height: 210px; width: 100%; }
 
-/* SECCIÓN 3: AUDITORÍA DE EFICIENCIA POR TRABAJADOR */
-.audit-workers-card {
-  background: #FFFFFF;
-  border: 1px solid var(--c-gris-linea);
-  border-radius: var(--radius-md);
-  padding: 16px;
-}
-.workers-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin-top: 12px;
-}
-@media (min-width: 640px) { .workers-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .workers-grid { grid-template-columns: repeat(3, 1fr); } }
-
-.worker-item {
+/* 8. AUDITORÍA DE TRABAJADORES */
+.worker-card {
   background: #F8FAFC;
   border: 1px solid var(--c-gris-linea);
   border-radius: 10px;
-  padding: 12px;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
-.worker-top { display: flex; justify-content: space-between; align-items: center; }
-.worker-name { font-size: 11.5px; font-weight: 800; }
-.worker-bar-bg { width: 100%; height: 6px; background: #E2E8F0; border-radius: 4px; overflow: hidden; }
+.worker-bar-bg { width: 100%; height: 6px; background: #E2E8F0; border-radius: 4px; overflow: hidden; margin-top: 3px; }
 .worker-bar-fill { height: 100%; border-radius: 4px; }
 
-/* SECCIÓN 4: TABLA DE REGISTRO EN VIVO */
-.table-card {
+/* 9. TABLA DE TRAZABILIDAD */
+.table-panel {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
-.table-header { padding: 14px 16px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
-.table-responsive { width: 100%; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; text-align: left; }
-th { background: var(--c-azul-real); color: #FFF; font-size: 11px; font-weight: 800; padding: 10px 12px; text-transform: uppercase; }
-td { padding: 10px 12px; border-bottom: 1px solid var(--c-gris-linea); font-size: 12px; }
+.table-scroll { width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 600px; }
+th { background: var(--c-azul-real); color: #FFF; font-size: 10.5px; font-weight: 800; padding: 9px 12px; text-transform: uppercase; }
+td { padding: 9px 12px; border-bottom: 1px solid var(--c-gris-linea); font-size: 11.5px; }
 tr:nth-child(even) { background: #F8FAFC; }
 
-/* BARRA INFERIOR FLOTANTE TÁCTIL (MÓVILES) */
-.bottom-nav {
+/* 10. BARRA DE NAVEGACIÓN INFERIOR (MÓVIL) */
+.mobile-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  height: 60px;
+  height: 56px;
   background: #FFFFFF;
   border-top: 1px solid var(--c-gris-linea);
   display: flex;
@@ -298,230 +262,223 @@ tr:nth-child(even) { background: #F8FAFC; }
   z-index: 90;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
-@media (min-width: 1024px) { .bottom-nav { display: none; } }
-.b-tab { border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 800; color: var(--text-muted); cursor: pointer; }
-.b-tab.active { color: var(--c-azul-marino); }
-.b-btn-add {
-  background: var(--c-azul-marino);
-  color: #FFF;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  border: none;
-  font-size: 20px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.4);
-  margin-top: -16px;
-  cursor: pointer;
+@media (min-width: 1024px) { .mobile-nav { display: none; } }
+.nav-item-m {
+  border: none; background: transparent; display: flex; flex-direction: column; align-items: center;
+  gap: 2px; font-size: 9.5px; font-weight: 800; color: var(--text-muted); cursor: pointer;
+}
+.nav-item-m.active { color: var(--c-azul-marino); }
+.nav-btn-plus {
+  background: var(--c-azul-marino); color: #FFF; width: 42px; height: 42px;
+  border-radius: 50%; border: none; font-size: 20px; display: flex; align-items: center;
+  justify-content: center; box-shadow: 0 4px 10px rgba(0, 82, 204, 0.35); margin-top: -14px;
 }
 
-/* MODAL DE CAPTURA */
-.modal-overlay {
+/* 11. MODAL TOUCH */
+.modal-mask {
   position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(4px); z-index: 500; display: none;
+  backdrop-filter: blur(3px); z-index: 500; display: none;
   align-items: flex-end; justify-content: center;
 }
-@media (min-width: 640px) { .modal-overlay { align-items: center; padding: 20px; } }
-.modal-overlay.open { display: flex; }
-.modal-box {
-  background: #FFF; width: 100%; max-width: 680px; max-height: 90vh;
-  border-radius: 18px 18px 0 0; display: flex; flex-direction: column; overflow: hidden;
+@media (min-width: 640px) { .modal-mask { align-items: center; padding: 20px; } }
+.modal-mask.open { display: flex; }
+.modal-window {
+  background: #FFF; width: 100%; max-width: 640px; max-height: 88vh;
+  border-radius: 16px 16px 0 0; display: flex; flex-direction: column; overflow: hidden;
 }
-@media (min-width: 640px) { .modal-box { border-radius: 16px; } }
-.modal-head { padding: 14px 18px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
-.modal-body { padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-.form-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
-@media (min-width: 640px) { .form-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
-.field-box { display: flex; flex-direction: column; gap: 4px; }
-.field-box label { font-size: 10.5px; font-weight: 800; color: var(--c-azul-marino); text-transform: uppercase; }
-.field-box input, .field-box select { padding: 9px 10px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-family: inherit; outline: none; }
-.modal-foot { padding: 12px 18px; border-top: 1px solid var(--c-gris-linea); display: flex; gap: 8px; }
-.btn-action { padding: 10px 16px; border-radius: 8px; font-weight: 800; font-size: 12px; border: none; cursor: pointer; flex: 1; }
-.btn-save { background: var(--c-azul-marino); color: #FFF; flex: 2; }
-.btn-cancel { background: #FFF; border: 1px solid var(--c-gris-linea); color: var(--text-muted); }
+@media (min-width: 640px) { .modal-window { border-radius: 14px; } }
+.m-head { padding: 12px 16px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
+.m-body { padding: 14px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.form-grid-m { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 640px) { .form-grid-m { grid-template-columns: repeat(3, 1fr); } }
+.field-box-m { display: flex; flex-direction: column; gap: 3px; }
+.field-box-m label { font-size: 10px; font-weight: 800; color: var(--c-azul-marino); text-transform: uppercase; }
+.field-box-m input, .field-box-m select { padding: 8px 10px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-family: inherit; outline: none; }
+.m-foot { padding: 10px 16px; border-top: 1px solid var(--c-gris-linea); display: flex; gap: 8px; }
 </style>
 </head>
 <body>
 
-<!-- PANTALLA DE LOGIN CON PIN CORPORATIVO -->
+<!-- LOGIN SEGURO CON PIN -->
 <div id="loginOverlay">
-  <div class="login-box">
-    <div class="login-logo">C</div>
-    <div class="login-title">CONVECSA ERP 360°</div>
-    <div class="login-sub">Control de Obra · THSSB</div>
-    <form onsubmit="validarAcceso(event)">
-      <select id="userSelector" style="width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #CBD5E1; font-weight: 700; margin-bottom: 12px; font-family: inherit;">
+  <div class="login-card">
+    <div class="login-icon">C</div>
+    <div style="font-size:17px; font-weight:900; color:var(--c-azul-marino);">CONVECSA ERP 360°</div>
+    <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:12px;">Control THSSB · 17 Niveles</div>
+    <form onsubmit="validarLogin(event)">
+      <select id="selUsuario" style="width:100%; padding:9px; border-radius:8px; border:1.5px solid #CBD5E1; font-weight:700; margin-bottom:10px; font-family:inherit;">
         <option value="SUPER_ADMIN|Jorge Orosco">Jorge Orosco (Super Admin)</option>
-        <option value="RESIDENTE|Ing. Residente">Ing. Residente (Producción)</option>
-        <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (Capataz Pintura)</option>
-        <option value="CAPATAZ|Mauro Bardales">M. Bardales (Capataz SCF)</option>
+        <option value="RESIDENTE|Ing. Residente">Ing. Residente</option>
+        <option value="CAPATAZ|Hilder Mollocondo">H. Mollocondo (PT)</option>
+        <option value="CAPATAZ|Mauro Bardales">M. Bardales (SCF)</option>
       </select>
-      <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric" required>
-      <button type="submit" class="btn-action btn-save" style="width: 100%;">INGRESAR AL SISTEMA</button>
+      <input type="password" id="pinBox" class="pin-box" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric" required>
+      <button type="submit" class="btn-ui" style="width:100%; background:var(--c-azul-marino); color:#FFF; justify-content:center; padding:10px;">INGRESAR AL SISTEMA</button>
     </form>
-    <div style="font-size: 11px; color: var(--text-muted); margin-top: 14px;">PIN por defecto: <b>1234</b></div>
+    <div style="font-size:11px; color:var(--text-muted); margin-top:10px;">PIN inicial: <b>1234</b></div>
   </div>
 </div>
 
-<!-- CABECERA PRINCIPAL -->
+<!-- BARRA DE CABECERA -->
 <header class="topbar">
-  <div class="brand-pill">
-    <div class="brand-icon">C</div>
+  <div class="brand-box">
+    <div class="brand-ico">C</div>
     <div>
-      <div class="brand-title">CONVECSA ERP 360°</div>
-      <div class="brand-sub">Torre Hospitalaria San Borja · 17 Niveles</div>
+      <div class="brand-name">CONVECSA ERP 360°</div>
+      <div class="brand-tag">Torre Hospitalaria San Borja · Last Planner</div>
     </div>
   </div>
-  <div class="top-actions">
-    <span id="sessionUserBadge" style="background: var(--c-celeste-claro); color: var(--c-azul-marino); padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 11px;">Jorge Orosco</span>
-    <button onclick="cerrarSesion()" style="background:none; border:none; color:var(--status-red); font-size:11px; font-weight:800; cursor:pointer;">Salir</button>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <span id="userPillBadge" style="background:var(--c-celeste-claro); color:var(--c-azul-marino); padding:3px 8px; border-radius:6px; font-weight:800; font-size:11px;">Jorge Orosco</span>
+    <button onclick="logout()" style="background:none; border:none; color:var(--status-red); font-size:11px; font-weight:800; cursor:pointer;">Salir</button>
   </div>
 </header>
 
-<!-- CONTENEDOR MAESTRO DE LA APLICACIÓN (CON SCROLL FLUIDO) -->
-<div class="app-layout" id="pdfReportContent">
+<!-- CONTENEDOR PRINCIPAL FLUIDO -->
+<main class="main-wrapper" id="dashboardPrintArea">
 
-  <!-- BARRA DE CONTROL Y BOTONES DE EXPORTACIÓN -->
-  <section class="control-bar">
-    <div class="group-controls">
-      <div class="pills-box">
-        <button class="pill-btn" onclick="setPeriodo('DIA', this)">Día</button>
-        <button class="pill-btn" onclick="setPeriodo('SEMANA', this)">Semana</button>
-        <button class="pill-btn active" onclick="setPeriodo('MES', this)">Mes</button>
-        <button class="pill-btn" onclick="setPeriodo('TODO', this)">Todo</button>
+  <!-- BARRA DE CONTROL Y ACCIONES -->
+  <section class="control-strip">
+    <div class="filter-pills-row">
+      <div class="pills-group">
+        <button class="pill-btn" onclick="filtrarPeriodo('DIA', this)">Día</button>
+        <button class="pill-btn" onclick="filtrarPeriodo('SEMANA', this)">Semana</button>
+        <button class="pill-btn active" onclick="filtrarPeriodo('MES', this)">Mes</button>
+        <button class="pill-btn" onclick="filtrarPeriodo('TODO', this)">Todo</button>
       </div>
 
-      <div class="pills-box">
-        <button class="pill-btn active" onclick="setModulo('CONSOLIDADO', this)">Global</button>
-        <button class="pill-btn" onclick="setModulo('PINTURA', this)">🎨 Pintura</button>
-        <button class="pill-btn" onclick="setModulo('SCF', this)">🔥 SCF</button>
+      <div class="pills-group">
+        <button class="pill-btn active" onclick="filtrarModulo('CONSOLIDADO', this)">Global</button>
+        <button class="pill-btn" onclick="filtrarModulo('PINTURA', this)">🎨 Pintura</button>
+        <button class="pill-btn" onclick="filtrarModulo('SCF', this)">🔥 SCF</button>
       </div>
     </div>
 
-    <!-- BOTONES DE EXPORTACIÓN A EXCEL Y PDF -->
-    <div class="group-controls">
-      <button class="btn-export btn-excel" onclick="exportarExcelConFormulas()">
+    <!-- BOTONES DE EXPORTACIÓN Y ACCIÓN -->
+    <div class="export-group">
+      <button class="btn-ui btn-excel" onclick="exportarExcelConFormulas()">
         <span>📊</span> Exportar Excel (.XLSX)
       </button>
-      <button class="btn-export btn-pdf" onclick="exportarReportePDF()">
+      <button class="btn-ui btn-pdf" onclick="exportarReportePDF()">
         <span>📄</span> Descargar RDO (PDF)
       </button>
-      <button class="btn-export" style="background: var(--c-azul-marino); color: #FFF;" onclick="sincronizarConSheets()">
+      <button class="btn-ui btn-sync" onclick="sincronizarConSheets()">
         <span>🔄</span> Sincronizar
       </button>
     </div>
   </section>
 
   <!-- 1. KPIS SUPERIORES -->
-  <section class="kpi-grid">
-    <div class="kpi-card c-rose">
-      <div class="kpi-header-lbl" id="lblEficTitulo">EFICIENCIA DEL MES</div>
-      <div class="kpi-main-val">
-        <div class="kpi-val-txt" id="valEficiencia">104.5%</div>
-        <canvas id="gaugeCanvas" width="90" height="46"></canvas>
+  <section class="grid-responsive-3">
+    <div class="kpi-card-box b-rose">
+      <div class="kpi-lbl" id="lblKpiEfic">EFICIENCIA DEL MES</div>
+      <div class="kpi-row-val">
+        <div class="kpi-num-txt" id="txtEficVal">104.5%</div>
+        <canvas id="gaugeCanvas" width="80" height="42"></canvas>
       </div>
-      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); display:flex; gap:6px; align-items:center;">
-        <span class="kpi-tag-status ganancia" id="badgeEstadoEfic">Ganancia</span>
+      <div style="font-size:11px; font-weight:700; color:var(--text-muted); display:flex; gap:6px; align-items:center;">
+        <span class="tag-badge ganancia" id="badgeEficEstado">Ganancia</span>
         <span>Meta Target: 100%</span>
       </div>
     </div>
 
-    <div class="kpi-card c-amber">
-      <div class="kpi-header-lbl">HH PERDIDAS ACUMULADAS</div>
-      <div class="kpi-main-val">
-        <div class="kpi-val-txt" id="valHHPerdidas">1.00<span style="font-size: 18px;"> hrs</span></div>
+    <div class="kpi-card-box b-amber">
+      <div class="kpi-lbl">HH PERDIDAS ACUMULADAS</div>
+      <div class="kpi-row-val">
+        <div class="kpi-num-txt" id="txtPerdidasVal">1.00<span style="font-size:16px;"> hrs</span></div>
       </div>
-      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted);">
-        <span id="valImpactoSoles">S/. 143 impacto estimado</span> (S/. 142.50/h)
+      <div style="font-size:11px; font-weight:700; color:var(--text-muted);">
+        <span id="txtImpactoSoles">S/. 143 impacto estimado</span> (S/. 142.50/h)
       </div>
     </div>
 
-    <div class="kpi-card c-emerald">
-      <div class="kpi-header-lbl">EFICIENCIA SEMANAL</div>
-      <div class="kpi-main-val">
-        <div class="kpi-val-txt" id="valEficSemanal">104.5%</div>
+    <div class="kpi-card-box b-emerald">
+      <div class="kpi-lbl">EFICIENCIA SEMANAL</div>
+      <div class="kpi-row-val">
+        <div class="kpi-num-txt" id="txtSemanalVal">104.5%</div>
       </div>
-      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); display:flex; justify-content:space-between;">
+      <div style="font-size:11px; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between;">
         <span>Todas las semanas</span>
-        <span style="color: var(--status-green); font-weight: 800;" id="valOperariosTotal">6 operarios activos</span>
+        <span style="color:var(--status-green); font-weight:800;" id="txtTotalOperarios">6 operarios activos</span>
       </div>
     </div>
   </section>
 
   <!-- 2. GRÁFICOS SUPERIORES -->
-  <section class="charts-grid-top">
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-title">Evolución por Semana (Eficiencia %)</div>
-        <span style="font-size: 10px; font-weight: 800; background: #EFF6FF; color: #2563EB; padding: 2px 6px; border-radius: 4px;">3 SEMANAS</span>
+  <section class="grid-responsive-2">
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-title-txt">Evolución por Semana (Eficiencia %)</div>
+        <span style="font-size:9.5px; font-weight:800; background:#EFF6FF; color:#2563EB; padding:2px 6px; border-radius:4px;">3 SEMANAS</span>
       </div>
-      <div class="canvas-holder">
-        <canvas id="chartEvolucionSem"></canvas>
+      <div class="chart-wrap">
+        <canvas id="chartEvolucion"></canvas>
       </div>
     </div>
 
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-title">Eficiencia por Elemento</div>
-        <span style="font-size: 10px; font-weight: 800; background: #FFF1F2; color: #E11D48; padding: 2px 6px; border-radius: 4px;">VS META 100%</span>
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-title-txt">Eficiencia por Elemento</div>
+        <span style="font-size:9.5px; font-weight:800; background:#FFF1F2; color:#E11D48; padding:2px 6px; border-radius:4px;">VS META 100%</span>
       </div>
-      <div class="canvas-holder">
-        <canvas id="chartPorElemento"></canvas>
+      <div class="chart-wrap">
+        <canvas id="chartElemento"></canvas>
       </div>
     </div>
   </section>
 
   <!-- 3. GRÁFICOS INFERIORES -->
-  <section class="charts-grid-bottom">
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-title">HH Ganadas vs Reales · Semana</div>
-        <span style="font-size: 10px; font-weight: 800; background: #ECFDF5; color: #059669; padding: 2px 6px; border-radius: 4px;">SEMANAL</span>
+  <section class="grid-responsive-3">
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-title-txt">HH Ganadas vs Reales · Semana</div>
+        <span style="font-size:9.5px; font-weight:800; background:#ECFDF5; color:#059669; padding:2px 6px; border-radius:4px;">SEMANAL</span>
       </div>
-      <div class="canvas-holder">
-        <canvas id="chartHHComp"></canvas>
-      </div>
-    </div>
-
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-title">Distribución por Nivel</div>
-        <span style="font-size: 10px; font-weight: 800; background: #EFF6FF; color: #2563EB; padding: 2px 6px; border-radius: 4px;">17 PISOS</span>
-      </div>
-      <div class="canvas-holder">
-        <canvas id="chartPorNivel"></canvas>
+      <div class="chart-wrap">
+        <canvas id="chartHH"></canvas>
       </div>
     </div>
 
-    <div class="chart-card">
-      <div class="chart-header">
-        <div class="chart-title">Estado de Actividades</div>
-        <span style="font-size: 10px; font-weight: 800; background: #FFF1F2; color: #E11D48; padding: 2px 6px; border-radius: 4px;">BALANCE LEAN</span>
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-title-txt">Distribución por Nivel</div>
+        <span style="font-size:9.5px; font-weight:800; background:#EFF6FF; color:#2563EB; padding:2px 6px; border-radius:4px;">17 PISOS</span>
       </div>
-      <div class="canvas-holder">
-        <canvas id="chartEstadoActs"></canvas>
+      <div class="chart-wrap">
+        <canvas id="chartNivel"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-head">
+        <div class="chart-title-txt">Estado de Actividades</div>
+        <span style="font-size:9.5px; font-weight:800; background:#FFF1F2; color:#E11D48; padding:2px 6px; border-radius:4px;">BALANCE LEAN</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chartEstado"></canvas>
       </div>
     </div>
   </section>
 
-  <!-- 4. AUDITORÍA DE EFICIENCIA POR TRABAJADOR -->
-  <section class="audit-workers-card">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
+  <!-- 4. AUDITORÍA POR TRABAJADOR -->
+  <section class="chart-box">
+    <div class="chart-head">
       <div>
-        <div style="font-size: 13.5px; font-weight: 900; color: var(--c-azul-marino);">👷 Auditoría de Eficiencia por Trabajador</div>
-        <div style="font-size: 11px; color: var(--text-muted);">Monitoreo de rendimiento para control de desviaciones y premios de productividad</div>
+        <div style="font-size:13px; font-weight:900; color:var(--c-azul-marino);">👷 Auditoría de Eficiencia por Trabajador</div>
+        <div style="font-size:11px; color:var(--text-muted);">Monitoreo individual de rendimiento y desviaciones</div>
       </div>
-      <span id="lblTotalEvaluados" style="font-size: 11px; font-weight: 800; color: var(--status-green);">6 evaluados</span>
+      <span id="txtEvaluados" style="font-size:11px; font-weight:800; color:var(--status-green);">6 evaluados</span>
     </div>
-    <div class="workers-grid" id="gridTrabajadores"></div>
+    <div class="grid-responsive-3" id="gridTrabajadores" style="margin-top:10px;"></div>
   </section>
 
-  <!-- 5. TABLA DE TRAZABILIDAD Y REGISTROS EN VIVO -->
-  <section class="table-card">
-    <div class="table-header">
-      <div style="font-size: 13px; font-weight: 900; color: var(--c-azul-marino);">📋 Trazabilidad de Registros en Google Sheets</div>
-      <div style="font-size: 11px; color: var(--text-muted);">Enrutado automático a REGISTRO_DIARIO_PINTURA y REGISTRO_DIARIO_SCF</div>
+  <!-- 5. TABLA DE REGISTROS -->
+  <section class="table-panel">
+    <div style="padding:12px 14px; border-bottom:1px solid var(--c-gris-linea); display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:12.5px; font-weight:900; color:var(--c-azul-marino);">📋 Trazabilidad en Google Sheets</div>
+      <div style="font-size:10.5px; color:var(--text-muted);">REGISTRO_DIARIO_PINTURA & REGISTRO_DIARIO_SCF</div>
     </div>
-    <div class="table-responsive">
+    <div class="table-scroll">
       <table>
         <thead>
           <tr>
@@ -531,9 +488,9 @@ tr:nth-child(even) { background: #F8FAFC; }
             <th>Operario</th>
             <th>Nivel (17)</th>
             <th>Subproceso</th>
-            <th style="text-align: right;">Metrado</th>
-            <th style="text-align: right;">HH Real</th>
-            <th style="text-align: center;">Eficiencia</th>
+            <th style="text-align:right;">Metrado</th>
+            <th style="text-align:right;">HH Real</th>
+            <th style="text-align:center;">Eficiencia</th>
             <th>Estado</th>
           </tr>
         </thead>
@@ -542,49 +499,49 @@ tr:nth-child(even) { background: #F8FAFC; }
     </div>
   </section>
 
-</div>
+</main>
 
-<!-- BARRA INFERIOR TÁCTIL (MÓVILES) -->
-<nav class="bottom-nav">
-  <button class="b-tab active" onclick="setModulo('CONSOLIDADO', this)">
+<!-- BARRA DE NAVEGACIÓN INFERIOR (CELULARES) -->
+<nav class="mobile-nav">
+  <button class="nav-item-m active" onclick="filtrarModulo('CONSOLIDADO', this)">
     <span>📊</span><span>Global</span>
   </button>
-  <button class="b-tab" onclick="setModulo('PINTURA', this)">
+  <button class="nav-item-m" onclick="filtrarModulo('PINTURA', this)">
     <span>🎨</span><span>Pintura</span>
   </button>
-  <button class="b-btn-add" onclick="abrirModal()" title="Registrar Avance">
+  <button class="nav-btn-plus" onclick="abrirModal()" title="Registrar Avance">
     ➕
   </button>
-  <button class="b-tab" onclick="setModulo('SCF', this)">
+  <button class="nav-item-m" onclick="filtrarModulo('SCF', this)">
     <span>🔥</span><span>SCF</span>
   </button>
-  <button class="b-tab" onclick="sincronizarConSheets()">
+  <button class="nav-item-m" onclick="sincronizarConSheets()">
     <span>🔄</span><span>Sync</span>
   </button>
 </nav>
 
-<!-- MODAL SMART CAPTURE (17 NIVELES) -->
-<div class="modal-overlay" id="modalCaptura">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div style="font-size: 13.5px; font-weight: 900; color: var(--c-azul-marino);">✍️ Registrar Avance de Campo</div>
-      <button onclick="cerrarModal()" style="background:none; border:none; font-size: 18px; color: var(--text-muted); cursor: pointer;">✕</button>
+<!-- MODAL TOUCH PARA REGISTRAR AVANCE -->
+<div class="modal-mask" id="modalCaptura">
+  <div class="modal-window">
+    <div class="m-head">
+      <div style="font-size:13px; font-weight:900; color:var(--c-azul-marino);">✍️ Registrar Avance de Campo</div>
+      <button onclick="cerrarModal()" style="background:none; border:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
     </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="field-box">
-          <label>Especialidad / Partida:</label>
-          <select id="mEspecialidad" onchange="actualizarCatalogosModal()">
+    <div class="m-body">
+      <div class="form-grid-m">
+        <div class="field-box-m">
+          <label>Partida:</label>
+          <select id="mEspecialidad" onchange="cargarCatalogosModal()">
             <option value="PINTURA">PINTURA (REGISTRO_DIARIO_PINTURA)</option>
             <option value="SCF">SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
           </select>
         </div>
-        <div class="field-box">
-          <label>Operario de Campo:</label>
+        <div class="field-box-m">
+          <label>Operario:</label>
           <select id="mTrabajador"></select>
         </div>
-        <div class="field-box">
-          <label>Nivel de Obra (17 Niveles):</label>
+        <div class="field-box-m">
+          <label>Nivel de Obra (17):</label>
           <select id="mNivel">
             <optgroup label="Sótanos (7)">
               <option value="S7">Sótano 7</option><option value="S6">Sótano 6</option><option value="S5">Sótano 5</option>
@@ -602,63 +559,61 @@ tr:nth-child(even) { background: #F8FAFC; }
         </div>
       </div>
 
-      <div class="form-grid">
-        <div class="field-box">
-          <label>Elemento Constructivo:</label>
+      <div class="form-grid-m">
+        <div class="field-box-m">
+          <label>Elemento:</label>
           <select id="mElemento"></select>
         </div>
-        <div class="field-box">
-          <label>Subproceso / Rend. Target:</label>
-          <select id="mSubproceso" onchange="recalcularMetricasModal()"></select>
+        <div class="field-box-m">
+          <label>Subproceso / Target:</label>
+          <select id="mSubproceso" onchange="recalcularModal()"></select>
         </div>
-        <div class="field-box">
-          <label id="lblUnidadModal">Metrado Ejecutado (m²):</label>
-          <input type="number" id="mMetrado" value="45.0" step="0.1" inputmode="decimal" oninput="recalcularMetricasModal()">
+        <div class="field-box-m">
+          <label id="lblUnidadModal">Metrado (m²):</label>
+          <input type="number" id="mMetrado" value="45.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
         </div>
       </div>
 
-      <div class="form-grid">
-        <div class="field-box">
+      <div class="form-grid-m">
+        <div class="field-box-m">
           <label>HH Reales Invertidas:</label>
-          <input type="number" id="mHHReal" value="2.0" step="0.5" inputmode="decimal" oninput="recalcularMetricasModal()">
+          <input type="number" id="mHHReal" value="2.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
         </div>
-        <div class="field-box">
+        <div class="field-box-m">
           <label>Causa Restricción:</label>
           <select id="mCausa">
-            <option value="Ninguna">Ninguna (Ritmo normal)</option>
+            <option value="Ninguna">Ninguna (Ritmo óptimo)</option>
             <option value="Demora Andamios">Demora en entrega/armado andamios</option>
             <option value="Frente No Liberado">Frente no liberado / Losa sin picar</option>
             <option value="Interferencia MEP">Interferencia instalaciones MEP</option>
           </select>
         </div>
-        <div class="field-box">
+        <div class="field-box-m">
           <label>Detalle / Ubicación:</label>
           <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7">
         </div>
       </div>
 
-      <!-- Resumen de cálculo Lean -->
-      <div style="background: var(--c-celeste-claro); border: 1px solid var(--c-azul-cian); border-radius: 8px; padding: 10px; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center;">
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">TARGET</div><div style="font-size:15px; font-weight:900;" id="mDispTarget">91.0</div></div>
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">HH GANADAS</div><div style="font-size:15px; font-weight:900;" id="mDispHHGan">8.41 h</div></div>
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">EFICIENCIA</div><div style="font-size:15px; font-weight:900; color:var(--status-green);" id="mDispEficiencia">420.5%</div></div>
-        <div><div style="font-size:9.5px; font-weight:800; color:var(--c-azul-marino);">ESTADO</div><div style="font-size:14px; font-weight:900; color:var(--status-green);" id="mDispEstado">GANANCIA</div></div>
+      <div style="background:var(--c-celeste-claro); border:1px solid #BEE3F8; border-radius:8px; padding:10px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
+        <div><div style="font-size:9px; font-weight:800; color:var(--c-azul-marino);">TARGET</div><div style="font-size:14px; font-weight:900;" id="dispTarget">91.0</div></div>
+        <div><div style="font-size:9px; font-weight:800; color:var(--c-azul-marino);">HH GANADAS</div><div style="font-size:14px; font-weight:900;" id="dispHHGan">8.41 h</div></div>
+        <div><div style="font-size:9px; font-weight:800; color:var(--c-azul-marino);">EFICIENCIA</div><div style="font-size:14px; font-weight:900; color:var(--status-green);" id="dispEficiencia">420.5%</div></div>
+        <div><div style="font-size:9px; font-weight:800; color:var(--c-azul-marino);">ESTADO</div><div style="font-size:13px; font-weight:900; color:var(--status-green);" id="dispEstado">GANANCIA</div></div>
       </div>
     </div>
-    <div class="modal-foot">
-      <button class="btn-action btn-cancel" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn-action btn-save" onclick="guardarRegistro()">💾 Guardar en Google Sheets</button>
+    <div class="m-foot">
+      <button class="btn-ui" style="background:#FFF; border:1px solid var(--c-gris-linea); color:var(--text-muted); flex:1;" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-ui" style="background:var(--c-azul-marino); color:#FFF; flex:2; justify-content:center;" onclick="guardarRegistro()">💾 Guardar en Google Sheets</button>
     </div>
   </div>
 </div>
 
 <script>
 // =========================================================================
-// CONFIGURACIÓN DE URL DE GOOGLE APPS SCRIPT
+// PEGA TU URL DE APPS SCRIPT AQUÍ (LA QUE TERMINA EN /exec)
 // =========================================================================
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
 
-// CATÁLOGOS CONVECSA
 const CATALOGO = {
   PINTURA: {
     trabajadores: [
@@ -703,7 +658,6 @@ let MODULO_ACTIVO = "CONSOLIDADO";
 let PERIODO_ACTIVO = "MES";
 let USUARIO_ACTUAL = { rol: "SUPER_ADMIN", nombre: "Jorge Orosco" };
 
-// REGISTROS INICIALES SINCRONIZABLES
 let LOG_REGISTROS = [
   { id: "PIN-20260919-01", horaExacta: "2026-09-19 08:30:15", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S7", elemento: "MURO", sub: "Pintura 1ra mano", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, hhGan: 1.85, ef: 185.0, est: "GANANCIA", unidad: "m²" },
   { id: "PIN-20260919-02", horaExacta: "2026-09-19 09:45:22", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 3.73, ef: 93.3, est: "PERDIDA", unidad: "m²" },
@@ -713,54 +667,52 @@ let LOG_REGISTROS = [
   { id: "PIN-20260916-06", horaExacta: "2026-09-16 15:00:00", fecha: "2026-09-16", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "BERMUDEZ MARIN DARWIN ENMANUEL", nivel: "AZ", elemento: "COLUMNAS", sub: "Empaste columnas", metrado: 26.0, hhReal: 0.63, rendOpt: 52.0, hhGan: 1.25, ef: 198.4, est: "GANANCIA", unidad: "m²" }
 ];
 
-let chEvolucion, chElemento, chHHComp, chNivel, chEstado;
+let chartEvolucion, chartElemento, chartHH, chartNivel, chartEstado;
 
-// CONTROL DE AUTENTICACIÓN Y LOGIN CON PIN
-function validarAcceso(e) {
+function validarLogin(e) {
   e.preventDefault();
-  const pin = document.getElementById('pinInput').value;
+  const pin = document.getElementById('pinBox').value;
   if (pin === "1234" || pin === "2026") {
-    const userVal = document.getElementById('userSelector').value.split('|');
-    USUARIO_ACTUAL.rol = userVal[0];
-    USUARIO_ACTUAL.nombre = userVal[1];
-    document.getElementById('sessionUserBadge').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
+    const val = document.getElementById('selUsuario').value.split('|');
+    USUARIO_ACTUAL.rol = val[0];
+    USUARIO_ACTUAL.nombre = val[1];
+    document.getElementById('userPillBadge').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
     document.getElementById('loginOverlay').style.display = 'none';
-    sessionStorage.setItem('convecsa_session', JSON.stringify(USUARIO_ACTUAL));
+    sessionStorage.setItem('convecsa_ses', JSON.stringify(USUARIO_ACTUAL));
   } else {
-    alert("❌ PIN Incorrecto. Intente nuevamente.");
-    document.getElementById('pinInput').value = '';
+    alert("PIN Incorrecto.");
+    document.getElementById('pinBox').value = '';
   }
 }
 
-function cerrarSesion() {
-  sessionStorage.removeItem('convecsa_session');
-  document.getElementById('pinInput').value = '';
+function logout() {
+  sessionStorage.removeItem('convecsa_ses');
+  document.getElementById('pinBox').value = '';
   document.getElementById('loginOverlay').style.display = 'flex';
 }
 
-// INICIALIZACIÓN
 window.addEventListener('DOMContentLoaded', () => {
-  const ses = sessionStorage.getItem('convecsa_session');
+  const ses = sessionStorage.getItem('convecsa_ses');
   if (ses) {
     USUARIO_ACTUAL = JSON.parse(ses);
-    document.getElementById('sessionUserBadge').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
+    document.getElementById('userPillBadge').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
     document.getElementById('loginOverlay').style.display = 'none';
   }
   inicializarGraficos();
   actualizarTodo();
 });
 
-function setPeriodo(periodo, btn) {
-  PERIODO_ACTIVO = periodo;
+function filtrarPeriodo(p, btn) {
+  PERIODO_ACTIVO = p;
   btn.parentElement.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('lblEficTitulo').innerText = "EFICIENCIA (" + periodo + ")";
+  document.getElementById('lblKpiEfic').innerText = "EFICIENCIA (" + p + ")";
   actualizarTodo();
 }
 
-function setModulo(mod, btn) {
-  MODULO_ACTIVO = mod;
-  btn.parentElement.querySelectorAll('.pill-btn, .b-tab').forEach(b => b.classList.remove('active'));
+function filtrarModulo(m, btn) {
+  MODULO_ACTIVO = m;
+  btn.parentElement.querySelectorAll('.pill-btn, .nav-item-m').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   actualizarTodo();
 }
@@ -768,8 +720,8 @@ function setModulo(mod, btn) {
 function getDatosFiltrados() {
   let list = LOG_REGISTROS;
   if (MODULO_ACTIVO !== "CONSOLIDADO") list = list.filter(r => r.modulo === MODULO_ACTIVO);
-  const hoyStr = new Date().toISOString().split('T')[0];
-  if (PERIODO_ACTIVO === "DIA") list = list.filter(r => r.fecha === hoyStr || r.horaExacta.startsWith(hoyStr));
+  const hoy = new Date().toISOString().split('T')[0];
+  if (PERIODO_ACTIVO === "DIA") list = list.filter(r => r.fecha === hoy || r.horaExacta.startsWith(hoy));
   else if (PERIODO_ACTIVO === "SEMANA") list = list.filter(r => r.semana === 7 || r.fecha >= "2026-09-14");
   else if (PERIODO_ACTIVO === "MES") list = list.filter(r => r.fecha >= "2026-09-01");
   return list;
@@ -777,28 +729,28 @@ function getDatosFiltrados() {
 
 function actualizarTodo() {
   actualizarKPIs();
-  renderizarAuditoriaTrabajadores();
+  renderizarAuditoria();
   renderizarTabla();
   actualizarGraficos();
 }
 
 function actualizarKPIs() {
-  const datos = getDatosFiltrados();
-  const totHHReal = datos.reduce((acc, r) => acc + r.hhReal, 0);
-  const totHHGan = datos.reduce((acc, r) => acc + r.hhGan, 0);
-  const ef = totHHReal > 0 ? (totHHGan / totHHReal) * 100 : 0;
-  const perdidas = datos.reduce((acc, r) => acc + Math.max(r.hhReal - r.hhGan, 0), 0);
-  const impacto = perdidas * 142.5;
-  const operarios = new Set(datos.map(r => r.trabajador)).size;
+  const d = getDatosFiltrados();
+  const totReal = d.reduce((a, r) => a + r.hhReal, 0);
+  const totGan = d.reduce((a, r) => a + r.hhGan, 0);
+  const ef = totReal > 0 ? (totGan / totReal) * 100 : 0;
+  const perd = d.reduce((a, r) => a + Math.max(r.hhReal - r.hhGan, 0), 0);
+  const soles = perd * 142.5;
+  const ops = new Set(d.map(r => r.trabajador)).size;
 
-  document.getElementById('valEficiencia').innerText = ef.toFixed(1) + "%";
-  document.getElementById('valEficSemanal').innerText = ef.toFixed(1) + "%";
-  document.getElementById('valHHPerdidas').innerHTML = perdidas.toFixed(2) + "<span style='font-size:18px;'> hrs</span>";
-  document.getElementById('valImpactoSoles').innerText = "S/. " + impacto.toFixed(0) + " impacto estimado";
-  document.getElementById('valOperariosTotal').innerText = operarios + " operarios activos";
+  document.getElementById('txtEficVal').innerText = ef.toFixed(1) + "%";
+  document.getElementById('txtSemanalVal').innerText = ef.toFixed(1) + "%";
+  document.getElementById('txtPerdidasVal').innerHTML = perd.toFixed(2) + "<span style='font-size:16px;'> hrs</span>";
+  document.getElementById('txtImpactoSoles').innerText = "S/. " + soles.toFixed(0) + " impacto estimado";
+  document.getElementById('txtTotalOperarios').innerText = ops + " operarios activos";
 
-  const badge = document.getElementById('badgeEstadoEfic');
-  badge.className = ef >= 100 ? "kpi-tag-status ganancia" : "kpi-tag-status perdida";
+  const badge = document.getElementById('badgeEficEstado');
+  badge.className = ef >= 100 ? "tag-badge ganancia" : "tag-badge perdida";
   badge.innerText = ef >= 100 ? "Ganancia" : "Pérdida";
 
   drawGauge(ef);
@@ -808,47 +760,45 @@ function drawGauge(pct) {
   const c = document.getElementById('gaugeCanvas');
   if (!c) return;
   const ctx = c.getContext('2d');
-  ctx.clearRect(0, 0, 90, 46);
-  const cx = 45, cy = 44, r = 30;
+  ctx.clearRect(0, 0, 80, 42);
+  const cx = 40, cy = 40, r = 26;
   ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
-  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 5.5; ctx.stroke();
-
-  const angulo = Math.PI + (Math.min(pct, 150) / 150) * Math.PI;
-  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, angulo);
+  ctx.strokeStyle = '#E2E8F0'; ctx.lineWidth = 5; ctx.stroke();
+  const ang = Math.PI + (Math.min(pct, 150) / 150) * Math.PI;
+  ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, ang);
   ctx.strokeStyle = pct >= 100 ? '#10B981' : '#E11D48';
-  ctx.lineWidth = 5.5; ctx.stroke();
+  ctx.lineWidth = 5; ctx.stroke();
 }
 
-function renderizarAuditoriaTrabajadores() {
+function renderizarAuditoria() {
   const grid = document.getElementById('gridTrabajadores');
   grid.innerHTML = '';
-  const datos = getDatosFiltrados();
-
-  const mapa = {};
-  datos.forEach(r => {
-    if (!mapa[r.trabajador]) mapa[r.trabajador] = { nombre: r.trabajador, hhReal: 0, hhGan: 0, metrado: 0, unidad: r.unidad };
-    mapa[r.trabajador].hhReal += r.hhReal;
-    mapa[r.trabajador].hhGan += r.hhGan;
-    mapa[r.trabajador].metrado += r.metrado;
+  const d = getDatosFiltrados();
+  const map = {};
+  d.forEach(r => {
+    if (!map[r.trabajador]) map[r.trabajador] = { nombre: r.trabajador, hhReal: 0, hhGan: 0, metrado: 0, unidad: r.unidad };
+    map[r.trabajador].hhReal += r.hhReal;
+    map[r.trabajador].hhGan += r.hhGan;
+    map[r.trabajador].metrado += r.metrado;
   });
 
-  const arr = Object.values(mapa).sort((a,b) => (b.hhGan/b.hhReal) - (a.hhGan/a.hhReal));
-  document.getElementById('lblTotalEvaluados').innerText = arr.length + " evaluados (" + PERIODO_ACTIVO + ")";
+  const arr = Object.values(map).sort((a,b) => (b.hhGan/b.hhReal) - (a.hhGan/a.hhReal));
+  document.getElementById('txtEvaluados').innerText = arr.length + " evaluados (" + PERIODO_ACTIVO + ")";
 
   arr.forEach(op => {
     const ef = op.hhReal > 0 ? (op.hhGan / op.hhReal) * 100 : 0;
     const esGan = ef >= 100;
     const col = esGan ? '#059669' : '#DC2626';
     const card = document.createElement('div');
-    card.className = 'worker-item';
+    card.className = 'worker-card';
     card.innerHTML = `
-      <div class="worker-top">
-        <span class="worker-name">${op.nombre}</span>
-        <span style="font-size:10px; font-weight:900; color:${col}; background:${esGan ? '#D1FAE5' : '#FEE2E2'}; padding:2px 6px; border-radius:5px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:800; font-size:11.5px;">${op.nombre}</span>
+        <span style="font-size:9.5px; font-weight:900; color:${col}; background:${esGan ? '#D1FAE5' : '#FEE2E2'}; padding:1px 6px; border-radius:4px;">
           ${ef.toFixed(1)}% ${esGan ? 'GANANCIA' : 'PÉRDIDA'}
         </span>
       </div>
-      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted);">
+      <div style="display:flex; justify-content:space-between; font-size:10.5px; color:var(--text-muted);">
         <span>Metrado: <b>${op.metrado.toFixed(1)} ${op.unidad}</b></span>
         <span>HH Real: <b>${op.hhReal.toFixed(1)}h</b> (Meta: ${op.hhGan.toFixed(1)}h)</span>
       </div>
@@ -866,7 +816,7 @@ function renderizarTabla() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><b>${r.id}</b></td>
-      <td><span style="font-size:10px; font-family:monospace;">${r.horaExacta.split(' ')[1]}</span></td>
+      <td><span style="font-family:monospace; font-size:10.5px;">${r.horaExacta.split(' ')[1]}</span></td>
       <td><span style="background:#E3F2FD; color:#0052CC; padding:2px 5px; border-radius:4px; font-weight:800; font-size:9.5px;">${r.hoja || r.modulo}</span></td>
       <td><b>${r.trabajador}</b></td>
       <td><span style="background:#F1F5F9; font-weight:900; padding:2px 5px; border-radius:4px;">${r.nivel}</span></td>
@@ -874,7 +824,7 @@ function renderizarTabla() {
       <td style="text-align:right; font-weight:800;">${r.metrado.toFixed(1)} ${r.unidad}</td>
       <td style="text-align:right; font-family:monospace;">${r.hhReal.toFixed(2)}h</td>
       <td style="text-align:center; font-weight:900; color:${isGan ? '#059669':'#DC2626'};">${r.ef}%</td>
-      <td><span class="kpi-tag-status ${isGan ? 'ganancia':'perdida'}">${r.est}</span></td>
+      <td><span class="tag-badge ${isGan ? 'ganancia':'perdida'}">${r.est}</span></td>
     `;
     t.appendChild(tr);
   });
@@ -884,21 +834,19 @@ function inicializarGraficos() {
   Chart.defaults.font.family = 'Plus Jakarta Sans';
   Chart.defaults.color = '#64748B';
 
-  // 1. Línea Evolución
-  chEvolucion = new Chart(document.getElementById('chartEvolucionSem'), {
+  chartEvolucion = new Chart(document.getElementById('chartEvolucion'), {
     type: 'line',
     data: {
       labels: ['Sem 3', 'Sem 4', 'Sem 7'],
       datasets: [
-        { label: 'Eficiencia %', data: [66.5, 66.7, 58.7], borderColor: '#6366F1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.35, pointRadius: 4 },
+        { label: 'Efic %', data: [66.5, 66.7, 58.7], borderColor: '#6366F1', backgroundColor: 'rgba(99, 102, 241, 0.1)', fill: true, tension: 0.35, pointRadius: 4 },
         { label: 'Meta 100%', data: [100, 100, 100], borderColor: '#10B981', borderDash: [5, 4], pointRadius: 0 }
       ]
     },
     options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 160 } } }
   });
 
-  // 2. Barras por Elemento
-  chElemento = new Chart(document.getElementById('chartPorElemento'), {
+  chartElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
     data: {
       labels: ['MURO', 'CIELORASO', 'PLENUM', 'COLUMNAS'],
@@ -907,8 +855,7 @@ function inicializarGraficos() {
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
   });
 
-  // 3. HH Comparativo
-  chHHComp = new Chart(document.getElementById('chartHHComp'), {
+  chartHH = new Chart(document.getElementById('chartHH'), {
     type: 'bar',
     data: {
       labels: ['Sem 3', 'Sem 4', 'Sem 7'],
@@ -920,8 +867,7 @@ function inicializarGraficos() {
     options: { responsive: true, maintainAspectRatio: false }
   });
 
-  // 4. Distribución por Nivel
-  chNivel = new Chart(document.getElementById('chartPorNivel'), {
+  chartNivel = new Chart(document.getElementById('chartNivel'), {
     type: 'doughnut',
     data: {
       labels: ['S1', 'P1', 'P2', 'P4', 'P3'],
@@ -930,8 +876,7 @@ function inicializarGraficos() {
     options: { responsive: true, maintainAspectRatio: false, cutout: '65%' }
   });
 
-  // 5. Estado Actividades
-  chEstado = new Chart(document.getElementById('chartEstadoActs'), {
+  chartEstado = new Chart(document.getElementById('chartEstado'), {
     type: 'doughnut',
     data: {
       labels: ['Pérdida', 'Ganancia'],
@@ -942,75 +887,58 @@ function inicializarGraficos() {
 }
 
 function actualizarGraficos() {
-  if (!chEstado) return;
+  if (!chartEstado) return;
   const d = getDatosFiltrados();
   const gan = d.filter(r => r.est === "GANANCIA").length;
   const per = d.filter(r => r.est === "PERDIDA").length;
-  chEstado.data.datasets[0].data = [per || 0, gan || 1];
-  chEstado.update();
+  chartEstado.data.datasets[0].data = [per || 0, gan || 1];
+  chartEstado.update();
 }
 
-// =========================================================================
-// FUNCIONALIDAD: EXPORTAR A EXCEL (.XLSX) CON TODAS LAS FÓRMULAS VIVAS
-// =========================================================================
+// EXPORTACIÓN A EXCEL (.XLSX) CON FÓRMULAS VIVAS
 function exportarExcelConFormulas() {
-  const datos = getDatosFiltrados();
-  const fechaHoy = new Date().toISOString().split('T')[0];
+  const d = getDatosFiltrados();
+  const fecha = new Date().toISOString().split('T')[0];
 
-  // Matriz de datos con fórmulas de Excel
   const wsData = [
-    ["CONVECSA S.A.C. - REPORTE DIARIO DE OBRA Y EVALUACIÓN LEAN"],
-    ["PROYECTO: TORRE HOSP. SAN BORJA (THSSB)", "", "FECHA:", fechaHoy],
+    ["CONVECSA S.A.C. - REPORTE DIARIO DE OBRA LEAN (RDO)"],
+    ["PROYECTO: TORRE HOSPITALARIA SAN BORJA (THSSB)", "", "FECHA:", fecha],
     [""],
     ["ID_REGISTRO", "TIMESTAMP", "FECHA", "HOJA", "OPERARIO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO", "UNIDAD", "HH_REAL", "REND_OPT", "HH_GANADAS", "EFICIENCIA", "ESTADO"]
   ];
 
-  datos.forEach((r, idx) => {
-    const rowNum = idx + 5;
+  d.forEach((r, idx) => {
+    const row = idx + 5;
     wsData.push([
-      r.id,
-      r.horaExacta,
-      r.fecha,
-      r.hoja || r.modulo,
-      r.trabajador,
-      r.nivel,
-      r.elemento,
-      r.sub,
-      r.metrado,
-      r.unidad,
-      r.hhReal,
-      r.rendOpt,
-      { f: `I${rowNum}*(17/L${rowNum})` }, // Fórmula viva de HH Ganadas
-      { f: `M${rowNum}/K${rowNum}` },       // Fórmula viva de Eficiencia
-      { f: `IF(N${rowNum}>=1,"GANANCIA","PERDIDA")` } // Fórmula viva de Estado
+      r.id, r.horaExacta, r.fecha, r.hoja || r.modulo, r.trabajador, r.nivel, r.elemento, r.sub,
+      r.metrado, r.unidad, r.hhReal, r.rendOpt,
+      { f: `I${row}*(17/L${row})` },
+      { f: `M${row}/K${row}` },
+      { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` }
     ]);
   });
 
-  // Fila de Totales
-  const lastRow = wsData.length;
+  const last = wsData.length;
   wsData.push([
     "TOTALES", "", "", "", "", "", "", "",
-    { f: `SUM(I5:I${lastRow})` }, "m²",
-    { f: `SUM(K5:K${lastRow})` }, "",
-    { f: `SUM(M5:M${lastRow})` },
-    { f: `AVERAGE(N5:N${lastRow})` },
-    ""
+    { f: `SUM(I5:I${last})` }, "m²",
+    { f: `SUM(K5:K${last})` }, "",
+    { f: `SUM(M5:M${last})` },
+    { f: `AVERAGE(N5:N${last})` }, ""
   ]);
 
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet(wsData);
-  XLSX.utils.book_append_sheet(wb, ws, "RDO_LEAN_THSSB");
-  XLSX.writeFile(wb, `RDO_CONVECSA_THSSB_${fechaHoy}.xlsx`);
+  XLSX.utils.book_append_sheet(wb, ws, "RDO_LEAN");
+  XLSX.writeFile(wb, `RDO_CONVECSA_THSSB_${fecha}.xlsx`);
 }
 
-// =========================================================================
-// FUNCIONALIDAD: DESCARGAR REPORTE DIARIO EN PDF OFICIAL
-// =========================================================================
+// EXPORTACIÓN A PDF
 function exportarReportePDF() {
-  const el = document.getElementById('pdfReportContent');
+  const el = document.getElementById('dashboardPrintArea');
   const opt = {
     margin: 6,
-    filename: `RDO_OFICIAL_CONVECSA_${new Date().toISOString().split('T')[0]}.pdf`,
+    filename: `RDO_CONVECSA_${new Date().toISOString().split('T')[0]}.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
@@ -1018,14 +946,14 @@ function exportarReportePDF() {
   html2pdf().set(opt).from(el).save();
 }
 
-// MODAL DE REGISTRO
+// MODAL
 function abrirModal() {
-  actualizarCatalogosModal();
+  cargarCatalogosModal();
   document.getElementById('modalCaptura').classList.add('open');
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
-function actualizarCatalogosModal() {
+function cargarCatalogosModal() {
   const esp = document.getElementById('mEspecialidad').value;
   const cfg = CATALOGO[esp];
   const sT = document.getElementById('mTrabajador'); sT.innerHTML = '';
@@ -1034,11 +962,11 @@ function actualizarCatalogosModal() {
   cfg.elementos.forEach(e => sE.innerHTML += `<option value="${e}">${e}</option>`);
   const sS = document.getElementById('mSubproceso'); sS.innerHTML = '';
   cfg.subprocesos.forEach(s => sS.innerHTML += `<option value="${s.nombre}|${s.rend}|${s.unidad}">${s.nombre} (${s.rend} ${s.unidad})</option>`);
-  document.getElementById('lblUnidadModal').innerText = `Metrado Ejecutado (${cfg.unidad}):`;
-  recalcularMetricasModal();
+  document.getElementById('lblUnidadModal').innerText = `Metrado (${cfg.unidad}):`;
+  recalcularModal();
 }
 
-function recalcularMetricasModal() {
+function recalcularModal() {
   const subData = document.getElementById('mSubproceso').value.split('|');
   const rendOpt = parseFloat(subData[1]) || 52.0;
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
@@ -1046,12 +974,12 @@ function recalcularMetricasModal() {
   const hhGan = metrado * (17.0 / rendOpt);
   const ef = (hhGan / hhReal) * 100;
 
-  document.getElementById('mDispTarget').innerText = rendOpt.toFixed(1);
-  document.getElementById('mDispHHGan').innerText = hhGan.toFixed(2) + " h";
-  document.getElementById('mDispEficiencia').innerText = ef.toFixed(1) + "%";
-  document.getElementById('mDispEficiencia').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
-  document.getElementById('mDispEstado').innerText = ef >= 100 ? "GANANCIA" : "PERDIDA";
-  document.getElementById('mDispEstado').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
+  document.getElementById('dispTarget').innerText = rendOpt.toFixed(1);
+  document.getElementById('dispHHGan').innerText = hhGan.toFixed(2) + " h";
+  document.getElementById('dispEficiencia').innerText = ef.toFixed(1) + "%";
+  document.getElementById('dispEficiencia').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
+  document.getElementById('dispEstado').innerText = ef >= 100 ? "GANANCIA" : "PERDIDA";
+  document.getElementById('dispEstado').style.color = ef >= 100 ? "var(--status-green)" : "var(--status-red)";
 }
 
 function guardarRegistro() {
@@ -1070,7 +998,6 @@ function guardarRegistro() {
   const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
   const hhGan = metrado * (17.0 / rendOpt);
   const ef = (hhGan / hhReal) * 100;
-  const estado = ef >= 100 ? "GANANCIA" : "PERDIDA";
 
   const nuevoItem = {
     id: (esp === "SCF" ? "SCF-" : "PIN-") + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0'),
@@ -1088,7 +1015,7 @@ function guardarRegistro() {
     rendOpt: rendOpt,
     hhGan: hhGan,
     ef: parseFloat(ef.toFixed(1)),
-    est: estado,
+    est: ef >= 100 ? "GANANCIA" : "PERDIDA",
     unidad: unidad
   };
 
@@ -1096,7 +1023,6 @@ function guardarRegistro() {
   actualizarTodo();
   cerrarModal();
 
-  // Envío a Google Sheets en segundo plano
   const payload = {
     fecha: timeStr.split(' ')[0],
     modulo: esp,
@@ -1130,7 +1056,7 @@ function sincronizarConSheets() {
         if (data.registros && data.registros.length > 0) {
           LOG_REGISTROS = data.registros;
           actualizarTodo();
-          alert("✅ Sincronización exitosa con las hojas de Google Sheets.");
+          alert("✅ Sincronizado en vivo con Google Sheets.");
         }
       }).catch(() => alert("Modo local activo."));
   }
