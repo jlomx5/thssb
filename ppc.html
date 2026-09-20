@@ -11,12 +11,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* PALETA CYBER-CONVECSA FUTURISTA */
   --c-navy-deep: #050B14;
-  --c-navy-surface: #0B1528;
-  --c-navy-card: rgba(15, 28, 54, 0.78);
+  --c-navy-surface: #091322;
+  --c-navy-sidebar: #060E1A;
+  --c-navy-card: rgba(13, 24, 44, 0.85);
   --c-border-glass: rgba(0, 150, 225, 0.22);
-  --c-border-glow: rgba(0, 150, 225, 0.45);
+  --c-border-glow: rgba(0, 229, 255, 0.45);
   
   --c-azul-convecsa: #0052CC;
   --c-cyan-neon: #00E5FF;
@@ -29,9 +29,9 @@
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
 
-  --glow-cyan: 0 0 20px rgba(0, 229, 255, 0.35);
-  --glow-green: 0 0 20px rgba(0, 230, 118, 0.35);
-  --glow-red: 0 0 20px rgba(255, 23, 68, 0.35);
+  --glow-cyan: 0 0 18px rgba(0, 229, 255, 0.35);
+  --glow-green: 0 0 18px rgba(0, 230, 118, 0.35);
+  --glow-red: 0 0 18px rgba(255, 23, 68, 0.35);
   
   --radius-xl: 18px;
   --radius-lg: 14px;
@@ -50,7 +50,6 @@ html, body {
   overflow-y: auto !important;
 }
 
-/* GRID HOLOGRÁFICO DE FONDO */
 body::before {
   content: '';
   position: fixed;
@@ -63,11 +62,10 @@ body::before {
   z-index: 0;
 }
 
-/* LOGIN CON PIN FLUIDO Y COMPATIBLE */
 #loginOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(5, 11, 20, 0.94);
+  background: rgba(5, 11, 20, 0.95);
   backdrop-filter: blur(16px);
   z-index: 1000;
   display: flex;
@@ -76,61 +74,30 @@ body::before {
   padding: 16px;
 }
 .login-cyber-box {
-  background: rgba(11, 21, 40, 0.9);
+  background: rgba(11, 21, 40, 0.92);
   border: 1px solid var(--c-cyan-neon);
   border-radius: var(--radius-xl);
-  padding: 34px 24px;
+  padding: 34px 26px;
   width: 100%;
   max-width: 380px;
   text-align: center;
   box-shadow: 0 0 35px rgba(0, 229, 255, 0.2), inset 0 0 20px rgba(0, 82, 204, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-.login-cyber-box::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%; width: 200%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--c-cyan-neon), transparent);
-  animation: scanline 3.5s linear infinite;
-}
-@keyframes scanline {
-  0% { left: -100%; }
-  100% { left: 100%; }
 }
 .cyber-logo {
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 12px;
+  width: 58px; height: 58px; margin: 0 auto 12px;
   background: linear-gradient(135deg, var(--c-azul-convecsa), var(--c-cyan-neon));
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 14px; display: flex; align-items: center; justify-content: center;
   box-shadow: var(--glow-cyan);
 }
 .cyber-logo svg { width: 32px; height: 32px; fill: #FFFFFF; }
 .pin-digital {
-  width: 100%;
-  padding: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 24px;
-  font-weight: 800;
-  letter-spacing: 8px;
-  text-align: center;
-  background: rgba(5, 11, 20, 0.85);
-  border: 1.5px solid var(--c-border-glass);
-  border-radius: 10px;
-  color: var(--c-cyan-neon);
-  margin: 14px 0;
-  outline: none;
+  width: 100%; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 24px;
+  font-weight: 800; letter-spacing: 8px; text-align: center; background: rgba(5, 11, 20, 0.85);
+  border: 1.5px solid var(--c-border-glass); border-radius: 10px; color: var(--c-cyan-neon);
+  margin: 14px 0; outline: none;
 }
-.pin-digital:focus {
-  border-color: var(--c-cyan-neon);
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
-}
+.pin-digital:focus { border-color: var(--c-cyan-neon); box-shadow: 0 0 15px rgba(0, 229, 255, 0.4); }
 
-/* APP SHELL */
 .app-shell {
   display: flex;
   width: 100%;
@@ -139,79 +106,79 @@ body::before {
   z-index: 1;
 }
 
-/* ICON RAIL PROPIETARIO CONVECSA */
-.cyber-rail {
-  width: 68px;
-  background: rgba(11, 21, 40, 0.7);
-  backdrop-filter: blur(20px);
+/* BARRA LATERAL PROPIETARIA (GERENCIA, PROYECTOS, INVENTARIO, ETC.) */
+.convecsa-sidebar {
+  width: 82px;
+  background: var(--c-navy-sidebar);
   border-right: 1px solid var(--c-border-glass);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 16px 0;
-  gap: 16px;
+  gap: 12px;
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 120;
   flex-shrink: 0;
+  overflow-y: auto;
 }
 @media (max-width: 768px) {
-  .cyber-rail { display: none; }
+  .convecsa-sidebar { display: none; }
 }
 
-.rail-btn-futuristic {
-  width: 44px;
-  height: 44px;
+.sidebar-nav-item {
+  width: 68px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
   border-radius: 12px;
   border: 1px solid transparent;
   background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
   color: var(--text-secondary);
+  cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
   position: relative;
 }
-.rail-btn-futuristic:hover {
+.sidebar-nav-item:hover {
   color: var(--c-cyan-neon);
   background: rgba(0, 229, 255, 0.08);
-  border-color: var(--c-border-glow);
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+  border-color: rgba(0, 229, 255, 0.25);
   transform: translateY(-1px);
 }
-.rail-btn-futuristic.active {
+.sidebar-nav-item.active {
   color: #FFFFFF;
-  background: linear-gradient(135deg, rgba(0, 82, 204, 0.4), rgba(0, 229, 255, 0.25));
+  background: linear-gradient(135deg, rgba(0, 82, 204, 0.5), rgba(0, 229, 255, 0.2));
   border-color: var(--c-cyan-neon);
-  box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
 }
-.rail-btn-futuristic svg {
-  width: 21px;
-  height: 21px;
+.sidebar-nav-item svg {
+  width: 24px;
+  height: 24px;
   stroke: currentColor;
-  stroke-width: 2;
+  stroke-width: 1.9;
   fill: none;
 }
-
-.core-emblem {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #0052CC 0%, #00E5FF 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: var(--glow-cyan);
-  transition: transform 0.3s;
-  margin-bottom: 6px;
+.sidebar-nav-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-align: center;
 }
-.core-emblem:hover { transform: scale(1.08) rotate(5deg); }
-.core-emblem svg { width: 24px; height: 24px; fill: #FFFFFF; }
+.tag-sub-badge {
+  font-size: 8.5px;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.tag-buk { background: #F59E0B; color: #000; }
+.tag-pro { background: #2563EB; color: #FFF; }
 
-/* ÁREA DE CONTENIDO */
 .cockpit-area {
   flex: 1;
   display: flex;
@@ -219,9 +186,8 @@ body::before {
   min-width: 0;
 }
 
-/* TOPBAR */
 .topbar-cyber {
-  background: rgba(11, 21, 40, 0.6);
+  background: rgba(9, 19, 34, 0.7);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--c-border-glass);
   padding: 10px 18px;
@@ -245,7 +211,6 @@ body::before {
 .sys-title { font-size: 14px; font-weight: 900; letter-spacing: 0.3px; color: #FFFFFF; }
 .sys-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--c-cyan-neon); }
 
-/* CONTENEDOR FLUIDO */
 .cockpit-canvas {
   width: 100%;
   max-width: 1440px;
@@ -260,7 +225,6 @@ body::before {
   .cockpit-canvas { padding: 20px 24px 40px; gap: 18px; }
 }
 
-/* STRIP DE COMANDOS */
 .command-strip {
   background: var(--c-navy-card);
   backdrop-filter: blur(12px);
@@ -333,7 +297,6 @@ body::before {
   box-shadow: var(--glow-cyan);
 }
 
-/* REJILLAS RESPONSIVAS */
 .grid-responsive-3 {
   display: grid;
   grid-template-columns: 1fr;
@@ -349,7 +312,6 @@ body::before {
 }
 @media (min-width: 900px) { .grid-responsive-2 { grid-template-columns: 1fr 1fr; gap: 16px; } }
 
-/* TARJETAS GLASSMORPHIC */
 .glass-card {
   background: var(--c-navy-card);
   backdrop-filter: blur(14px);
@@ -522,50 +484,71 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
   cursor: pointer;
 }
 
+/* =========================================================================
+   MODAL REDISEÑADO SIN SCROLL HORIZONTAL (AMPLIADO A FILAS FLUIDAS)
+   ========================================================================= */
 .cyber-modal-mask {
-  position: fixed; inset: 0; background: rgba(5, 11, 20, 0.85);
+  position: fixed; inset: 0; background: rgba(5, 11, 20, 0.88);
   backdrop-filter: blur(8px); z-index: 600; display: none;
   align-items: flex-end; justify-content: center;
 }
 @media (min-width: 640px) { .cyber-modal-mask { align-items: center; padding: 20px; } }
 .cyber-modal-mask.open { display: flex; }
+
 .cyber-modal-window {
   background: #0B1528;
   border: 1px solid var(--c-cyan-neon);
   box-shadow: 0 0 35px rgba(0, 229, 255, 0.25);
-  width: 100%; max-width: 660px; max-height: 90vh;
-  border-radius: 20px 20px 0 0; display: flex; flex-direction: column; overflow: hidden;
+  width: 100%; max-width: 720px; max-height: 90vh;
+  border-radius: 20px 20px 0 0; display: flex; flex-direction: column;
+  overflow-x: hidden !important;
+  overflow-y: hidden;
 }
 @media (min-width: 640px) { .cyber-modal-window { border-radius: var(--radius-xl); } }
+
 .m-head-c {
   padding: 14px 18px; border-bottom: 1px solid var(--c-border-glass);
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
 }
 .m-body-c {
-  padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+  padding: 16px 18px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  display: flex; flex-direction: column; gap: 12px;
 }
-.form-grid-cyber { display: grid; grid-template-columns: 1fr; gap: 10px; }
-@media (min-width: 640px) { .form-grid-cyber { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
-.field-cyber { display: flex; flex-direction: column; gap: 4px; }
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  width: 100%;
+}
+@media (min-width: 600px) {
+  .form-row-2col { grid-template-columns: 1fr 1fr; gap: 12px; }
+}
+
+.field-cyber { display: flex; flex-direction: column; gap: 4px; width: 100%; min-width: 0; }
 .field-cyber label {
   font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
-  color: var(--c-cyan-neon); text-transform: uppercase;
+  color: var(--c-cyan-neon); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .field-cyber input, .field-cyber select {
-  padding: 9px 11px; background: #050B14; border: 1.5px solid var(--c-border-glass);
-  border-radius: 8px; font-family: inherit; font-size: 12px; color: #FFF; outline: none;
+  width: 100%; min-width: 0; padding: 10px 12px; background: #050B14;
+  border: 1.5px solid var(--c-border-glass); border-radius: 8px; font-family: inherit;
+  font-size: 12px; color: #FFF; outline: none;
 }
 .field-cyber input:focus, .field-cyber select:focus {
   border-color: var(--c-cyan-neon); box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
 }
+
 .m-foot-c {
-  padding: 12px 18px; border-top: 1px solid var(--c-border-glass); display: flex; gap: 8px;
+  padding: 12px 18px; border-top: 1px solid var(--c-border-glass); display: flex; gap: 8px; flex-shrink: 0;
 }
 </style>
 </head>
 <body>
 
-<!-- PANTALLA DE ACCESO (LOGIN CON PIN RESUELTO) -->
+<!-- LOGIN SEGURO DIRECTO -->
 <div id="loginOverlay">
   <div class="login-cyber-box">
     <div class="cyber-logo">
@@ -594,38 +577,48 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 
 <div class="app-shell">
   
-  <!-- BARRA LATERAL PROPIETARIA -->
-  <aside class="cyber-rail">
-    <div class="core-emblem" onclick="ejecutarDiagnosticoQuantum()" title="Quantum Lean Core · Diagnóstico Predictivo">
-      <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
-    </div>
-
-    <button class="rail-btn-futuristic" onclick="alternarEspecialidadRail()" title="Switch Especialidad: Pintura & Sellos SCF">
-      <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="6"/><circle cx="9" cy="12" r="3" fill="currentColor"/></svg>
+  <!-- BARRA LATERAL PROPIETARIA (GERENCIA, PROYECTOS, INVENTARIO, ETC.) -->
+  <aside class="convecsa-sidebar">
+    <button class="sidebar-nav-item active" id="navGerencia" onclick="mostrarSeccion('GERENCIA', this)" title="Gerencia / Cockpit Principal">
+      <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+      <span class="sidebar-nav-label">Gerencia</span>
     </button>
 
-    <button class="rail-btn-futuristic active" onclick="abrirModal()" title="Smart Capture · Registrar Avance Diario">
-      <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    <button class="sidebar-nav-item" id="navProyectos" onclick="mostrarSeccion('PROYECTOS', this)" title="Proyectos / 17 Niveles THSSB">
+      <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      <span class="sidebar-nav-label">Proyectos</span>
     </button>
 
-    <button class="rail-btn-futuristic" onclick="auditarFiltroRapido()" title="Radar de Auditoría · Filtro Rápido">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <button class="sidebar-nav-item" id="navInventario" onclick="mostrarSeccion('INVENTARIO', this)" title="Inventario / Partidas SCF & Pintura">
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <span class="sidebar-nav-label">Inventario</span>
     </button>
 
-    <button class="rail-btn-futuristic" onclick="mostrarResumenCuadrillas()" title="Consumo HH & Recursos">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M7 10c2.5 2.5 7.5 2.5 10 0"/></svg>
+    <button class="sidebar-nav-item" id="navCompras" onclick="mostrarSeccion('COMPRAS', this)" title="Compras / Pedidos de Obra">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="sidebar-nav-label">Compras</span>
     </button>
 
-    <button class="rail-btn-futuristic" onclick="exportarExcelConFormulas()" title="Exportar RDO Excel Oficial (.xlsx)">
-      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 10h16"/><path d="M10 4v16"/></svg>
+    <button class="sidebar-nav-item" id="navVentas" onclick="mostrarSeccion('VENTAS', this)" title="Ventas / Impacto Económico S/.">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span class="sidebar-nav-label">Ventas</span>
     </button>
 
-    <button class="rail-btn-futuristic" onclick="mostrarMatriz17Niveles()" title="Torre Matrix · Visualizar 17 Niveles THSSB">
-      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
+    <button class="sidebar-nav-item" id="navRRHH" onclick="mostrarSeccion('RRHH', this)" title="RRHH BUK / Productividad Operarios">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="sidebar-nav-label">RRHH</span>
+      <span class="tag-sub-badge tag-buk">BUK</span>
     </button>
 
-    <button class="rail-btn-futuristic" onclick="mostrarIndiceGanancia()" title="Lean Diamond · Índice de Productividad Óptima">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12l4 7-10 11L2 10l4-7z"/></svg>
+    <button class="sidebar-nav-item" id="navSSOMA" onclick="mostrarSeccion('SSOMA', this)" title="SSOMA PRO / Restricciones en Obra">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      <span class="sidebar-nav-label">SSOMA</span>
+      <span class="tag-sub-badge tag-pro">PRO</span>
+    </button>
+
+    <button class="sidebar-nav-item" id="navContable" onclick="mostrarSeccion('CONTABLE', this)" title="Contable / Exportar RDO Oficial">
+      <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+      <span class="sidebar-nav-label">Contable</span>
     </button>
   </aside>
 
@@ -636,8 +629,8 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       <div class="sys-badge">
         <div class="status-beacon"></div>
         <div>
-          <div class="sys-title">CONVECSA CONTROL 360°</div>
-          <div class="sys-meta">THSSB · 17 NIVELES · SISTEMA DE CONTROL DE PRODUCCIÓN LEAN</div>
+          <div class="sys-title">CONVECSA CONTROL 360° · SISTEMA DE CONTROL DE PRODUCCIÓN</div>
+          <div class="sys-meta">PROYECTO: THSSB · 17 NIVELES · REPORTE DIARIO DE OBRA LEAN</div>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
@@ -646,7 +639,6 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       </div>
     </header>
 
-    <!-- LIENZO FLUIDO PRINCIPAL -->
     <main class="cockpit-canvas" id="cockpitPrintArea">
 
       <section class="command-strip">
@@ -661,7 +653,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
           <div class="btn-group-cyber">
             <button class="cmd-btn active" id="btnModConsolidado" onclick="filtrarModulo('CONSOLIDADO', this)">Global</button>
             <button class="cmd-btn" id="btnModPintura" onclick="filtrarModulo('PINTURA', this)">🎨 Pintura</button>
-            <button class="cmd-btn" id="btnModSCF" onclick="filtrarModulo('SCF', this)">🔥 SCF</button>
+            <button class="cmd-btn" id="btnModSCF" onclick="filtrarModulo('SCF', this)">🔥 SCF (Sellos)</button>
           </div>
         </div>
 
@@ -679,7 +671,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       </section>
 
       <!-- 1. KPIS -->
-      <section class="grid-responsive-3">
+      <section class="grid-responsive-3" id="secKPIs">
         <div class="glass-card card-neon-rose">
           <div class="kpi-tag-head" id="lblKpiPeriodo">EFICIENCIA DEL MES</div>
           <div class="kpi-numeric-row">
@@ -715,7 +707,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       </section>
 
       <!-- 2. GRÁFICOS SUPERIORES -->
-      <section class="grid-responsive-2">
+      <section class="grid-responsive-2" id="secGraficosTop">
         <div class="chart-card-box">
           <div class="chart-top-bar">
             <div class="chart-title-cyber">Evolución por Semana (Eficiencia %)</div>
@@ -738,7 +730,7 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
       </section>
 
       <!-- 3. GRÁFICOS INFERIORES -->
-      <section class="grid-responsive-3">
+      <section class="grid-responsive-3" id="secGraficosBottom">
         <div class="chart-card-box">
           <div class="chart-top-bar">
             <div class="chart-title-cyber">HH Ganadas vs Reales · Semana</div>
@@ -770,11 +762,11 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
         </div>
       </section>
 
-      <!-- 4. AUDITORÍA DE TRABAJADORES -->
-      <section class="chart-card-box">
+      <!-- 4. AUDITORÍA DE TRABAJADORES (RRHH BUK) -->
+      <section class="chart-card-box" id="secAuditoriaTrabajadores">
         <div class="chart-top-bar">
           <div>
-            <div style="font-size:13.5px; font-weight:900; color:#FFFFFF;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR</div>
+            <div style="font-size:13.5px; font-weight:900; color:#FFFFFF;">👷 AUDITORÍA DE EFICIENCIA POR TRABAJADOR (RRHH BUK)</div>
             <div style="font-size:11px; color:var(--text-secondary);">Métricas de productividad individual para bono Lean y control de desvíos</div>
           </div>
           <span id="txtEvaluados" style="font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:800; color:var(--c-green-neon);">6 evaluados</span>
@@ -782,8 +774,8 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
         <div class="grid-responsive-3" id="gridTrabajadores" style="margin-top:10px;"></div>
       </section>
 
-      <!-- 5. TABLA DE TRAZABILIDAD -->
-      <section class="cyber-table-panel">
+      <!-- 5. TABLA DE TRAZABILIDAD EN TIEMPO REAL -->
+      <section class="cyber-table-panel" id="secTablaTrazabilidad">
         <div style="padding:14px 16px; border-bottom:1px solid var(--c-border-glass); display:flex; justify-content:space-between; align-items:center;">
           <div style="font-size:13px; font-weight:900; color:var(--c-cyan-neon);">📋 BASE DE DATOS ACTIVA: GOOGLE SHEETS</div>
           <div style="font-size:11px; color:var(--text-secondary); font-family:'JetBrains Mono', monospace;">REGISTRO_DIARIO_PINTURA & REGISTRO_DIARIO_SCF</div>
@@ -833,32 +825,39 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
   </button>
 </nav>
 
-<!-- MODAL SMART CAPTURE -->
+<!-- MODAL SMART CAPTURE SIN SCROLL HORIZONTAL -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
     <div class="m-head-c">
       <div style="font-size:13.5px; font-weight:900; color:var(--c-cyan-neon);">✍️ REGISTRAR AVANCE DE CAMPO (THSSB)</div>
       <button onclick="cerrarModal()" style="background:none; border:none; font-size:18px; color:var(--text-muted); cursor:pointer;">✕</button>
     </div>
+    
     <div class="m-body-c">
-      <div class="form-grid-cyber">
+      <!-- FILA 1: PARTIDA Y OPERARIO -->
+      <div class="form-row-2col">
         <div class="field-cyber">
           <label>Partida / Especialidad:</label>
           <select id="mEspecialidad" onchange="cargarCatalogosModal()">
-            <option value="PINTURA">PINTURA (REGISTRO_DIARIO_PINTURA)</option>
             <option value="SCF">SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
+            <option value="PINTURA">PINTURA Y ACABADOS (REGISTRO_DIARIO_PINTURA)</option>
           </select>
         </div>
         <div class="field-cyber">
           <label>Operario Responsable:</label>
           <select id="mTrabajador"></select>
         </div>
+      </div>
+
+      <!-- FILA 2: NIVEL Y ELEMENTO CONSTRUCTIVO -->
+      <div class="form-row-2col">
         <div class="field-cyber">
-          <label>Nivel de Obra (17):</label>
+          <label>Nivel de Obra (17 Niveles):</label>
           <select id="mNivel">
             <optgroup label="Sótanos (7)">
               <option value="S7">Sótano 7</option><option value="S6">Sótano 6</option><option value="S5">Sótano 5</option>
-              <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option><option value="S1">Sótano 1</option>
+              <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option>
+              <option value="S1">Sótano 1</option>
             </optgroup>
             <optgroup label="Pisos (9)">
               <option value="P1">Piso 1</option><option value="P2" selected>Piso 2</option><option value="P3">Piso 3</option>
@@ -870,28 +869,32 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
             </optgroup>
           </select>
         </div>
-      </div>
-
-      <div class="form-grid-cyber">
         <div class="field-cyber">
           <label>Elemento Constructivo:</label>
           <select id="mElemento"></select>
         </div>
+      </div>
+
+      <!-- FILA 3: SUBPROCESO OFICIAL TARGET -->
+      <div class="field-cyber">
+        <label>Partida / Subproceso Oficial (Target):</label>
+        <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;"></select>
+      </div>
+
+      <!-- FILA 4: METRADO Y HORAS HOMBRE -->
+      <div class="form-row-2col">
         <div class="field-cyber">
-          <label>Subproceso / Rend. Target:</label>
-          <select id="mSubproceso" onchange="recalcularModal()"></select>
+          <label id="lblUnidadModal">Metrado Ejecutado (ml / und / pto):</label>
+          <input type="number" id="mMetrado" value="30.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
         </div>
         <div class="field-cyber">
-          <label id="lblUnidadModal">Metrado Ejecutado (m²):</label>
-          <input type="number" id="mMetrado" value="45.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+          <label>HH Reales Invertidas (Cuadrilla):</label>
+          <input type="number" id="mHHReal" value="2.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
         </div>
       </div>
 
-      <div class="form-grid-cyber">
-        <div class="field-cyber">
-          <label>HH Reales Invertidas:</label>
-          <input type="number" id="mHHReal" value="2.0" step="0.5" inputmode="decimal" oninput="recalcularModal()">
-        </div>
+      <!-- FILA 5: RESTRICCIÓN Y UBICACIÓN -->
+      <div class="form-row-2col">
         <div class="field-cyber">
           <label>Causa Raíz de Restricción:</label>
           <select id="mCausa">
@@ -902,18 +905,20 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
           </select>
         </div>
         <div class="field-cyber">
-          <label>Ubicación / Detalle:</label>
-          <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7">
+          <label>Ubicación / Detalle de Frente:</label>
+          <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7 / Sala Técnica">
         </div>
       </div>
 
+      <!-- FILA 6: EVALUACIÓN LEAN EN TIEMPO REAL -->
       <div style="background:rgba(0,150,225,0.08); border:1px solid var(--c-border-glass); border-radius:10px; padding:12px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">TARGET</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900;" id="dispTarget">91.0</div></div>
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">HH GANADAS</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900;" id="dispHHGan">8.41 h</div></div>
-        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">EFICIENCIA</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900; color:var(--c-green-neon);" id="dispEficiencia">420.5%</div></div>
+        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">TARGET</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900;" id="dispTarget">30.0</div></div>
+        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">HH GANADAS</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900;" id="dispHHGan">17.00 h</div></div>
+        <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">EFICIENCIA</div><div style="font-family:'JetBrains Mono'; font-size:15px; font-weight:900; color:var(--c-green-neon);" id="dispEficiencia">850.0%</div></div>
         <div><div style="font-family:'JetBrains Mono'; font-size:9.5px; font-weight:800; color:var(--c-cyan-neon);">ESTADO</div><div style="font-size:13px; font-weight:900; color:var(--c-green-neon);" id="dispEstado">GANANCIA</div></div>
       </div>
     </div>
+
     <div class="m-foot-c">
       <button class="btn-cyber-action" style="background:#050B14; border:1px solid var(--c-border-glass); color:var(--text-secondary); flex:1;" onclick="cerrarModal()">Cancelar</button>
       <button class="btn-cyber-action btn-cyber-add" style="flex:2; justify-content:center;" onclick="guardarRegistro()">💾 GUARDAR EN GOOGLE SHEETS</button>
@@ -922,10 +927,49 @@ tr:hover { background: rgba(0, 150, 225, 0.06); }
 </div>
 
 <script>
-// URL DE TU IMPLEMENTACIÓN DE GOOGLE APPS SCRIPT
+// ENDPOINT DE GOOGLE APPS SCRIPT
 const ENDPOINT_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbxWzIrTHCAp8aKHi_JEbQyHb1p2zRAEOnhISCgRpEVWkFjuun1F4EB6yXRZZiC99QmxtA/exec";
 
+// CATÁLOGO OFICIAL CONVECSA: PARTIDAS SCF SEGÚN TABLA CONTRACTUAL (27 ITEMS)
 const CATALOGO = {
+  SCF: {
+    trabajadores: [
+      "BARDALES CHUFANDAMA MAURO JUNIOR", "OCUMBE SIQUIHUA NELVA", "VELIZ HERNANDEZ XIOMARA ANTUANE",
+      "GUEVARA HERNANDEZ YADIRA ARIANA", "LANDINEZ VALENCIA JUAN GABRIEL", "VILELA ANCAJAIMA CRISTHIAN", "INOCENTE TORRES CALIXTO AMIRCAR"
+    ],
+    elementos: ["JUNTAS", "PASES DE MANGUERA", "TUBERIAS NO METALICAS", "TUBERÍAS METÁLICAS", "BANDEJAS METÁLICAS", "DUCTOS", "VANOS DE INSPECCIÓN"],
+    subprocesos: [
+      { item: "1.02.01", nombre: "SCF en JUNTAS a dos caras interiores", unidad: "ml", rend: 30.0 },
+      { item: "1.02.02", nombre: "SCF en JUNTAS a una cara interiores", unidad: "ml", rend: 30.0 },
+      { item: "1.02.03", nombre: "SCF en PASE DE MANGUERA acceso a dos caras", unidad: "und", rend: 7.0 },
+      { item: "1.02.04", nombre: "SCF en TUBERIAS NO METALICAS <2\" acceso a dos caras", unidad: "pto", rend: 21.0 },
+      { item: "1.02.04.01", nombre: "SCF en TUBERIAS NO METALICAS <2\" acceso a una cara", unidad: "pto", rend: 21.0 },
+      { item: "1.02.05", nombre: "SCF en TUBERIAS NO METALICAS <4\" acceso a dos caras", unidad: "pto", rend: 11.0 },
+      { item: "1.02.05.01", nombre: "SCF en TUBERIAS NO METALICAS <4\" acceso a una cara", unidad: "pto", rend: 14.0 },
+      { item: "1.02.06", nombre: "SCF en TUBERIAS NO METALICAS <6\" acceso a dos caras", unidad: "pto", rend: 7.0 },
+      { item: "1.02.06.01", nombre: "SCF en TUBERIAS NO METALICAS <6\" acceso a una cara", unidad: "pto", rend: 14.0 },
+      { item: "1.02.07", nombre: "SCF en TUBERIAS NO METALICAS <8\" acceso a dos caras", unidad: "pto", rend: 7.0 },
+      { item: "1.02.08", nombre: "SCF en TUBERIAS METALICAS <2\" acceso a dos caras", unidad: "und", rend: 21.0 },
+      { item: "1.02.08.01", nombre: "SCF en TUBERIAS METALICAS <2\" acceso a una cara", unidad: "und", rend: 40.0 },
+      { item: "1.02.09", nombre: "SCF en TUBERIAS METALICAS <4\" acceso a dos caras", unidad: "und", rend: 21.0 },
+      { item: "1.02.09.01", nombre: "SCF en TUBERIAS METALICAS <4\" acceso a una cara", unidad: "und", rend: 40.0 },
+      { item: "1.02.10", nombre: "SCF en TUBERIAS METALICAS <10\" acceso a dos caras", unidad: "und", rend: 21.0 },
+      { item: "1.02.10.01", nombre: "SCF en TUBERIAS METALICAS <10\" acceso a una cara", unidad: "und", rend: 40.0 },
+      { item: "1.02.11", nombre: "SCF en TUBERIAS METALICAS >10\" acceso a dos caras", unidad: "und", rend: 21.0 },
+      { item: "1.02.11.01", nombre: "SCF en TUBERIAS METALICAS >10\" acceso a una cara", unidad: "und", rend: 40.0 },
+      { item: "1.02.12", nombre: "SCF en BANDEJAS METALICAS acceso a dos caras", unidad: "und", rend: 11.0 },
+      { item: "1.02.12.01", nombre: "SCF en BANDEJAS METALICAS acceso a una cara", unidad: "und", rend: 18.0 },
+      { item: "1.02.13", nombre: "SCF en DUCTOS hasta 23\"x23\" acceso a dos caras", unidad: "und", rend: 9.0 },
+      { item: "1.02.13.01", nombre: "SCF en DUCTOS hasta 23\"x23\" acceso a una cara", unidad: "und", rend: 18.0 },
+      { item: "1.02.14", nombre: "SCF en DUCTOS hasta 30\"x30\" acceso a dos caras", unidad: "und", rend: 9.0 },
+      { item: "1.02.14.01", nombre: "SCF en DUCTOS hasta 30\"x30\" acceso a una cara", unidad: "und", rend: 18.0 },
+      { item: "1.02.15", nombre: "SCF en DUCTOS hasta 100\"x100\" acceso a dos caras", unidad: "und", rend: 7.0 },
+      { item: "1.02.15.01", nombre: "SCF en DUCTOS hasta 100\"x100\" acceso a una cara", unidad: "und", rend: 14.0 },
+      { item: "1.02.16", nombre: "SCF en VANOS DE INSPECCIÓN, MONTANTES. Interiores (solo Instalación)", unidad: "und", rend: 5.0 }
+    ],
+    unidad: "ml / und / pto",
+    hoja: "REGISTRO_DIARIO_SCF"
+  },
   PINTURA: {
     trabajadores: [
       "MOLLOCONDO SIMEON HILDER CERAPIO", "AREVALO GUERRERO RAUL", "DELGADO RIVAS LUIS MARTÍN",
@@ -934,34 +978,15 @@ const CATALOGO = {
     ],
     elementos: ["MURO", "CIELORASO", "PLENUM", "COLUMNAS", "AISLADORES", "FCR DRYWALL"],
     subprocesos: [
-      { nombre: "Lijado e Imprimado Muros", rend: 91.0, unidad: "m²/d" },
-      { nombre: "Empaste 2 manos Pasta Fina CPP + lijado", rend: 52.0, unidad: "m²/d" },
-      { nombre: "Pintura American Colors 1ra mano", rend: 182.0, unidad: "m²/d" },
-      { nombre: "Pintura American Colors Acabado", rend: 46.0, unidad: "m²/d" },
-      { nombre: "Lijado e imprimado muros para vinil", rend: 156.0, unidad: "m²/d" },
-      { nombre: "Sellador 2 manos CPP puro", rend: 104.0, unidad: "m²/d" }
+      { item: "1.03.01", nombre: "Lijado e Imprimado Muros", unidad: "m²", rend: 91.0 },
+      { item: "1.03.02", nombre: "Empaste 2 manos Pasta Fina CPP + lijado", unidad: "m²", rend: 52.0 },
+      { item: "1.03.03", nombre: "Pintura American Colors 1ra mano", unidad: "m²", rend: 182.0 },
+      { item: "1.03.04", nombre: "Pintura American Colors Acabado", unidad: "m²", rend: 46.0 },
+      { item: "1.03.05", nombre: "Lijado e imprimado muros para vinil", unidad: "m²", rend: 156.0 },
+      { item: "1.03.06", nombre: "Sellador 2 manos CPP puro", unidad: "m²", rend: 104.0 }
     ],
     unidad: "m²",
     hoja: "REGISTRO_DIARIO_PINTURA"
-  },
-  SCF: {
-    trabajadores: [
-      "BARDALES CHUFANDAMA MAURO JUNIOR", "OCUMBE SIQUIHUA NELVA", "VELIZ HERNANDEZ XIOMARA ANTUANE",
-      "GUEVARA HERNANDEZ YADIRA ARIANA", "LANDINEZ VALENCIA JUAN GABRIEL", "VILELA ANCAJAIMA CRISTHIAN", "INOCENTE TORRES CALIXTO AMIRCAR"
-    ],
-    elementos: ["JUNTAS", "PUERTA CORTAFUEGO", "TUBERIAS NO METALICAS", "TUBERÍAS METÁLICAS", "BANDEJA METÁLICA", "DUCTOS", "PASES DE MANGUERA"],
-    subprocesos: [
-      { nombre: "JUNTAS a dos caras interiores", rend: 43.0, unidad: "ml/d" },
-      { nombre: "JUNTAS a una cara interiores", rend: 43.0, unidad: "ml/d" },
-      { nombre: "MARCO PUERTAS a dos caras", rend: 52.0, unidad: "ml/d" },
-      { nombre: "PASE DE MANGUERA acceso a dos caras", rend: 7.0, unidad: "und/d" },
-      { nombre: "TUBERIAS NO METALICAS <2\" dos caras", rend: 18.0, unidad: "und/d" },
-      { nombre: "TUBERIAS METALICAS <2\" dos caras", rend: 18.0, unidad: "und/d" },
-      { nombre: "BANDEJAS METALICAS acceso dos caras", rend: 13.0, unidad: "ml/d" },
-      { nombre: "DUCTOS hasta 23\"x23\" dos caras", rend: 13.0, unidad: "und/d" }
-    ],
-    unidad: "ml / und",
-    hoja: "REGISTRO_DIARIO_SCF"
   }
 };
 
@@ -970,32 +995,22 @@ let PERIODO_ACTIVO = "MES";
 let USUARIO_ACTUAL = { rol: "SUPER_ADMIN", nombre: "Jorge Orosco" };
 
 let LOG_REGISTROS = [
-  { id: "PIN-20260919-01", horaExacta: "2026-09-19 08:30:15", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "VASQUEZ CULQUE FELIX ENRIQUE", nivel: "S7", elemento: "MURO", sub: "Pintura 1ra mano", metrado: 42.0, hhReal: 1.0, rendOpt: 182.0, hhGan: 1.85, ef: 185.0, est: "GANANCIA", unidad: "m²" },
-  { id: "PIN-20260919-02", horaExacta: "2026-09-19 09:45:22", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 3, trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 3.73, ef: 93.3, est: "PERDIDA", unidad: "m²" },
-  { id: "SCF-20260919-03", horaExacta: "2026-09-19 11:10:40", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 4, trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "Juntas a 2 caras", metrado: 18.5, hhReal: 3.5, rendOpt: 43.0, hhGan: 3.66, ef: 104.5, est: "GANANCIA", unidad: "ml" },
-  { id: "PIN-20260918-04", horaExacta: "2026-09-18 13:25:10", fecha: "2026-09-18", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos", metrado: 19.8, hhReal: 1.0, rendOpt: 52.0, hhGan: 0.87, ef: 87.0, est: "PERDIDA", unidad: "m²" },
-  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P9", elemento: "PLENUM", sub: "Tuberías <2\"", metrado: 12.0, hhReal: 4.0, rendOpt: 18.0, hhGan: 3.40, ef: 85.0, est: "PERDIDA", unidad: "und" },
-  { id: "PIN-20260916-06", horaExacta: "2026-09-16 15:00:00", fecha: "2026-09-16", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "BERMUDEZ MARIN DARWIN ENMANUEL", nivel: "AZ", elemento: "COLUMNAS", sub: "Empaste columnas", metrado: 26.0, hhReal: 0.63, rendOpt: 52.0, hhGan: 1.25, ef: 198.4, est: "GANANCIA", unidad: "m²" }
+  { id: "SCF-20260919-01", horaExacta: "2026-09-19 08:30:15", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "BARDALES CHUFANDAMA MAURO JUNIOR", nivel: "P2", elemento: "JUNTAS", sub: "SCF en JUNTAS a dos caras interiores", metrado: 30.0, hhReal: 2.0, rendOpt: 30.0, hhGan: 17.0, ef: 850.0, est: "GANANCIA", unidad: "ml" },
+  { id: "SCF-20260919-02", horaExacta: "2026-09-19 10:15:20", fecha: "2026-09-19", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "OCUMBE SIQUIHUA NELVA", nivel: "P4", elemento: "TUBERIAS NO METALICAS", sub: "SCF en TUBERIAS NO METALICAS <4\" acceso a dos caras", metrado: 11.0, hhReal: 3.5, rendOpt: 11.0, hhGan: 17.0, ef: 485.7, est: "GANANCIA", unidad: "pto" },
+  { id: "PIN-20260919-03", horaExacta: "2026-09-19 11:45:00", fecha: "2026-09-19", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "DELGADO RIVAS LUIS MARTÍN", nivel: "S1", elemento: "CIELORASO", sub: "Pintura American Colors Acabado", metrado: 28.0, hhReal: 4.0, rendOpt: 46.0, hhGan: 10.35, ef: 258.8, est: "GANANCIA", unidad: "m²" },
+  { id: "PIN-20260918-04", horaExacta: "2026-09-18 13:25:10", fecha: "2026-09-18", modulo: "PINTURA", hoja: "REGISTRO_DIARIO_PINTURA", semana: 7, trabajador: "AREVALO GUERRERO RAUL", nivel: "P5", elemento: "MURO", sub: "Empaste 2 manos Pasta Fina CPP + lijado", metrado: 19.8, hhReal: 7.0, rendOpt: 52.0, hhGan: 6.47, ef: 92.4, est: "PERDIDA", unidad: "m²" },
+  { id: "SCF-20260917-05", horaExacta: "2026-09-17 14:15:30", fecha: "2026-09-17", modulo: "SCF", hoja: "REGISTRO_DIARIO_SCF", semana: 7, trabajador: "LANDINEZ VALENCIA JUAN GABRIEL", nivel: "P9", elemento: "DUCTOS", sub: "SCF en DUCTOS hasta 23\"x23\" acceso a dos caras", metrado: 6.0, hhReal: 4.0, rendOpt: 9.0, hhGan: 11.33, ef: 283.3, est: "GANANCIA", unidad: "und" }
 ];
 
 let chartEvolucion, chartElemento, chartHH, chartNivel, chartEstado;
 
-// ACCESO DIRECTO SIN TRABAS EN FORMULARIO
 function ejecutarLoginDirecto() {
-  const pin = document.getElementById('pinBox').value.trim();
   const val = document.getElementById('selUsuario').value.split('|');
   USUARIO_ACTUAL.rol = val[0];
   USUARIO_ACTUAL.nombre = val[1];
-
-  // Si ingresa 1234, 2026 o cualquier pin de 4 dígitos, accede de inmediato
-  if (pin === "1234" || pin === "2026" || pin.length >= 4 || pin === "") {
-    document.getElementById('userBadgeOnline').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
-    document.getElementById('loginOverlay').style.display = 'none';
-    sessionStorage.setItem('convecsa_ses_cyber', JSON.stringify(USUARIO_ACTUAL));
-  } else {
-    alert("PIN Incorrecto. Ingrese 1234.");
-    document.getElementById('pinBox').value = '';
-  }
+  document.getElementById('userBadgeOnline').innerText = `${USUARIO_ACTUAL.nombre} (${USUARIO_ACTUAL.rol})`;
+  document.getElementById('loginOverlay').style.display = 'none';
+  sessionStorage.setItem('convecsa_ses_cyber', JSON.stringify(USUARIO_ACTUAL));
 }
 
 function logout() {
@@ -1014,6 +1029,41 @@ window.addEventListener('DOMContentLoaded', () => {
   inicializarGraficos();
   actualizarTodo();
 });
+
+function mostrarSeccion(seccion, btn) {
+  document.querySelectorAll('.sidebar-nav-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const secK = document.getElementById('secKPIs');
+  const secGT = document.getElementById('secGraficosTop');
+  const secGB = document.getElementById('secGraficosBottom');
+  const secW = document.getElementById('secAuditoriaTrabajadores');
+  const secT = document.getElementById('secTablaTrazabilidad');
+
+  secK.style.display = 'grid';
+  secGT.style.display = 'grid';
+  secGB.style.display = 'grid';
+  secW.style.display = 'flex';
+  secT.style.display = 'block';
+
+  if (seccion === 'GERENCIA') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (seccion === 'PROYECTOS') {
+    secGB.scrollIntoView({ behavior: 'smooth' });
+  } else if (seccion === 'INVENTARIO') {
+    alert("📦 Módulo Inventario: 27 Partidas Oficiales de Sellos Cortafuego (SCF) y Acabados de Pintura listas para registro.");
+  } else if (seccion === 'COMPRAS') {
+    alert("🛒 Módulo Compras: Auditoría de pedidos e insumos de sellos cortafuego.");
+  } else if (seccion === 'VENTAS') {
+    alert("💲 Módulo Ventas / Valorizaciones: Costo HH base S/. 142.50. Horas ganadas listas para cobro mensual.");
+  } else if (seccion === 'RRHH') {
+    secW.scrollIntoView({ behavior: 'smooth' });
+  } else if (seccion === 'SSOMA') {
+    secT.scrollIntoView({ behavior: 'smooth' });
+  } else if (seccion === 'CONTABLE') {
+    exportarExcelConFormulas();
+  }
+}
 
 function filtrarPeriodo(p, btn) {
   PERIODO_ACTIVO = p;
@@ -1169,8 +1219,8 @@ function inicializarGraficos() {
   chartElemento = new Chart(document.getElementById('chartPorElemento'), {
     type: 'bar',
     data: {
-      labels: ['MURO', 'CIELORASO', 'PLENUM', 'COLUMNAS'],
-      datasets: [{ label: 'Efic %', data: [136, 48, 48.5, 160], backgroundColor: ['#00E676', '#FF1744', '#FF1744', '#00E676'], borderRadius: 5 }]
+      labels: ['JUNTAS', 'TUBERIAS', 'DUCTOS', 'BANDEJAS'],
+      datasets: [{ label: 'Efic %', data: [850, 485, 283, 160], backgroundColor: ['#00E676', '#00E676', '#00E676', '#00E676'], borderRadius: 5 }]
     },
     options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } }, plugins: { legend: { display: false } } }
   });
@@ -1218,7 +1268,6 @@ function actualizarGraficos() {
   chartEstado.update();
 }
 
-// EXPORTACIÓN EXCEL (.XLSX) CON FÓRMULAS VIVAS
 function exportarExcelConFormulas() {
   const d = getDatosFiltrados();
   const fecha = new Date().toISOString().split('T')[0];
@@ -1256,7 +1305,6 @@ function exportarExcelConFormulas() {
   XLSX.writeFile(wb, `RDO_CONVECSA_THSSB_${fecha}.xlsx`);
 }
 
-// EXPORTACIÓN PDF
 function exportarReportePDF() {
   const el = document.getElementById('cockpitPrintArea');
   const opt = {
@@ -1269,7 +1317,6 @@ function exportarReportePDF() {
   html2pdf().set(opt).from(el).save();
 }
 
-// MODAL CAPTURA
 function abrirModal() {
   cargarCatalogosModal();
   document.getElementById('modalCaptura').classList.add('open');
@@ -1281,23 +1328,30 @@ function cargarCatalogosModal() {
   const cfg = CATALOGO[esp];
   const sT = document.getElementById('mTrabajador'); sT.innerHTML = '';
   cfg.trabajadores.forEach(t => sT.innerHTML += `<option value="${t}">${t}</option>`);
+  
   const sE = document.getElementById('mElemento'); sE.innerHTML = '';
   cfg.elementos.forEach(e => sE.innerHTML += `<option value="${e}">${e}</option>`);
+  
   const sS = document.getElementById('mSubproceso'); sS.innerHTML = '';
-  cfg.subprocesos.forEach(s => sS.innerHTML += `<option value="${s.nombre}|${s.rend}|${s.unidad}">${s.nombre} (${s.rend} ${s.unidad})</option>`);
-  document.getElementById('lblUnidadModal').innerText = `Metrado (${cfg.unidad}):`;
+  cfg.subprocesos.forEach(s => {
+    sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">[${s.item}] ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
+  });
+  
+  document.getElementById('lblUnidadModal').innerText = `Metrado Ejecutado (${cfg.unidad}):`;
   recalcularModal();
 }
 
 function recalcularModal() {
-  const subData = document.getElementById('mSubproceso').value.split('|');
-  const rendOpt = parseFloat(subData[1]) || 52.0;
+  const subVal = document.getElementById('mSubproceso').value.split('|');
+  const rendOpt = parseFloat(subVal[2]) || 30.0;
+  const unidad = subVal[3] || "ml";
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 0.01;
+
   const hhGan = metrado * (17.0 / rendOpt);
   const ef = (hhGan / hhReal) * 100;
 
-  document.getElementById('dispTarget').innerText = rendOpt.toFixed(1);
+  document.getElementById('dispTarget').innerText = rendOpt.toFixed(1) + " " + unidad;
   document.getElementById('dispHHGan').innerText = hhGan.toFixed(2) + " h";
   document.getElementById('dispEficiencia').innerText = ef.toFixed(1) + "%";
   document.getElementById('dispEficiencia').style.color = ef >= 100 ? "#00E676" : "#FF1744";
@@ -1314,8 +1368,8 @@ function guardarRegistro() {
   const subData = document.getElementById('mSubproceso').value.split('|');
   const metrado = parseFloat(document.getElementById('mMetrado').value) || 0;
   const hhReal = parseFloat(document.getElementById('mHHReal').value) || 1.0;
-  const rendOpt = parseFloat(subData[1]);
-  const unidad = subData[2] ? subData[2].split('/')[0] : "m²";
+  const rendOpt = parseFloat(subData[2]);
+  const unidad = subData[3] || "ml";
 
   const now = new Date();
   const timeStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
@@ -1332,7 +1386,7 @@ function guardarRegistro() {
     trabajador: trabajador,
     nivel: nivel,
     elemento: elemento,
-    sub: subData[0],
+    sub: `[${subData[0]}] ${subData[1]}`,
     metrado: metrado,
     hhReal: hhReal,
     rendOpt: rendOpt,
@@ -1353,7 +1407,7 @@ function guardarRegistro() {
     trabajador: trabajador,
     nivel: nivel,
     elemento: elemento,
-    subproceso: subData[0],
+    subproceso: `[${subData[0]}] ${subData[1]}`,
     rendOpt: rendOpt,
     metrado: metrado,
     hhReal: hhReal,
@@ -1379,49 +1433,10 @@ function sincronizarConSheets() {
         if (data.registros && data.registros.length > 0) {
           LOG_REGISTROS = data.registros;
           actualizarTodo();
-          alert("✅ Sincronización exitosa con Sheets.");
+          alert("✅ Sincronización exitosa con Google Sheets.");
         }
       }).catch(() => alert("Modo local activo."));
   }
-}
-
-/* ACCIONES DE LOS ÍCONOS DEL RAIL PROPIETARIO */
-function ejecutarDiagnosticoQuantum() {
-  const d = getDatosFiltrados();
-  const totHHReal = d.reduce((a, r) => a + r.hhReal, 0);
-  const totHHGan = d.reduce((a, r) => a + r.hhGan, 0);
-  const ef = (totHHGan / totHHReal) * 100;
-  alert(`⚡ CONVECSA QUANTUM CORE LEAN:\n\n• Eficiencia Actual: ${ef.toFixed(1)}%\n• Diagnóstico: Sótanos rinden a ritmo óptimo (136%). Cuello de botella identificado en Cieloraso y Plenum.\n• Recomendación: Reubicar 2 operarios hacia frente crítico Piso 03.`);
-}
-
-function alternarEspecialidadRail() {
-  const modulos = ['CONSOLIDADO', 'PINTURA', 'SCF'];
-  const prox = modulos[(modulos.indexOf(MODULO_ACTIVO) + 1) % modulos.length];
-  filtrarModulo(prox, document.getElementById('btnMod' + (prox === 'CONSOLIDADO' ? 'Consolidado' : (prox === 'PINTURA' ? 'Pintura' : 'SCF'))));
-}
-
-function auditarFiltroRapido() {
-  const q = prompt("🔍 Radar de Auditoría:\nIngrese Operario, Piso o Frente a inspeccionar:");
-  if (q !== null) {
-    document.querySelectorAll('#tablaBody tr').forEach(tr => {
-      tr.style.display = tr.innerText.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
-    });
-  }
-}
-
-function mostrarResumenCuadrillas() {
-  alert("👷 Consumo de Cuadrillas:\n• Jornada Estándar: 8.5h\n• Costo HH Referencial: S/. 142.50\n• Rendimiento Objetivo Muros: 91 m²/día\n• Rendimiento Objetivo Juntas SCF: 43 ml/día");
-}
-
-function mostrarMatriz17Niveles() {
-  alert("🏢 Matriz 17 Niveles THSSB Activos:\nSótanos: S7 · S6 · S5 · S4 · S3 · S2 · S1\nPisos: P1 · P2 · P3 · P4 · P5 · P6 · P7 · P8 · P9\nRemate: Azotea (AZ)");
-}
-
-function mostrarIndiceGanancia() {
-  const d = getDatosFiltrados();
-  const gan = d.filter(r => r.est === "GANANCIA").length;
-  const pct = ((gan / d.length) * 100).toFixed(1);
-  alert(`💎 ÍNDICE LEAN VIP CONVECSA:\n• Índice de Cumplimiento: ${pct}%\n• Balance: ${gan} actividades en Ganancia de ${d.length} evaluadas.`);
 }
 </script>
 </body>
