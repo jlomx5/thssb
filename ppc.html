@@ -88,7 +88,7 @@ body::before {
 
 .app-shell { display: flex; width: 100%; min-height: 100vh; }
 
-/* BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) */
+/* BARRA LATERAL IZQUIERDA FIJA */
 .convecsa-sidebar {
   width: 86px; background: var(--bg-sidebar); border-right: 1px solid var(--border-glass);
   display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px;
@@ -115,7 +115,7 @@ body::before {
 .sidebar-nav-item svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8; fill: none; }
 .sidebar-nav-label { font-size: 9px; font-weight: 500; text-align: center; }
 
-/* TOPBAR Y STRIP DE COMANDOS ENCABEZADO STICKY */
+/* STICKY HEADER WRAPPER */
 .sticky-header-wrapper {
   position: sticky; top: 0; z-index: 180;
   background: var(--bg-surface);
@@ -201,16 +201,17 @@ body::before {
 
 .cyber-modal-window {
   background: var(--bg-surface); border: 1px solid var(--c-cyan);
-  width: 100%; max-width: 760px; max-height: 92vh; border-radius: 16px 16px 0 0;
+  width: 100%; max-width: 820px; max-height: 94vh; border-radius: 16px 16px 0 0;
   display: flex; flex-direction: column; overflow: hidden;
 }
 @media (min-width: 640px) { .cyber-modal-window { border-radius: 14px; } }
 
 .m-head-c { padding: 12px 18px; border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
-.m-body-c { padding: 16px 18px; overflow-y: auto !important; overflow-x: hidden !important; display: flex; flex-direction: column; gap: 10px; }
+.m-body-c { padding: 16px 18px; overflow-y: auto !important; overflow-x: hidden !important; display: flex; flex-direction: column; gap: 12px; }
 
-.form-row-2col { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
-@media (min-width: 600px) { .form-row-2col { grid-template-columns: 1fr 1fr; gap: 12px; } }
+/* LAYOUT RESPONSIVO DE 3 COLUMNAS SEGÚN IMAGEN 48 */
+.form-row-3col { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; }
+@media (min-width: 768px) { .form-row-3col { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
 
 .field-cyber { display: flex; flex-direction: column; gap: 4px; width: 100%; }
 .field-cyber label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 600; color: var(--c-cyan); text-transform: uppercase; }
@@ -268,7 +269,7 @@ body::before {
 input:checked + .slider-switch { background-color: var(--c-green); }
 input:checked + .slider-switch:before { transform: translateX(18px); }
 
-/* BARRA INFERIOR MOBILE CON BOTÓN REGISTRAR TÁCTIL BLINDADO */
+/* BARRA INFERIOR MOBILE */
 .mobile-bottom-bar {
   position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
   background: var(--bg-surface); border-top: 1px solid var(--border-glass);
@@ -310,7 +311,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
 <div class="app-shell">
   
-  <!-- BARRA LATERAL IZQUIERDA MINIMALISTA (DESKTOP) -->
+  <!-- BARRA LATERAL IZQUIERDA FIJA -->
   <aside class="convecsa-sidebar">
     <button class="sidebar-nav-item active" onclick="seleccionarModuloEspecialidad('CONSOLIDADO', this)" title="Gerencia: Dashboard">
       <svg viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
@@ -351,27 +352,42 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
   </aside>
 
   <div class="cockpit-area">
-    
-    <!-- ENCABEZADO SUPERIOR FIJO Y PERMANENTE AL HACER SCROLL -->
-    <div class="sticky-header-wrapper">
-      <header class="topbar-cyber">
+    <header class="topbar-cyber">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div class="status-beacon"></div>
+        <div>
+          <div style="font-size:13px; font-weight:700;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
+          <div style="font-size:10px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn-cyber-action" onclick="toggleTheme()" style="background:rgba(0,150,225,0.12); color:var(--c-cyan);" title="Alternar tema">
+          <span id="iconTemaTopbar">⚡</span> <span id="lblTemaTopbar" style="font-size:10.5px;">Auto</span>
+        </button>
+        <span id="userBadgeOnline" style="font-size:11px; font-weight:600; margin-left:4px;">Jorge Orosco</span>
+        <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-size:11px; font-weight:600; cursor:pointer;">Salir</button>
+      </div>
+    </header>
+
+    <main class="cockpit-canvas" id="cockpitPrintArea">
+      
+      <!-- MONITOR CONTRACTUAL DE PLAZO -->
+      <section id="panelAlertaPlazo" style="background:rgba(255,179,0,0.1); border:1px solid var(--c-amber); border-radius:var(--radius-card); padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
         <div style="display:flex; align-items:center; gap:8px;">
-          <div class="status-beacon"></div>
+          <span style="font-size:18px;">⏱️</span>
           <div>
-            <div style="font-size:13px; font-weight:700;" id="lblTituloArea">GERENCIA: DASHBOARD EJECUTIVO</div>
-            <div style="font-size:10px; color:var(--c-cyan);" id="lblSubtituloArea">THSSB · SISTEMA RDO LEAN</div>
+            <div style="font-size:11px; font-weight:700; color:var(--c-amber);" id="txtPlazoTitulo">CONTROL CONTRACTUAL DE PLAZO: 9 MESES (INICIO: 15/09/2026)</div>
+            <div style="font-size:10px; color:var(--text-muted);" id="txtPlazoSub">Mes de Ejecución: Mes 1 de 9 · Fin Contractual: 15/06/2027</div>
           </div>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <button class="btn-cyber-action" onclick="toggleTheme()" style="background:rgba(0,150,225,0.12); color:var(--c-cyan);" title="Alternar tema">
-            <span id="iconTemaTopbar">⚡</span> <span id="lblTemaTopbar" style="font-size:10.5px;">Auto</span>
-          </button>
-          <span id="userBadgeOnline" style="font-size:11px; font-weight:600; margin-left:4px;">Jorge Orosco</span>
-          <button onclick="logout()" style="background:none; border:none; color:var(--c-red); font-size:11px; font-weight:600; cursor:pointer;">Salir</button>
+        <div style="display:flex; gap:14px; align-items:center; font-family:'JetBrains Mono'; font-size:11px;">
+          <span>Programado: <b style="color:var(--c-cyan);" id="txtPgmPct">11.1%</b></span>
+          <span>Real: <b style="color:var(--c-green);" id="txtRealPct">0.0%</b></span>
+          <span id="badgeDesvioPlazo" style="padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(0,230,118,0.2); color:var(--c-green);">EN PLAZO</span>
         </div>
-      </header>
+      </section>
 
-      <!-- BARRA DE FILTROS DÍA / SEMANA / MES / AÑO SIEMPRE VISIBLE EN 1 SOLA FILA -->
+      <!-- BARRA SUPERIOR PERMANENTE EN 1 SOLA FILA -->
       <section class="command-strip">
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:nowrap;">
           <div class="btn-group-cyber">
@@ -391,25 +407,6 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
         <div style="font-family:'JetBrains Mono'; font-size:10.5px; color:var(--text-muted);" id="lblFiltroEspecialidadActiva">
           ESPECIALIDAD: <b>CONSOLIDADO GLOBAL</b>
-        </div>
-      </section>
-    </div>
-
-    <main class="cockpit-canvas" id="cockpitPrintArea">
-      
-      <!-- MONITOR CONTRACTUAL DE PLAZO -->
-      <section id="panelAlertaPlazo" style="background:rgba(255,179,0,0.1); border:1px solid var(--c-amber); border-radius:var(--radius-card); padding:10px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:18px;">⏱️</span>
-          <div>
-            <div style="font-size:11px; font-weight:700; color:var(--c-amber);" id="txtPlazoTitulo">CONTROL CONTRACTUAL DE PLAZO: 9 MESES (INICIO: 15/09/2026)</div>
-            <div style="font-size:10px; color:var(--text-muted);" id="txtPlazoSub">Mes de Ejecución: Mes 1 de 9 · Fin Contractual: 15/06/2027</div>
-          </div>
-        </div>
-        <div style="display:flex; gap:14px; align-items:center; font-family:'JetBrains Mono'; font-size:11px;">
-          <span>Programado: <b style="color:var(--c-cyan);" id="txtPgmPct">11.1%</b></span>
-          <span>Real: <b style="color:var(--c-green);" id="txtRealPct">0.0%</b></span>
-          <span id="badgeDesvioPlazo" style="padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; background:rgba(0,230,118,0.2); color:var(--c-green);">EN PLAZO</span>
         </div>
       </section>
 
@@ -511,7 +508,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 </div>
 
 <!-- =========================================================================
-     MODAL SMART CAPTURE: CAMPOS 100% PRE-CARGADOS Y PROTEGIDO PARA CAPATACES
+     MODAL SMART CAPTURE: ORDEN DE FORMULARIO EXACTO SEGÚN IMAGEN 48 Y RESPONSIVO
      ========================================================================= -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
@@ -521,109 +518,94 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
     </div>
     
     <div class="m-body-c">
-      <div class="form-row-2col">
+      
+      <!-- FILA 1: FECHA DE TRABAJO | NIVEL DE OBRA (17 NIVELES) | UBICACIÓN / DETALLE DE FRENTE -->
+      <div class="form-row-3col">
         <div class="field-cyber">
-          <label>Fecha de Trabajo:</label>
+          <label>FECHA DE TRABAJO:</label>
           <input type="date" id="mFecha" onchange="recalcularModal()">
         </div>
         <div class="field-cyber">
-          <label>Partida / Especialidad:</label>
-          <select id="mEspecialidad" onchange="cargarCatalogosModal()">
-            <option value="SCF" selected>SELLOS CORTAFUEGO (REGISTRO_DIARIO_SCF)</option>
-            <option value="PINTURA">PINTURA Y ACABADOS (REGISTRO_DIARIO_PINTURA)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row-2col">
-        <div class="field-cyber">
-          <label>Operario Responsable:</label>
-          <!-- Pre-poblado estático garantizado para que nunca aparezca en blanco -->
-          <select id="mTrabajador">
-            <option value="BARDALES CHUFANDAMA MAURO JUNIOR">BARDALES CHUFANDAMA MAURO JUNIOR (OPERARIO)</option>
-            <option value="OCUMBE SIQUIHUA NELVA">OCUMBE SIQUIHUA NELVA (OPERARIO)</option>
-            <option value="VELIZ HERNANDEZ XIOMARA ANTUANE">VELIZ HERNANDEZ XIOMARA ANTUANE (OPERARIO)</option>
-            <option value="GUEVARA HERNANDEZ YADIRA ARIANA">GUEVARA HERNANDEZ YADIRA ARIANA (OPERARIO)</option>
-            <option value="LANDINEZ VALENCIA JUAN GABRIEL">LANDINEZ VALENCIA JUAN GABRIEL (OPERARIO)</option>
-            <option value="VILELA ANCAJAIMA CRISTHIAN">VILELA ANCAJAIMA CRISTHIAN (OPERARIO)</option>
-            <option value="INOCENTE TORRES CALIXTO AMIRCAR">INOCENTE TORRES CALIXTO AMIRCAR (OPERARIO)</option>
-          </select>
-        </div>
-        <div class="field-cyber">
-          <label>Nivel de Obra (17 Niveles):</label>
+          <label>NIVEL DE OBRA (17 NIVELES):</label>
           <select id="mNivel">
             <optgroup label="Sótanos (7)">
               <option value="S7">Sótano 7</option><option value="S6">Sótano 6</option><option value="S5">Sótano 5</option>
               <option value="S4">Sótano 4</option><option value="S3">Sótano 3</option><option value="S2">Sótano 2</option><option value="S1">Sótano 1</option>
             </optgroup>
             <optgroup label="Pisos (9)">
-              <option value="P1">Piso 1</option><option value="P2" selected>Piso 2</option><option value="P3">Piso 3</option>
+              <option value="P1">Piso 1</option><option value="P2">Piso 2</option><option value="P3">Piso 3</option>
               <option value="P4">Piso 4</option><option value="P5">Piso 5</option><option value="P6">Piso 6</option>
-              <option value="P7">Piso 7</option><option value="P8">Piso 8</option><option value="P9">Piso 9</option>
+              <option value="P7">Piso 7</option><option value="P8">Piso 8</option><option value="P9" selected>Piso 9</option>
             </optgroup>
             <optgroup label="Azotea (1)">
               <option value="AZ">Azotea</option>
             </optgroup>
           </select>
         </div>
+        <div class="field-cyber">
+          <label>UBICACIÓN / DETALLE DE FRENTE:</label>
+          <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7 / Sala Técnica">
+        </div>
       </div>
 
-      <div class="form-row-2col">
+      <!-- FILA 2: PARTIDA / ESPECIALIDAD | Elemento Constructivo: | SUBPROCESO OFICIAL (TARGET) -->
+      <div class="form-row-3col">
         <div class="field-cyber">
-          <label>Elemento Constructivo:</label>
-          <!-- Pre-poblado estático garantizado -->
-          <select id="mElemento">
-            <option value="JUNTAS" selected>JUNTAS</option>
-            <option value="PASES DE MANGUERA">PASES DE MANGUERA</option>
-            <option value="TUBERIAS NO METALICAS">TUBERIAS NO METALICAS</option>
-            <option value="TUBERÍAS METÁLICAS">TUBERÍAS METÁLICAS</option>
-            <option value="BANDEJAS METÁLICAS">BANDEJAS METÁLICAS</option>
-            <option value="DUCTOS">DUCTOS</option>
-            <option value="VANOS DE INSPECCIÓN">VANOS DE INSPECCIÓN</option>
+          <label>PARTIDA / ESPECIALIDAD:</label>
+          <select id="mEspecialidad" onchange="cargarCatalogosModal()">
+            <option value="SCF" selected>Sellos Cortafuego (REGISTRO_DIARIO_SCF)</option>
+            <option value="PINTURA">Pintura y Acabados (REGISTRO_DIARIO_PINTURA)</option>
           </select>
         </div>
         <div class="field-cyber">
-          <label id="lblUnidadModal">Metrado Ejecutado (ml):</label>
-          <input type="number" id="mMetrado" placeholder="Ej: 15.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+          <label>Elemento Constructivo:</label>
+          <select id="mElemento" onchange="filtrarSubprocesosPorElemento()">
+            <option value="JUNTAS" selected>Juntas</option>
+            <option value="PASES DE MANGUERA">Pases de Manguera</option>
+            <option value="TUBERIAS NO METALICAS">Tuberias No Metálicas</option>
+            <option value="TUBERÍAS METÁLICAS">Tuberías Metálicas</option>
+            <option value="BANDEJAS METÁLICAS">Bandejas Metálicas</option>
+            <option value="DUCTOS">Ductos</option>
+            <option value="VANOS DE INSPECCIÓN">Vanos de Inspección</option>
+          </select>
+        </div>
+        <div class="field-cyber">
+          <label>SUBPROCESO OFICIAL (TARGET):</label>
+          <select id="mSubproceso" onchange="recalcularModal()">
+            <!-- Filtrado automático por la familia del elemento constructivo -->
+          </select>
         </div>
       </div>
 
+      <!-- FILA 3: Operario Responsable: | Metrado (ml): | HH reales invertidas (horas) -->
+      <div class="form-row-3col">
+        <div class="field-cyber">
+          <label>Operario Responsable:</label>
+          <select id="mTrabajador"></select>
+        </div>
+        <div class="field-cyber">
+          <label id="lblUnidadModal">Metrado (ml):</label>
+          <input type="number" id="mMetrado" placeholder="Ej: 15.0" step="0.1" inputmode="decimal" oninput="recalcularModal()">
+        </div>
+        <div class="field-cyber">
+          <label>HH reales invertidas (horas):</label>
+          <input type="number" id="mHHReal" placeholder="Ej: 5.5" step="0.5" inputmode="decimal" oninput="recalcularModal()">
+        </div>
+      </div>
+
+      <!-- FILA 4: CAUSA RAÍZ DE RESTRICCIÓN -->
       <div class="field-cyber">
-        <label>Partida / Subproceso Oficial (Target):</label>
-        <!-- Pre-poblado estático garantizado con nomenclatura limpia 01, 02... -->
-        <select id="mSubproceso" onchange="recalcularModal()" style="width:100%;">
-          <option value="01|JUNTAS a dos caras interiores|30.0|ml" selected>01 JUNTAS a dos caras interiores (30.0 ml/día)</option>
-          <option value="02|JUNTAS a una cara interiores|30.0|ml">02 JUNTAS a una cara interiores (30.0 ml/día)</option>
-          <option value="03|PASE DE MANGUERA acceso a dos caras|7.0|und">03 PASE DE MANGUERA acceso a dos caras (7.0 und/día)</option>
-          <option value="04|TUBERIAS NO METALICAS <2&quot; acceso a dos caras|21.0|pto">04 TUBERIAS NO METALICAS &lt;2" acceso a dos caras (21.0 pto/día)</option>
-          <option value="11|TUBERIAS METALICAS <2&quot; acceso a dos caras|21.0|und">11 TUBERIAS METALICAS &lt;2" acceso a dos caras (21.0 und/día)</option>
-          <option value="21|DUCTOS hasta 23&quot;x23&quot; acceso a dos caras|9.0|und">21 DUCTOS hasta 23"x23" acceso a dos caras (9.0 und/día)</option>
+        <label>CAUSA RAÍZ DE RESTRICCIÓN:</label>
+        <select id="mCausa">
+          <option value="Ninguna (Ritmo óptimo)">Ninguna (Ritmo óptimo)</option>
+          <option value="Demora en entrega/armado andamios">Demora en entrega/armado andamios</option>
+          <option value="Frente no liberado / Losa sin picar">Frente no liberado / Losa sin picar</option>
+          <option value="Interferencia instalaciones MEP">Interferencia instalaciones MEP</option>
         </select>
       </div>
 
-      <div class="form-row-2col">
-        <div class="field-cyber">
-          <label>HH Reales Invertidas (Horas):</label>
-          <input type="number" id="mHHReal" placeholder="Ej: 5.5" step="0.5" inputmode="decimal" oninput="recalcularModal()">
-        </div>
-        <div class="field-cyber">
-          <label>Causa Raíz de Restricción:</label>
-          <select id="mCausa">
-            <option value="Ninguna">Ninguna (Ritmo óptimo)</option>
-            <option value="Demora Andamios">Demora en entrega/armado andamios</option>
-            <option value="Frente No Liberado">Frente no liberado / Losa sin picar</option>
-            <option value="Interferencia MEP">Interferencia instalaciones MEP</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="field-cyber">
-        <label>Ubicación / Detalle de Frente:</label>
-        <input type="text" id="mObs" placeholder="Ej: Pasillo eje 4-7 / Sala Técnica">
-      </div>
-
       <!-- PANEL LEAN CALIBRADO -->
-      <div style="background:rgba(0,150,225,0.06); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center;">
+      <div style="background:rgba(0,150,225,0.06); border:1px solid var(--border-glass); border-radius:8px; padding:10px; display:grid; grid-template-columns:repeat(4, 1fr); text-align:center; margin-top:4px;">
         <div><div style="font-size:9px; color:var(--c-cyan);">TARGET/DÍA</div><div style="font-size:13px; font-weight:700;" id="dispTarget">30.0 ml</div></div>
         <div><div style="font-size:9px; color:var(--c-cyan);">HH GANADAS</div><div style="font-size:13px; font-weight:700;" id="dispHHGan">0.00 h</div></div>
         <div><div style="font-size:9px; color:var(--c-cyan);">EFICIENCIA</div><div style="font-size:13px; font-weight:700;" id="dispEficiencia">0.0%</div></div>
@@ -659,7 +641,6 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
     </div>
     <div class="m-body-c" style="gap:14px;">
       
-      <!-- FORMULARIO AGREGAR NUEVO -->
       <div style="background:rgba(0,0,0,0.25); border:1px solid var(--border-glass); border-radius:8px; padding:12px; display:flex; flex-direction:column; gap:8px;">
         <div style="font-size:11px; font-weight:600; color:var(--c-cyan);">+ AGREGAR NUEVO OPERARIO</div>
         <div class="form-row-2col">
@@ -689,7 +670,6 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         </div>
       </div>
 
-      <!-- LISTA DE OPERARIOS -->
       <div style="display:flex; flex-direction:column; gap:6px;">
         <div style="font-size:11px; font-weight:600; color:var(--text-muted);">RELACIÓN DE OPERARIOS (DESACTIVA SI FUE CESADO / ELIMINA SI ES DUPLICADO):</div>
         <div id="listaRecursosContainer" style="max-height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; padding-right:4px;"></div>
@@ -721,7 +701,6 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         </div>
       </div>
 
-      <!-- FORMULARIO DIRECTO INTEGRADO -->
       <div id="boxNuevaPartidaDirecta" style="display:none; background:rgba(0,150,225,0.08); border:1px solid var(--c-cyan); border-radius:8px; padding:10px; margin-top:8px;">
         <div style="font-size:11px; font-weight:700; color:var(--c-cyan); margin-bottom:6px;">+ INGRESAR NUEVA PARTIDA A LA BASE:</div>
         <div style="display:grid; grid-template-columns: 80px 1fr 60px 100px 90px auto; gap:6px; align-items:center;">
@@ -851,53 +830,53 @@ const RECURSOS_DEFAULT = [
 
 let RECURSOS_SISTEMA = [...RECURSOS_DEFAULT];
 
-// CATÁLOGO LIMPIO "01 ...", "02 ..."
+// CATÁLOGO DE 27 PARTIDAS SCF Y 15 DE PINTURA CON ELEMENTO VINCULADO
 const METRADOS_DEFAULT = {
   SCF: [
-    { item: "01", nombre: "JUNTAS a dos caras interiores", unidad: "ml", metradoContractual: 5788.31, rend: 30.0 },
-    { item: "02", nombre: "JUNTAS a una cara interiores", unidad: "ml", metradoContractual: 10138.64, rend: 30.0 },
-    { item: "03", nombre: "PASE DE MANGUERA acceso a dos caras", unidad: "und", metradoContractual: 43.00, rend: 7.0 },
-    { item: "04", nombre: "TUBERIAS NO METALICAS <2\" acceso a dos caras", unidad: "pto", metradoContractual: 133.00, rend: 21.0 },
-    { item: "05", nombre: "TUBERIAS NO METALICAS <2\" acceso a una cara", unidad: "pto", metradoContractual: 69.00, rend: 21.0 },
-    { item: "06", nombre: "TUBERIAS NO METALICAS <4\" acceso a dos caras", unidad: "pto", metradoContractual: 234.00, rend: 11.0 },
-    { item: "07", nombre: "TUBERIAS NO METALICAS <4\" acceso a una cara", unidad: "pto", metradoContractual: 58.00, rend: 14.0 },
-    { item: "08", nombre: "TUBERIAS NO METALICAS <6\" acceso a dos caras", unidad: "pto", metradoContractual: 341.00, rend: 7.0 },
-    { item: "09", nombre: "TUBERIAS NO METALICAS <6\" acceso a una cara", unidad: "pto", metradoContractual: 23.00, rend: 14.0 },
-    { item: "10", nombre: "TUBERIAS NO METALICAS <8\" acceso a dos caras", unidad: "pto", metradoContractual: 247.00, rend: 7.0 },
-    { item: "11", nombre: "TUBERIAS METALICAS <2\" acceso a dos caras", unidad: "und", metradoContractual: 2900.00, rend: 21.0 },
-    { item: "12", nombre: "TUBERIAS METALICAS <2\" acceso a una cara", unidad: "und", metradoContractual: 94.00, rend: 40.0 },
-    { item: "13", nombre: "TUBERIAS METALICAS <4\" acceso a dos caras", unidad: "und", metradoContractual: 206.00, rend: 21.0 },
-    { item: "14", nombre: "TUBERIAS METALICAS <4\" acceso a una cara", unidad: "und", metradoContractual: 39.00, rend: 40.0 },
-    { item: "15", nombre: "TUBERIAS METALICAS <10\" acceso a dos caras", unidad: "und", metradoContractual: 152.00, rend: 21.0 },
-    { item: "16", nombre: "TUBERIAS METALICAS <10\" acceso a una cara", unidad: "und", metradoContractual: 74.00, rend: 40.0 },
-    { item: "17", nombre: "TUBERIAS METALICAS >10\" acceso a dos caras", unidad: "und", metradoContractual: 2.00, rend: 21.0 },
-    { item: "18", nombre: "TUBERIAS METALICAS >10\" acceso a una cara", unidad: "und", metradoContractual: 4.00, rend: 40.0 },
-    { item: "19", nombre: "BANDEJAS METALICAS acceso a dos caras", unidad: "und", metradoContractual: 139.00, rend: 11.0 },
-    { item: "20", nombre: "BANDEJAS METALICAS acceso a una cara", unidad: "und", metradoContractual: 17.00, rend: 18.0 },
-    { item: "21", nombre: "DUCTOS hasta 23\"x23\" acceso a dos caras", unidad: "und", metradoContractual: 530.00, rend: 9.0 },
-    { item: "22", nombre: "DUCTOS hasta 23\"x23\" acceso a una cara", unidad: "und", metradoContractual: 189.20, rend: 18.0 },
-    { item: "23", nombre: "DUCTOS hasta 30\"x30\" acceso a dos caras", unidad: "und", metradoContractual: 53.00, rend: 9.0 },
-    { item: "24", nombre: "DUCTOS hasta 30\"x30\" acceso a una cara", unidad: "und", metradoContractual: 40.00, rend: 18.0 },
-    { item: "25", nombre: "DUCTOS hasta 100\"x100\" acceso a dos caras", unidad: "und", metradoContractual: 45.00, rend: 7.0 },
-    { item: "26", nombre: "DUCTOS hasta 100\"x100\" acceso a una cara", unidad: "und", metradoContractual: 43.00, rend: 14.0 },
-    { item: "27", nombre: "VANOS DE INSPECCIÓN, MONTANTES (solo Instalación)", unidad: "und", metradoContractual: 163.00, rend: 5.0 }
+    { item: "01", nombre: "JUNTAS a dos caras interiores", unidad: "ml", metradoContractual: 5788.31, rend: 30.0, elemento: "JUNTAS" },
+    { item: "02", nombre: "JUNTAS a una cara interiores", unidad: "ml", metradoContractual: 10138.64, rend: 30.0, elemento: "JUNTAS" },
+    { item: "03", nombre: "PASE DE MANGUERA acceso a dos caras", unidad: "und", metradoContractual: 43.00, rend: 7.0, elemento: "PASES DE MANGUERA" },
+    { item: "04", nombre: "TUBERIAS NO METALICAS <2\" acceso a dos caras", unidad: "pto", metradoContractual: 133.00, rend: 21.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "05", nombre: "TUBERIAS NO METALICAS <2\" acceso a una cara", unidad: "pto", metradoContractual: 69.00, rend: 21.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "06", nombre: "TUBERIAS NO METALICAS <4\" acceso a dos caras", unidad: "pto", metradoContractual: 234.00, rend: 11.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "07", nombre: "TUBERIAS NO METALICAS <4\" acceso a una cara", unidad: "pto", metradoContractual: 58.00, rend: 14.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "08", nombre: "TUBERIAS NO METALICAS <6\" acceso a dos caras", unidad: "pto", metradoContractual: 341.00, rend: 7.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "09", nombre: "TUBERIAS NO METALICAS <6\" acceso a una cara", unidad: "pto", metradoContractual: 23.00, rend: 14.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "10", nombre: "TUBERIAS NO METALICAS <8\" acceso a dos caras", unidad: "pto", metradoContractual: 247.00, rend: 7.0, elemento: "TUBERIAS NO METALICAS" },
+    { item: "11", nombre: "TUBERIAS METALICAS <2\" acceso a dos caras", unidad: "und", metradoContractual: 2900.00, rend: 21.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "12", nombre: "TUBERIAS METALICAS <2\" acceso a una cara", unidad: "und", metradoContractual: 94.00, rend: 40.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "13", nombre: "TUBERIAS METALICAS <4\" acceso a dos caras", unidad: "und", metradoContractual: 206.00, rend: 21.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "14", nombre: "TUBERIAS METALICAS <4\" acceso a una cara", unidad: "und", metradoContractual: 39.00, rend: 40.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "15", nombre: "TUBERIAS METALICAS <10\" acceso a dos caras", unidad: "und", metradoContractual: 152.00, rend: 21.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "16", nombre: "TUBERIAS METALICAS <10\" acceso a una cara", unidad: "und", metradoContractual: 74.00, rend: 40.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "17", nombre: "TUBERIAS METALICAS >10\" acceso a dos caras", unidad: "und", metradoContractual: 2.00, rend: 21.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "18", nombre: "TUBERIAS METALICAS >10\" acceso a una cara", unidad: "und", metradoContractual: 4.00, rend: 40.0, elemento: "TUBERÍAS METÁLICAS" },
+    { item: "19", nombre: "BANDEJAS METALICAS acceso a dos caras", unidad: "und", metradoContractual: 139.00, rend: 11.0, elemento: "BANDEJAS METÁLICAS" },
+    { item: "20", nombre: "BANDEJAS METALICAS acceso a una cara", unidad: "und", metradoContractual: 17.00, rend: 18.0, elemento: "BANDEJAS METÁLICAS" },
+    { item: "21", nombre: "DUCTOS hasta 23\"x23\" acceso a dos caras", unidad: "und", metradoContractual: 530.00, rend: 9.0, elemento: "DUCTOS" },
+    { item: "22", nombre: "DUCTOS hasta 23\"x23\" acceso a una cara", unidad: "und", metradoContractual: 189.20, rend: 18.0, elemento: "DUCTOS" },
+    { item: "23", nombre: "DUCTOS hasta 30\"x30\" acceso a dos caras", unidad: "und", metradoContractual: 53.00, rend: 9.0, elemento: "DUCTOS" },
+    { item: "24", nombre: "DUCTOS hasta 30\"x30\" acceso a una cara", unidad: "und", metradoContractual: 40.00, rend: 18.0, elemento: "DUCTOS" },
+    { item: "25", nombre: "DUCTOS hasta 100\"x100\" acceso a dos caras", unidad: "und", metradoContractual: 45.00, rend: 7.0, elemento: "DUCTOS" },
+    { item: "26", nombre: "DUCTOS hasta 100\"x100\" acceso a una cara", unidad: "und", metradoContractual: 43.00, rend: 14.0, elemento: "DUCTOS" },
+    { item: "27", nombre: "VANOS DE INSPECCIÓN, MONTANTES (solo Instalación)", unidad: "und", metradoContractual: 163.00, rend: 5.0, elemento: "VANOS DE INSPECCIÓN" }
   ],
   PINTURA: [
-    { item: "01", nombre: "Pintura Pato en cielorrasos fondos de losa no cubiertos por FCR", unidad: "m2", metradoContractual: 0.76, rend: 91.0 },
-    { item: "02", nombre: "Pintura Epóxica en cielos rasos cto limpieza y residuos", unidad: "m2", metradoContractual: 416.19, rend: 46.0 },
-    { item: "03", nombre: "Pintura American Colors en FCR Drywall (2 imp + 2 manos)", unidad: "m2", metradoContractual: 7025.50, rend: 182.0 },
-    { item: "04", nombre: "Pintura Látex en caras laterales y fondo de viga", unidad: "m2", metradoContractual: 149.71, rend: 52.0 },
-    { item: "05", nombre: "Pintura Látex en fondo de escaleras (Empastado + 2 manos)", unidad: "m2", metradoContractual: 618.08, rend: 52.0 },
-    { item: "06", nombre: "Pintura Látex en cara lateral de escalera (Empastado + 2 manos)", unidad: "m2", metradoContractual: 55.27, rend: 52.0 },
-    { item: "07", nombre: "Cielo Raso pintado color negro detrás de falso cielo", unidad: "m2", metradoContractual: 76.25, rend: 91.0 },
-    { item: "08", nombre: "Pintura American Colors en muros interiores (Empastado + lijado)", unidad: "m2", metradoContractual: 162.91, rend: 52.0 },
-    { item: "09", nombre: "Pintura American Colors en muros exteriores", unidad: "m2", metradoContractual: 1833.68, rend: 46.0 },
-    { item: "10", nombre: "Empaste en muros para colocación de vinil (Moistek + 2 capas)", unidad: "m2", metradoContractual: 18985.90, rend: 156.0 },
-    { item: "11", nombre: "Pintura Epóxica sobre FCR Yeso Mold Rey - Ambientes Médicos", unidad: "m2", metradoContractual: 1167.93, rend: 46.0 },
-    { item: "12", nombre: "Pintura en muros - Sótanos (2 al 6) American Colors", unidad: "m2", metradoContractual: 12557.51, rend: 182.0 },
-    { item: "13", nombre: "Pintura Látex Pato en muros - Plenum (2 manos imp + 2 manos)", unidad: "m2", metradoContractual: 16648.19, rend: 104.0 },
-    { item: "14", nombre: "Retoques de pintura American Colors (1 mano)", unidad: "m2", metradoContractual: 1431.88, rend: 182.0 },
-    { item: "15", nombre: "Retoques de pintura Látex Pato (1 mano)", unidad: "m2", metradoContractual: 1404.41, rend: 182.0 }
+    { item: "01", nombre: "Pintura Pato en cielorrasos fondos de losa no cubiertos por FCR", unidad: "m2", metradoContractual: 0.76, rend: 91.0, elemento: "CIELORASO" },
+    { item: "02", nombre: "Pintura Epóxica en cielos rasos cto limpieza y residuos", unidad: "m2", metradoContractual: 416.19, rend: 46.0, elemento: "CIELORASO" },
+    { item: "03", nombre: "Pintura American Colors en FCR Drywall (2 imp + 2 manos)", unidad: "m2", metradoContractual: 7025.50, rend: 182.0, elemento: "FCR DRYWALL" },
+    { item: "04", nombre: "Pintura Látex en caras laterales y fondo de viga", unidad: "m2", metradoContractual: 149.71, rend: 52.0, elemento: "MURO" },
+    { item: "05", nombre: "Pintura Látex en fondo de escaleras (Empastado + 2 manos)", unidad: "m2", metradoContractual: 618.08, rend: 52.0, elemento: "MURO" },
+    { item: "06", nombre: "Pintura Látex en cara lateral de escalera (Empastado + 2 manos)", unidad: "m2", metradoContractual: 55.27, rend: 52.0, elemento: "MURO" },
+    { item: "07", nombre: "Cielo Raso pintado color negro detrás de falso cielo", unidad: "m2", metradoContractual: 76.25, rend: 91.0, elemento: "CIELORASO" },
+    { item: "08", nombre: "Pintura American Colors en muros interiores (Empastado + lijado)", unidad: "m2", metradoContractual: 162.91, rend: 52.0, elemento: "MURO" },
+    { item: "09", nombre: "Pintura American Colors en muros exteriores", unidad: "m2", metradoContractual: 1833.68, rend: 46.0, elemento: "MURO" },
+    { item: "10", nombre: "Empaste en muros para colocación de vinil (Moistek + 2 capas)", unidad: "m2", metradoContractual: 18985.90, rend: 156.0, elemento: "MURO" },
+    { item: "11", nombre: "Pintura Epóxica sobre FCR Yeso Mold Rey - Ambientes Médicos", unidad: "m2", metradoContractual: 1167.93, rend: 46.0, elemento: "FCR DRYWALL" },
+    { item: "12", nombre: "Pintura en muros - Sótanos (2 al 6) American Colors", unidad: "m2", metradoContractual: 12557.51, rend: 182.0, elemento: "MURO" },
+    { item: "13", nombre: "Pintura Látex Pato en muros - Plenum (2 manos imp + 2 manos)", unidad: "m2", metradoContractual: 16648.19, rend: 104.0, elemento: "PLENUM" },
+    { item: "14", nombre: "Retoques de pintura American Colors (1 mano)", unidad: "m2", metradoContractual: 1431.88, rend: 182.0, elemento: "MURO" },
+    { item: "15", nombre: "Retoques de pintura Látex Pato (1 mano)", unidad: "m2", metradoContractual: 1404.41, rend: 182.0, elemento: "MURO" }
   ]
 };
 
@@ -963,7 +942,6 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginOverlay').style.display = 'none';
   }
 
-  // Sanitización de LocalStorage
   try {
     const mLocal = localStorage.getItem('convecsa_metrados_thssb');
     if (mLocal) {
@@ -1230,7 +1208,7 @@ function renderizarTabla() {
   t.innerHTML = '';
   const datos = getDatosFiltrados();
   
-  // Actualizar resumen QA/QC en cabecera
+  // Resumen QA/QC sobre la cabecera
   const tot = datos.length;
   const proto = datos.filter(r => r.qaqc === "PROTOCOLIZADO").length;
   const pend = tot - proto;
@@ -1380,11 +1358,32 @@ function abrirModal() {
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
+function resolverElementoPartida(item, nombre, esp) {
+  const n = String(nombre).toUpperCase();
+  if (esp === "SCF") {
+    if (n.includes("JUNTA")) return "JUNTAS";
+    if (n.includes("MANGUERA") || n.includes("PASE")) return "PASES DE MANGUERA";
+    if (n.includes("NO METALICA") || n.includes("NO METÁLICA")) return "TUBERIAS NO METALICAS";
+    if (n.includes("TUBERIA") || n.includes("TUBERÍA")) return "TUBERÍAS METÁLICAS";
+    if (n.includes("BANDEJA")) return "BANDEJAS METÁLICAS";
+    if (n.includes("DUCTO")) return "DUCTOS";
+    if (n.includes("VANO") || n.includes("MONTANTE")) return "VANOS DE INSPECCIÓN";
+    return "JUNTAS";
+  } else {
+    if (n.includes("CIELO") || n.includes("CIELORASO") || n.includes("CIELORRASO")) return "CIELORASO";
+    if (n.includes("PLENUM")) return "PLENUM";
+    if (n.includes("DRYWALL") || n.includes("FCR") || n.includes("YESO")) return "FCR DRYWALL";
+    if (n.includes("COLUMNA") || n.includes("VIGA") || n.includes("ESCALERA")) return "COLUMNAS";
+    return "MURO";
+  }
+}
+
+// CARGA DE CATÁLOGOS CON VINCULACIÓN COMPLETA
 function cargarCatalogosModal() {
   const esp = document.getElementById('mEspecialidad').value || "SCF";
   const cfg = CATALOGO[esp] || CATALOGO.SCF;
   
-  // 1. Operario Responsable
+  // 1. Operarios de la especialidad
   const sT = document.getElementById('mTrabajador');
   if (sT) {
     let activos = RECURSOS_SISTEMA.filter(r => r.modulo === esp && r.activo !== false);
@@ -1397,7 +1396,7 @@ function cargarCatalogosModal() {
     });
   }
   
-  // 2. Elemento Constructivo
+  // 2. Elementos de la especialidad
   const sE = document.getElementById('mElemento');
   if (sE && cfg.elementos) {
     sE.innerHTML = '';
@@ -1406,22 +1405,35 @@ function cargarCatalogosModal() {
     });
   }
   
-  // 3. Subprocesos Oficiales
+  filtrarSubprocesosPorElemento();
+}
+
+// FILTRADO ESTRICTO DE SUBPROCESOS POR ELEMENTO SELECCIONADO
+function filtrarSubprocesosPorElemento() {
+  const esp = document.getElementById('mEspecialidad').value || "SCF";
+  const elemSel = (document.getElementById('mElemento').value || "").toUpperCase();
   const sS = document.getElementById('mSubproceso');
-  if (sS) {
-    let subprocesos = METRADOS_PRESUPUESTO[esp];
-    if (!subprocesos || subprocesos.length === 0) {
-      subprocesos = METRADOS_DEFAULT[esp] || [];
-    }
-    sS.innerHTML = '';
-    subprocesos.forEach(s => {
-      sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">${s.item} ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
-    });
-  }
+  if (!sS) return;
+
+  let subprocesos = METRADOS_PRESUPUESTO[esp] || METRADOS_DEFAULT[esp] || [];
   
+  // Filtrar estrictamente por la familia del elemento constructivo
+  const filtrados = subprocesos.filter(s => {
+    const elemAsignado = (s.elemento || resolverElementoPartida(s.item, s.nombre, esp)).toUpperCase();
+    return elemAsignado === elemSel;
+  });
+
+  const listaFinal = filtrados.length > 0 ? filtrados : subprocesos;
+
+  sS.innerHTML = '';
+  listaFinal.forEach(s => {
+    sS.innerHTML += `<option value="${s.item}|${s.nombre}|${s.rend}|${s.unidad}">${s.item} ${s.nombre} (${s.rend} ${s.unidad}/día)</option>`;
+  });
+
+  const unidadActual = listaFinal[0] ? listaFinal[0].unidad : (esp === 'SCF' ? 'ml' : 'm²');
   const lblU = document.getElementById('lblUnidadModal');
-  if (lblU) lblU.innerText = `Metrado (${cfg.unidad}):`;
-  
+  if (lblU) lblU.innerText = `Metrado (${unidadActual}):`;
+
   recalcularModal();
 }
 
@@ -1445,14 +1457,10 @@ function recalcularModal() {
     }
   }
 
-  // Jornada y cálculo universal: L-V (8.5 h) y Sábados (5.5 h)
   const jornadaTurno = esSabado ? 5.5 : 8.5;
   const targetDia = (rendNominal / 8.5) * jornadaTurno;
-
-  // HH Ganadas estándar: 1 HH = Rendimiento contractual / 8.5 h
   const hhGan = rendNominal > 0 ? metrado * (8.5 / rendNominal) : 0;
   
-  // Eficiencia real frente a las HH efectivamente invertidas
   const ef = hhReal > 0 ? (hhGan / hhReal) * 100 : 0;
   const esGanancia = ef >= 100;
 
@@ -1492,7 +1500,6 @@ function guardarRegistro() {
   progBar.style.width = '40%';
   progTxt.innerText = "⏳ Escribiendo en base de datos...";
 
-  // Detección de sábado y horas ganadas universales
   let esSabado = false;
   if (fechaSel) {
     const parts = fechaSel.split('-');
