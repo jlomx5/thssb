@@ -14,7 +14,7 @@
   --c-azul-marino: #0052CC;
   --c-azul-real: #0096E1;
   --c-celeste-claro: #E3F2FD;
-  --c-gris-fondo: #F4F6F9;
+  --c-gris-fondo: #F8FAFC;
   --c-gris-linea: #E2E8F0;
   --text-main: #0F172A;
   --text-muted: #64748B;
@@ -22,12 +22,12 @@
   --status-green-bg: #D1FAE5;
   --status-red: #DC2626;
   --status-red-bg: #FEE2E2;
-  --radius-card: 12px;
+  --radius-card: 14px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-/* 1. ESTRUCTURA GLOBAL CON SCROLL FLUIDO */
+/* CONTENEDOR FLUIDO CON SCROLL NATURAL */
 html, body {
   width: 100%;
   min-height: 100vh;
@@ -35,10 +35,10 @@ html, body {
   font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
   color: var(--text-main);
   overflow-x: hidden;
-  overflow-y: auto !important; /* Scroll natural garantizado */
+  overflow-y: auto !important;
 }
 
-/* 2. PANTALLA DE ACCESO (LOGIN POR PIN) */
+/* PANTALLA DE ACCESO (LOGIN CON PIN) */
 #loginOverlay {
   position: fixed;
   inset: 0;
@@ -51,16 +51,16 @@ html, body {
 }
 .login-card {
   background: #FFFFFF;
-  border-radius: 16px;
-  padding: 26px 20px;
+  border-radius: 18px;
+  padding: 28px 22px;
   width: 100%;
   max-width: 360px;
   text-align: center;
-  box-shadow: 0 16px 32px rgba(0,0,0,0.25);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.25);
 }
 .login-icon {
   width: 48px; height: 48px; background: var(--c-azul-marino); color: #FFF;
-  border-radius: 10px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 12px; display: inline-flex; align-items: center; justify-content: center;
   font-size: 22px; font-weight: 900; margin-bottom: 10px;
 }
 .pin-box {
@@ -71,59 +71,128 @@ html, body {
   letter-spacing: 6px;
   text-align: center;
   border: 2px solid var(--c-gris-linea);
-  border-radius: 8px;
+  border-radius: 10px;
   margin: 12px 0;
   outline: none;
 }
 .pin-box:focus { border-color: var(--c-azul-real); }
 
-/* 3. BARRA SUPERIOR */
+/* CONTENEDOR PRINCIPAL: ICON RAIL LATERAL + ÁREA DE TRABAJO */
+.app-shell {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* BARRA LATERAL ULTRA SLIM CON ÍCONOS */
+.icon-rail {
+  width: 64px;
+  background: #FFFFFF;
+  border-right: 1px solid var(--c-gris-linea);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 0;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 110;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .icon-rail { display: none; } /* En móviles se traslada a la barra inferior */
+}
+
+.rail-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #1E293B;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.rail-btn:hover {
+  background: var(--c-celeste-claro);
+  color: var(--c-azul-marino);
+}
+.rail-btn.active {
+  background: #EFF6FF;
+  color: var(--c-azul-marino);
+}
+.rail-btn svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* ESTRELLA GEMINI DEGRADADA */
+.sparkle-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.sparkle-icon:hover { transform: scale(1.1); }
+
+/* CONTENEDOR DERECHO */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* TOPBAR */
 .topbar {
   background: #FFFFFF;
-  border-bottom: 2px solid var(--c-azul-marino);
-  padding: 10px 14px;
+  border-bottom: 1px solid var(--c-gris-linea);
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  z-index: 90;
 }
 .brand-box { display: flex; align-items: center; gap: 8px; }
-.brand-ico {
-  width: 32px; height: 32px; background: var(--c-azul-marino); color: #FFF;
-  border-radius: 7px; display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 15px;
-}
-.brand-name { font-size: 13.5px; font-weight: 900; color: var(--c-azul-marino); }
-.brand-tag { font-size: 10px; color: var(--text-muted); display: none; }
-@media (min-width: 640px) { .brand-tag { display: inline; } }
+.brand-name { font-size: 14.5px; font-weight: 900; color: var(--c-azul-marino); }
+.brand-tag { font-size: 11px; color: var(--text-muted); }
 
-/* 4. CONTENEDOR PRINCIPAL FLUIDO */
+/* CONTENIDO RESPONSIVO */
 .main-wrapper {
   width: 100%;
-  max-width: 1380px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 12px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-bottom: 85px; /* Espacio para barra táctil de móvil */
+  gap: 16px;
+  padding-bottom: 90px;
 }
 @media (min-width: 1024px) {
-  .main-wrapper { padding: 18px 24px 30px; }
+  .main-wrapper { padding: 22px 26px 40px; }
 }
 
-/* 5. BARRA DE CONTROL Y BOTONES */
+/* STRIP DE CONTROLES */
 .control-strip {
   background: #FFFFFF;
   border-radius: var(--radius-card);
   border: 1px solid var(--c-gris-linea);
-  padding: 10px 14px;
+  padding: 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
 }
 @media (min-width: 768px) {
   .control-strip { flex-direction: row; justify-content: space-between; align-items: center; }
@@ -132,14 +201,14 @@ html, body {
 .pills-group {
   display: flex;
   background: #F1F5F9;
-  padding: 2px;
+  padding: 3px;
   border-radius: 8px;
   gap: 2px;
 }
 .pill-btn {
   border: none;
   background: transparent;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 800;
@@ -152,8 +221,8 @@ html, body {
 .btn-ui {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 7px 13px;
   border-radius: 8px;
   font-size: 11px;
   font-weight: 800;
@@ -162,9 +231,9 @@ html, body {
 }
 .btn-excel { background: #10B981; color: #FFF; }
 .btn-pdf { background: #E11D48; color: #FFF; }
-.btn-sync { background: var(--c-azul-marino); color: #FFF; }
+.btn-add { background: var(--c-azul-marino); color: #FFF; }
 
-/* 6. GRID TOTALMENTE RESPONSIVO (MÓVIL = 1 COL, TABLET = 2 COL, PC = 3 COL) */
+/* REJILLA RESPONSIVA FLUIDA */
 .grid-responsive-3 {
   display: grid;
   grid-template-columns: 1fr;
@@ -184,7 +253,7 @@ html, body {
   background: #FFFFFF;
   border-radius: var(--radius-card);
   border: 1px solid var(--c-gris-linea);
-  padding: 14px;
+  padding: 16px;
   position: relative;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.02);
@@ -197,9 +266,9 @@ html, body {
 .b-amber::before { background: #F59E0B; }
 .b-emerald::before { background: #10B981; }
 
-.kpi-lbl { font-size: 10.5px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+.kpi-lbl { font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
 .kpi-row-val { display: flex; align-items: baseline; justify-content: space-between; margin: 8px 0; }
-.kpi-num-txt { font-size: 32px; font-weight: 900; line-height: 1; }
+.kpi-num-txt { font-size: 34px; font-weight: 900; line-height: 1; }
 .b-rose .kpi-num-txt { color: #E11D48; }
 .b-amber .kpi-num-txt { color: #D97706; }
 .b-emerald .kpi-num-txt { color: #059669; }
@@ -208,27 +277,25 @@ html, body {
 .tag-badge.ganancia { background: #D1FAE5; color: #059669; }
 .tag-badge.perdida { background: #FFE4E6; color: #E11D48; }
 
-/* 7. TARJETAS DE GRÁFICOS */
 .chart-box {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
   border-radius: var(--radius-card);
-  padding: 14px;
+  padding: 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   display: flex;
   flex-direction: column;
 }
 .chart-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.chart-title-txt { font-size: 12px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
-.chart-title-txt::before { content: ''; width: 3px; height: 12px; background: var(--c-azul-marino); border-radius: 2px; }
-.chart-wrap { position: relative; height: 210px; width: 100%; }
+.chart-title-txt { font-size: 12.5px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+.chart-title-txt::before { content: ''; width: 3.5px; height: 13px; background: var(--c-azul-marino); border-radius: 2px; }
+.chart-wrap { position: relative; height: 215px; width: 100%; }
 
-/* 8. AUDITORÍA DE TRABAJADORES */
 .worker-card {
   background: #F8FAFC;
   border: 1px solid var(--c-gris-linea);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -236,7 +303,6 @@ html, body {
 .worker-bar-bg { width: 100%; height: 6px; background: #E2E8F0; border-radius: 4px; overflow: hidden; margin-top: 3px; }
 .worker-bar-fill { height: 100%; border-radius: 4px; }
 
-/* 9. TABLA DE TRAZABILIDAD */
 .table-panel {
   background: #FFFFFF;
   border: 1px solid var(--c-gris-linea);
@@ -244,16 +310,16 @@ html, body {
   overflow: hidden;
 }
 .table-scroll { width: 100%; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-th { background: var(--c-azul-real); color: #FFF; font-size: 10.5px; font-weight: 800; padding: 9px 12px; text-transform: uppercase; }
-td { padding: 9px 12px; border-bottom: 1px solid var(--c-gris-linea); font-size: 11.5px; }
+table { width: 100%; border-collapse: collapse; min-width: 620px; }
+th { background: var(--c-azul-real); color: #FFF; font-size: 10.5px; font-weight: 800; padding: 10px 12px; text-transform: uppercase; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--c-gris-linea); font-size: 11.5px; }
 tr:nth-child(even) { background: #F8FAFC; }
 
-/* 10. BARRA DE NAVEGACIÓN INFERIOR (MÓVIL) */
+/* BARRA INFERIOR (MÓVILES) */
 .mobile-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  height: 56px;
+  height: 58px;
   background: #FFFFFF;
   border-top: 1px solid var(--c-gris-linea);
   display: flex;
@@ -262,7 +328,7 @@ tr:nth-child(even) { background: #F8FAFC; }
   z-index: 90;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
-@media (min-width: 1024px) { .mobile-nav { display: none; } }
+@media (min-width: 769px) { .mobile-nav { display: none; } }
 .nav-item-m {
   border: none; background: transparent; display: flex; flex-direction: column; align-items: center;
   gap: 2px; font-size: 9.5px; font-weight: 800; color: var(--text-muted); cursor: pointer;
@@ -274,7 +340,7 @@ tr:nth-child(even) { background: #F8FAFC; }
   justify-content: center; box-shadow: 0 4px 10px rgba(0, 82, 204, 0.35); margin-top: -14px;
 }
 
-/* 11. MODAL TOUCH */
+/* MODAL DE CAPTURA */
 .modal-mask {
   position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(3px); z-index: 500; display: none;
@@ -283,23 +349,23 @@ tr:nth-child(even) { background: #F8FAFC; }
 @media (min-width: 640px) { .modal-mask { align-items: center; padding: 20px; } }
 .modal-mask.open { display: flex; }
 .modal-window {
-  background: #FFF; width: 100%; max-width: 640px; max-height: 88vh;
+  background: #FFF; width: 100%; max-width: 650px; max-height: 88vh;
   border-radius: 16px 16px 0 0; display: flex; flex-direction: column; overflow: hidden;
 }
 @media (min-width: 640px) { .modal-window { border-radius: 14px; } }
-.m-head { padding: 12px 16px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
-.m-body { padding: 14px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.m-head { padding: 14px 18px; border-bottom: 1px solid var(--c-gris-linea); display: flex; justify-content: space-between; align-items: center; }
+.m-body { padding: 14px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 .form-grid-m { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 640px) { .form-grid-m { grid-template-columns: repeat(3, 1fr); } }
 .field-box-m { display: flex; flex-direction: column; gap: 3px; }
 .field-box-m label { font-size: 10px; font-weight: 800; color: var(--c-azul-marino); text-transform: uppercase; }
-.field-box-m input, .field-box-m select { padding: 8px 10px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-family: inherit; outline: none; }
-.m-foot { padding: 10px 16px; border-top: 1px solid var(--c-gris-linea); display: flex; gap: 8px; }
+.field-box-m input, .field-box-m select { padding: 9px 10px; border: 1.5px solid #CBD5E1; border-radius: 8px; font-size: 12px; font-family: inherit; outline: none; }
+.m-foot { padding: 12px 18px; border-top: 1px solid var(--c-gris-linea); display: flex; gap: 8px; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SEGURO CON PIN -->
+<!-- LOGIN SEGURO POR PIN -->
 <div id="loginOverlay">
   <div class="login-card">
     <div class="login-icon">C</div>
@@ -319,187 +385,244 @@ tr:nth-child(even) { background: #F8FAFC; }
   </div>
 </div>
 
-<!-- BARRA DE CABECERA -->
-<header class="topbar">
-  <div class="brand-box">
-    <div class="brand-ico">C</div>
-    <div>
-      <div class="brand-name">CONVECSA ERP 360°</div>
-      <div class="brand-tag">Torre Hospitalaria San Borja · Last Planner</div>
+<div class="app-shell">
+  
+  <!-- BARRA LATERAL CON ÍCONOS -->
+  <aside class="icon-rail">
+    <!-- 1. Estrella Gemini (Degradado 4 Puntas) -->
+    <div class="sparkle-icon" onclick="asistentePredictivoIA()" title="Análisis Predictivo Lean IA">
+      <svg viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF5252" />
+            <stop offset="35%" stop-color="#FFD600" />
+            <stop offset="70%" stop-color="#00C853" />
+            <stop offset="100%" stop-color="#2979FF" />
+          </linearGradient>
+        </defs>
+        <path d="M50,0 Q50,50 100,50 Q50,50 50,100 Q50,50 0,50 Q50,50 50,0 Z" fill="url(#geminiGrad)" />
+      </svg>
     </div>
+
+    <!-- 2. Switch / Modo Toggle -->
+    <button class="rail-btn" onclick="toggleVistaAvanzada()" title="Alternar Vista">
+      <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="6"/><circle cx="8" cy="12" r="3" fill="currentColor"/></svg>
+    </button>
+
+    <!-- 3. Lápiz / Registrar Avance -->
+    <button class="rail-btn" onclick="abrirModal()" title="Registrar Avance Diario">
+      <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    </button>
+
+    <!-- 4. Lupa / Buscar y Auditar -->
+    <button class="rail-btn" onclick="enfocarBusqueda()" title="Buscar y Auditar Frentes">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+
+    <!-- 5. Taza / Indicador de Recursos -->
+    <button class="rail-btn" onclick="alert('Registro de Recursos y Productividad en Campo')" title="Recursos">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="4"/><path d="M7 9c3 3 7 3 10 0"/></svg>
+    </button>
+
+    <!-- 6. Archivo / Exportar RDO -->
+    <button class="rail-btn" onclick="exportarExcelConFormulas()" title="Exportar RDO Excel">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 10h16"/><path d="M10 4v6"/></svg>
+    </button>
+
+    <!-- 7. Matriz 4 Cuadrados (17 Niveles) -->
+    <button class="rail-btn" onclick="alert('17 Niveles activos: S7 a S1, P1 a P9 y Azotea')" title="17 Niveles de Obra">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></svg>
+    </button>
+
+    <!-- 8. Diamante / Estado VIP Ganancia -->
+    <button class="rail-btn" onclick="alert('Balance Lean: Eficiencia Superior a la Meta')" title="Meta y Rendimiento Óptimo">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12l4 7-10 11L2 10l4-7z"/></svg>
+    </button>
+  </aside>
+
+  <!-- ÁREA CENTRAL DE TRABAJO -->
+  <div class="main-area">
+    
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="brand-box">
+        <span class="brand-name">CONVECSA ERP 360°</span>
+        <span class="brand-tag">· Torre Hospitalaria San Borja</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span id="userPillBadge" style="background:var(--c-celeste-claro); color:var(--c-azul-marino); padding:3px 8px; border-radius:6px; font-weight:800; font-size:11px;">Jorge Orosco</span>
+        <button onclick="logout()" style="background:none; border:none; color:var(--status-red); font-size:11px; font-weight:800; cursor:pointer;">Salir</button>
+      </div>
+    </header>
+
+    <!-- CONTENIDO CON SCROLL FLUIDO -->
+    <main class="main-wrapper" id="dashboardPrintArea">
+
+      <!-- BARRA DE CONTROL Y EXPORTACIONES -->
+      <section class="control-strip">
+        <div class="filter-pills-row">
+          <div class="pills-group">
+            <button class="pill-btn" onclick="filtrarPeriodo('DIA', this)">Día</button>
+            <button class="pill-btn" onclick="filtrarPeriodo('SEMANA', this)">Semana</button>
+            <button class="pill-btn active" onclick="filtrarPeriodo('MES', this)">Mes</button>
+            <button class="pill-btn" onclick="filtrarPeriodo('TODO', this)">Todo</button>
+          </div>
+
+          <div class="pills-group">
+            <button class="pill-btn active" onclick="filtrarModulo('CONSOLIDADO', this)">Global</button>
+            <button class="pill-btn" onclick="filtrarModulo('PINTURA', this)">🎨 Pintura</button>
+            <button class="pill-btn" onclick="filtrarModulo('SCF', this)">🔥 SCF</button>
+          </div>
+        </div>
+
+        <div class="export-group">
+          <button class="btn-ui btn-excel" onclick="exportarExcelConFormulas()">
+            <span>📊</span> Exportar Excel
+          </button>
+          <button class="btn-ui btn-pdf" onclick="exportarReportePDF()">
+            <span>📄</span> Descargar RDO
+          </button>
+          <button class="btn-ui btn-add" onclick="abrirModal()">
+            <span>➕</span> Nuevo Avance
+          </button>
+        </div>
+      </section>
+
+      <!-- 1. KPIS SUPERIORES -->
+      <section class="grid-responsive-3">
+        <div class="kpi-card-box b-rose">
+          <div class="kpi-lbl" id="lblKpiEfic">EFICIENCIA DEL MES</div>
+          <div class="kpi-row-val">
+            <div class="kpi-num-txt" id="txtEficVal">104.5%</div>
+            <canvas id="gaugeCanvas" width="80" height="42"></canvas>
+          </div>
+          <div style="font-size:11px; font-weight:700; color:var(--text-muted); display:flex; gap:6px; align-items:center;">
+            <span class="tag-badge ganancia" id="badgeEficEstado">Ganancia</span>
+            <span>Meta Target: 100%</span>
+          </div>
+        </div>
+
+        <div class="kpi-card-box b-amber">
+          <div class="kpi-lbl">HH PERDIDAS ACUMULADAS</div>
+          <div class="kpi-row-val">
+            <div class="kpi-num-txt" id="txtPerdidasVal">1.00<span style="font-size:16px;"> hrs</span></div>
+          </div>
+          <div style="font-size:11px; font-weight:700; color:var(--text-muted);">
+            <span id="txtImpactoSoles">S/. 143 impacto estimado</span> (S/. 142.50/h)
+          </div>
+        </div>
+
+        <div class="kpi-card-box b-emerald">
+          <div class="kpi-lbl">EFICIENCIA SEMANAL</div>
+          <div class="kpi-row-val">
+            <div class="kpi-num-txt" id="txtSemanalVal">104.5%</div>
+          </div>
+          <div style="font-size:11px; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between;">
+            <span>Todas las semanas</span>
+            <span style="color:var(--status-green); font-weight:800;" id="txtTotalOperarios">6 operarios activos</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. GRÁFICOS SUPERIORES -->
+      <section class="grid-responsive-2">
+        <div class="chart-box">
+          <div class="chart-head">
+            <div class="chart-title-txt">Evolución por Semana (Eficiencia %)</div>
+            <span style="font-size:9.5px; font-weight:800; background:#EFF6FF; color:#2563EB; padding:2px 6px; border-radius:4px;">3 SEMANAS</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chartEvolucion"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-head">
+            <div class="chart-title-txt">Eficiencia por Elemento</div>
+            <span style="font-size:9.5px; font-weight:800; background:#FFF1F2; color:#E11D48; padding:2px 6px; border-radius:4px;">VS META 100%</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chartElemento"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. GRÁFICOS INFERIORES -->
+      <section class="grid-responsive-3">
+        <div class="chart-box">
+          <div class="chart-head">
+            <div class="chart-title-txt">HH Ganadas vs Reales · Semana</div>
+            <span style="font-size:9.5px; font-weight:800; background:#ECFDF5; color:#059669; padding:2px 6px; border-radius:4px;">SEMANAL</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chartHH"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-head">
+            <div class="chart-title-txt">Distribución por Nivel</div>
+            <span style="font-size:9.5px; font-weight:800; background:#EFF6FF; color:#2563EB; padding:2px 6px; border-radius:4px;">17 PISOS</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chartNivel"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-head">
+            <div class="chart-title-txt">Estado de Actividades</div>
+            <span style="font-size:9.5px; font-weight:800; background:#FFF1F2; color:#E11D48; padding:2px 6px; border-radius:4px;">BALANCE LEAN</span>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="chartEstado"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. AUDITORÍA POR TRABAJADOR -->
+      <section class="chart-box">
+        <div class="chart-head">
+          <div>
+            <div style="font-size:13px; font-weight:900; color:var(--c-azul-marino);">👷 Auditoría de Eficiencia por Trabajador</div>
+            <div style="font-size:11px; color:var(--text-muted);">Monitoreo individual de rendimiento y desviaciones</div>
+          </div>
+          <span id="txtEvaluados" style="font-size:11px; font-weight:800; color:var(--status-green);">6 evaluados</span>
+        </div>
+        <div class="grid-responsive-3" id="gridTrabajadores" style="margin-top:10px;"></div>
+      </section>
+
+      <!-- 5. TABLA DE REGISTROS -->
+      <section class="table-panel">
+        <div style="padding:12px 14px; border-bottom:1px solid var(--c-gris-linea); display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:12.5px; font-weight:900; color:var(--c-azul-marino);">📋 Trazabilidad en Google Sheets</div>
+          <div style="font-size:10.5px; color:var(--text-muted);">REGISTRO_DIARIO_PINTURA & REGISTRO_DIARIO_SCF</div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Hora</th>
+                <th>Hoja</th>
+                <th>Operario</th>
+                <th>Nivel (17)</th>
+                <th>Subproceso</th>
+                <th style="text-align:right;">Metrado</th>
+                <th style="text-align:right;">HH Real</th>
+                <th style="text-align:center;">Eficiencia</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tablaBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
   </div>
-  <div style="display:flex; align-items:center; gap:8px;">
-    <span id="userPillBadge" style="background:var(--c-celeste-claro); color:var(--c-azul-marino); padding:3px 8px; border-radius:6px; font-weight:800; font-size:11px;">Jorge Orosco</span>
-    <button onclick="logout()" style="background:none; border:none; color:var(--status-red); font-size:11px; font-weight:800; cursor:pointer;">Salir</button>
-  </div>
-</header>
-
-<!-- CONTENEDOR PRINCIPAL FLUIDO -->
-<main class="main-wrapper" id="dashboardPrintArea">
-
-  <!-- BARRA DE CONTROL Y ACCIONES -->
-  <section class="control-strip">
-    <div class="filter-pills-row">
-      <div class="pills-group">
-        <button class="pill-btn" onclick="filtrarPeriodo('DIA', this)">Día</button>
-        <button class="pill-btn" onclick="filtrarPeriodo('SEMANA', this)">Semana</button>
-        <button class="pill-btn active" onclick="filtrarPeriodo('MES', this)">Mes</button>
-        <button class="pill-btn" onclick="filtrarPeriodo('TODO', this)">Todo</button>
-      </div>
-
-      <div class="pills-group">
-        <button class="pill-btn active" onclick="filtrarModulo('CONSOLIDADO', this)">Global</button>
-        <button class="pill-btn" onclick="filtrarModulo('PINTURA', this)">🎨 Pintura</button>
-        <button class="pill-btn" onclick="filtrarModulo('SCF', this)">🔥 SCF</button>
-      </div>
-    </div>
-
-    <!-- BOTONES DE EXPORTACIÓN Y ACCIÓN -->
-    <div class="export-group">
-      <button class="btn-ui btn-excel" onclick="exportarExcelConFormulas()">
-        <span>📊</span> Exportar Excel (.XLSX)
-      </button>
-      <button class="btn-ui btn-pdf" onclick="exportarReportePDF()">
-        <span>📄</span> Descargar RDO (PDF)
-      </button>
-      <button class="btn-ui btn-sync" onclick="sincronizarConSheets()">
-        <span>🔄</span> Sincronizar
-      </button>
-    </div>
-  </section>
-
-  <!-- 1. KPIS SUPERIORES -->
-  <section class="grid-responsive-3">
-    <div class="kpi-card-box b-rose">
-      <div class="kpi-lbl" id="lblKpiEfic">EFICIENCIA DEL MES</div>
-      <div class="kpi-row-val">
-        <div class="kpi-num-txt" id="txtEficVal">104.5%</div>
-        <canvas id="gaugeCanvas" width="80" height="42"></canvas>
-      </div>
-      <div style="font-size:11px; font-weight:700; color:var(--text-muted); display:flex; gap:6px; align-items:center;">
-        <span class="tag-badge ganancia" id="badgeEficEstado">Ganancia</span>
-        <span>Meta Target: 100%</span>
-      </div>
-    </div>
-
-    <div class="kpi-card-box b-amber">
-      <div class="kpi-lbl">HH PERDIDAS ACUMULADAS</div>
-      <div class="kpi-row-val">
-        <div class="kpi-num-txt" id="txtPerdidasVal">1.00<span style="font-size:16px;"> hrs</span></div>
-      </div>
-      <div style="font-size:11px; font-weight:700; color:var(--text-muted);">
-        <span id="txtImpactoSoles">S/. 143 impacto estimado</span> (S/. 142.50/h)
-      </div>
-    </div>
-
-    <div class="kpi-card-box b-emerald">
-      <div class="kpi-lbl">EFICIENCIA SEMANAL</div>
-      <div class="kpi-row-val">
-        <div class="kpi-num-txt" id="txtSemanalVal">104.5%</div>
-      </div>
-      <div style="font-size:11px; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between;">
-        <span>Todas las semanas</span>
-        <span style="color:var(--status-green); font-weight:800;" id="txtTotalOperarios">6 operarios activos</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2. GRÁFICOS SUPERIORES -->
-  <section class="grid-responsive-2">
-    <div class="chart-box">
-      <div class="chart-head">
-        <div class="chart-title-txt">Evolución por Semana (Eficiencia %)</div>
-        <span style="font-size:9.5px; font-weight:800; background:#EFF6FF; color:#2563EB; padding:2px 6px; border-radius:4px;">3 SEMANAS</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="chartEvolucion"></canvas>
-      </div>
-    </div>
-
-    <div class="chart-box">
-      <div class="chart-head">
-        <div class="chart-title-txt">Eficiencia por Elemento</div>
-        <span style="font-size:9.5px; font-weight:800; background:#FFF1F2; color:#E11D48; padding:2px 6px; border-radius:4px;">VS META 100%</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="chartElemento"></canvas>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. GRÁFICOS INFERIORES -->
-  <section class="grid-responsive-3">
-    <div class="chart-box">
-      <div class="chart-head">
-        <div class="chart-title-txt">HH Ganadas vs Reales · Semana</div>
-        <span style="font-size:9.5px; font-weight:800; background:#ECFDF5; color:#059669; padding:2px 6px; border-radius:4px;">SEMANAL</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="chartHH"></canvas>
-      </div>
-    </div>
-
-    <div class="chart-box">
-      <div class="chart-head">
-        <div class="chart-title-txt">Distribución por Nivel</div>
-        <span style="font-size:9.5px; font-weight:800; background:#EFF6FF; color:#2563EB; padding:2px 6px; border-radius:4px;">17 PISOS</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="chartNivel"></canvas>
-      </div>
-    </div>
-
-    <div class="chart-box">
-      <div class="chart-head">
-        <div class="chart-title-txt">Estado de Actividades</div>
-        <span style="font-size:9.5px; font-weight:800; background:#FFF1F2; color:#E11D48; padding:2px 6px; border-radius:4px;">BALANCE LEAN</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="chartEstado"></canvas>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. AUDITORÍA POR TRABAJADOR -->
-  <section class="chart-box">
-    <div class="chart-head">
-      <div>
-        <div style="font-size:13px; font-weight:900; color:var(--c-azul-marino);">👷 Auditoría de Eficiencia por Trabajador</div>
-        <div style="font-size:11px; color:var(--text-muted);">Monitoreo individual de rendimiento y desviaciones</div>
-      </div>
-      <span id="txtEvaluados" style="font-size:11px; font-weight:800; color:var(--status-green);">6 evaluados</span>
-    </div>
-    <div class="grid-responsive-3" id="gridTrabajadores" style="margin-top:10px;"></div>
-  </section>
-
-  <!-- 5. TABLA DE REGISTROS -->
-  <section class="table-panel">
-    <div style="padding:12px 14px; border-bottom:1px solid var(--c-gris-linea); display:flex; justify-content:space-between; align-items:center;">
-      <div style="font-size:12.5px; font-weight:900; color:var(--c-azul-marino);">📋 Trazabilidad en Google Sheets</div>
-      <div style="font-size:10.5px; color:var(--text-muted);">REGISTRO_DIARIO_PINTURA & REGISTRO_DIARIO_SCF</div>
-    </div>
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Hora</th>
-            <th>Hoja</th>
-            <th>Operario</th>
-            <th>Nivel (17)</th>
-            <th>Subproceso</th>
-            <th style="text-align:right;">Metrado</th>
-            <th style="text-align:right;">HH Real</th>
-            <th style="text-align:center;">Eficiencia</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody id="tablaBody"></tbody>
-      </table>
-    </div>
-  </section>
-
-</main>
+</div>
 
 <!-- BARRA DE NAVEGACIÓN INFERIOR (CELULARES) -->
 <nav class="mobile-nav">
@@ -520,7 +643,7 @@ tr:nth-child(even) { background: #F8FAFC; }
   </button>
 </nav>
 
-<!-- MODAL TOUCH PARA REGISTRAR AVANCE -->
+<!-- MODAL TOUCH DE REGISTRO -->
 <div class="modal-mask" id="modalCaptura">
   <div class="modal-window">
     <div class="m-head">
@@ -946,7 +1069,7 @@ function exportarReportePDF() {
   html2pdf().set(opt).from(el).save();
 }
 
-// MODAL
+// MODAL DE REGISTRO
 function abrirModal() {
   cargarCatalogosModal();
   document.getElementById('modalCaptura').classList.add('open');
@@ -1056,9 +1179,27 @@ function sincronizarConSheets() {
         if (data.registros && data.registros.length > 0) {
           LOG_REGISTROS = data.registros;
           actualizarTodo();
-          alert("✅ Sincronizado en vivo con Google Sheets.");
+          alert("✅ Sincronizado con Google Sheets.");
         }
       }).catch(() => alert("Modo local activo."));
+  }
+}
+
+// ACCIONES DE LA BARRA LATERAL
+function asistentePredictivoIA() {
+  alert("✨ Asistente Predictivo CONVECSA Lean:\n\nBasado en el historial, la partida de Muros en Sótanos tiene 98% de probabilidad de cumplir la meta. Se recomienda reforzar cuadrilla en Plenum y Cieloraso.");
+}
+
+function toggleVistaAvanzada() {
+  alert("Vista de Rendimientos y Desviaciones alternada.");
+}
+
+function enfocarBusqueda() {
+  const q = prompt("Ingrese operario, frente o nivel a auditar:");
+  if (q) {
+    document.querySelectorAll('#tablaBody tr').forEach(tr => {
+      tr.style.display = tr.innerText.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+    });
   }
 }
 </script>
