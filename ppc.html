@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg-main: radial-gradient(circle at 10% 20%, #0A1931 0%, #050B14 100%);
@@ -31,7 +31,7 @@
   --bg-surface: #FFFFFF;
   --bg-sidebar: #FFFFFF;
   --bg-card: #FFFFFF;
-  --border-glass: #E2E8F0;
+  --border-glass: #CBD5E1;
   --text-main: #0F172A;
   --text-muted: #64748B;
   --c-cyan: #0052CC;
@@ -187,7 +187,7 @@ body::before {
   display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
 }
 
-/* BARRA DE PROGRESO DE REGISTRO */
+/* BARRA DE PROGRESO */
 .save-progress-container {
   flex: 1; display: none; flex-direction: column; gap: 3px; min-width: 140px;
 }
@@ -426,22 +426,25 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 
       <!-- TABLA EN VIVO -->
       <section class="chart-card-box" style="overflow:hidden;">
-        <div style="font-size:12px; font-weight:700; margin-bottom:8px;">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <div style="font-size:12.5px; font-weight:700; color:var(--text-main);">📋 REGISTROS ACTIVOS: GOOGLE SHEETS</div>
+          <div id="lblResumenQAQC" style="font-size:11px; font-family:'JetBrains Mono'; color:var(--text-secondary);">
+            QA/QC: <b style="color:var(--c-green);">0 Protocolizados</b> · <b style="color:var(--c-amber);">0 Pendientes</b> (0.0%)
+          </div>
+        </div>
         <div style="width:100%; overflow-x:auto;">
           <table class="cyber-table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>FECHA</th>
-                <th>HORA</th>
-                <th>HOJA</th>
-                <th>OPERARIO</th>
-                <th>NIVEL</th>
+                <th style="width:115px;">FECHA Y HORA</th>
+                <th>PERSONAL</th>
+                <th style="width:65px; text-align:center;">NIVEL</th>
                 <th>SUBPROCESO</th>
-                <th style="text-align:right;">METRADO</th>
-                <th style="text-align:right;">HH REAL</th>
-                <th style="text-align:center;">EFIC</th>
-                <th>ESTADO</th>
+                <th style="text-align:right; width:95px;">METRADO</th>
+                <th style="text-align:right; width:75px;">HH REAL</th>
+                <th style="text-align:center; width:65px;">EFIC</th>
+                <th style="text-align:center; width:135px;">PROGRAMAR LIBERACIÓN</th>
+                <th style="text-align:center; width:125px;">QA / QC</th>
               </tr>
             </thead>
             <tbody id="tablaBody"></tbody>
@@ -453,7 +456,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 </div>
 
 <!-- =========================================================================
-     MODAL SMART CAPTURE (SIN BOTÓN METRADO PARA PROTEGER DE CAPATACES)
+     MODAL SMART CAPTURE (PROTEGIDO SIN BOTÓN METRADO)
      ========================================================================= -->
 <div class="cyber-modal-mask" id="modalCaptura">
   <div class="cyber-modal-window">
@@ -547,7 +550,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
       </div>
     </div>
 
-    <!-- BOTONES INFERIORES: RETIRADO EL BOTÓN METRADO PARA SEGURIDAD -->
+    <!-- BOTONES: RETIRADO METRADO -->
     <div class="m-foot-c">
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
         <button class="btn-cyber-action" style="background:rgba(0,0,0,0.3); color:var(--text-muted);" onclick="cerrarModal()">Cerrar</button>
@@ -621,7 +624,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 </div>
 
 <!-- =========================================================================
-     MODAL METRADOS CONTRACTUALES & BASE CURVA S (ACCESIBLE DESDE BARRA LATERAL)
+     MODAL METRADOS CONTRACTUALES & BASE CURVA S (DESDE BARRA LATERAL)
      ========================================================================= -->
 <div class="cyber-modal-mask" id="modalMetrados" style="z-index: 700;">
   <div class="cyber-modal-window" style="max-width: 880px;">
@@ -641,7 +644,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
         </div>
       </div>
 
-      <!-- FORMULARIO DIRECTO INTEGRADO (CERO PROMPTS INVASIVOS) -->
+      <!-- FORMULARIO DIRECTO INTEGRADO -->
       <div id="boxNuevaPartidaDirecta" style="display:none; background:rgba(0,150,225,0.08); border:1px solid var(--c-cyan); border-radius:8px; padding:10px; margin-top:8px;">
         <div style="font-size:11px; font-weight:700; color:var(--c-cyan); margin-bottom:6px;">+ INGRESAR NUEVA PARTIDA A LA BASE:</div>
         <div style="display:grid; grid-template-columns: 80px 1fr 60px 100px 90px auto; gap:6px; align-items:center;">
@@ -681,7 +684,7 @@ input:checked + .slider-switch:before { transform: translateX(18px); }
 </div>
 
 <!-- =========================================================================
-     MODAL ELEGANTE: CONTROL DE PLAZO CONTRACTUAL Y REPROGRAMACIÓN (CERO ALERTS)
+     MODAL ELEGANTE: CONTROL DE PLAZO CONTRACTUAL Y REPROGRAMACIÓN (SIN ALERTS)
      ========================================================================= -->
 <div class="cyber-modal-mask" id="modalPlazoReprogramacion" style="z-index: 800;">
   <div class="cyber-modal-window" style="max-width: 520px;">
@@ -822,12 +825,13 @@ let LOG_REGISTROS = [];
 
 let chartEvolucion, chartElemento, chartHH, chartNivel, chartEstado;
 
-// CERRAR MODALES CON LA TECLA ESCAPE
+// CONTROL TECLADO: SALIR CON ESC
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     cerrarModal();
     cerrarModalRecurso();
     cerrarModalMetrados();
+    cerrarModalPlazoContractual();
   }
 });
 
@@ -937,17 +941,14 @@ function actualizarTodo() {
   actualizarGraficos();
 }
 
-// MONITOR DE PLAZO CONTRACTUAL Y ALERTA DE REPROGRAMACIÓN
 function actualizarMonitorPlazo() {
   const hoy = new Date();
   const diffDias = Math.max(0, Math.floor((hoy - FECHA_INICIO_OBRA) / (1000 * 60 * 60 * 24)));
   const totalDias = Math.floor((FECHA_FIN_OBRA - FECHA_INICIO_OBRA) / (1000 * 60 * 60 * 24));
   const mesActual = Math.min(PLAZO_MESES, Math.ceil(diffDias / 30.41)) || 1;
 
-  // % Programado lineal teórico
   const pgmPct = Math.min(100, (diffDias / totalDias) * 100);
 
-  // % Real acumulado
   const totalContractual = [...METRADOS_PRESUPUESTO.SCF, ...METRADOS_PRESUPUESTO.PINTURA]
     .reduce((acc, p) => acc + (p.metradoContractual || 0), 0);
   const totalEjecutado = LOG_REGISTROS.reduce((acc, r) => acc + (r.metrado || 0), 0);
@@ -1060,24 +1061,95 @@ function renderizarAuditoria() {
 function renderizarTabla() {
   const t = document.getElementById('tablaBody');
   t.innerHTML = '';
-  getDatosFiltrados().forEach(r => {
+  const datos = getDatosFiltrados();
+  
+  // Actualizar resumen QA/QC sobre la cabecera
+  const tot = datos.length;
+  const proto = datos.filter(r => r.qaqc === "PROTOCOLIZADO").length;
+  const pend = tot - proto;
+  const pctQA = tot > 0 ? ((proto / tot) * 100).toFixed(1) : "0.0";
+  const lblQA = document.getElementById('lblResumenQAQC');
+  if (lblQA) {
+    lblQA.innerHTML = `QA/QC: <b style="color:var(--c-green);">${proto} Protocolizados</b> · <b style="color:var(--c-amber);">${pend} Pendientes</b> (${pctQA}%)`;
+  }
+
+  datos.forEach(r => {
     const isGan = r.est === "GANANCIA";
+    const horaSolo = r.horaExacta ? r.horaExacta.split(' ')[1] : '';
+    const isProto = r.qaqc === "PROTOCOLIZADO";
+    const btnQABg = isProto ? "rgba(0, 230, 118, 0.15)" : "rgba(255, 179, 0, 0.15)";
+    const btnQACol = isProto ? "var(--c-green)" : "var(--c-amber)";
+    const btnQABorder = isProto ? "rgba(0, 230, 118, 0.4)" : "rgba(255, 179, 0, 0.4)";
+    const btnQATxt = isProto ? "✅ Protocolizado" : "⏳ Pendiente";
+
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-family:'JetBrains Mono'; font-weight:600;">${r.id}</td>
-      <td>${r.fecha}</td>
-      <td style="font-family:'JetBrains Mono'; font-size:10px; color:var(--c-cyan);">${r.horaExacta.split(' ')[1] || ''}</td>
-      <td><span style="background:rgba(0,150,225,0.15); color:var(--c-cyan); padding:2px 5px; border-radius:4px; font-size:9.5px;">${r.hoja || r.modulo}</span></td>
-      <td><b>${r.trabajador}</b></td>
-      <td><span style="background:rgba(255,255,255,0.06); padding:2px 5px; border-radius:4px; font-weight:600;">${r.nivel}</span></td>
-      <td>${r.sub}</td>
-      <td style="text-align:right; font-family:'JetBrains Mono';">${r.metrado.toFixed(1)} ${r.unidad}</td>
+      <td>
+        <div style="font-family:'JetBrains Mono'; font-size:11px; font-weight:600; color:var(--text-main);">${r.fecha}</div>
+        <div style="font-family:'JetBrains Mono'; font-size:9.5px; color:var(--text-muted); opacity:0.85;">⏱️ ${horaSolo}</div>
+      </td>
+      <td><b style="color:var(--text-main); font-size:11.5px;">${r.trabajador}</b></td>
+      <td style="text-align:center;"><span style="background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:4px; font-family:'JetBrains Mono'; font-weight:600; font-size:10.5px;">${r.nivel}</span></td>
+      <td style="font-size:11px;">${r.sub}</td>
+      <td style="text-align:right; font-family:'JetBrains Mono'; font-weight:600;">${r.metrado.toFixed(1)} <span style="font-size:10px; color:var(--text-muted);">${r.unidad}</span></td>
       <td style="text-align:right; font-family:'JetBrains Mono';">${r.hhReal.toFixed(2)}h</td>
-      <td style="text-align:center; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'}; font-weight:600;">${r.ef}%</td>
-      <td><span style="padding:2px 6px; border-radius:4px; font-size:9.5px; background:${isGan?'rgba(0,230,118,0.15)':'rgba(255,23,68,0.15)'}; color:${isGan?'#00E676':'#FF1744'}; font-weight:600;">${r.est}</span></td>
+      <td style="text-align:center; font-family:'JetBrains Mono'; color:${isGan ? '#00E676':'#FF1744'}; font-weight:700;">${r.ef}%</td>
+      <td style="text-align:center;">
+        <input type="date" value="${r.liberacion || ''}" style="padding:3px 6px; background:rgba(0,0,0,0.3); border:1px solid var(--border-glass); border-radius:5px; color:var(--text-main); font-family:'JetBrains Mono'; font-size:10.5px; outline:none;" onchange="actualizarFechaLiberacion('${r.id}', this.value)" title="Programar fecha de inspección y liberación">
+      </td>
+      <td style="text-align:center;">
+        <button onclick="toggleEstadoQAQC('${r.id}')" style="background:${btnQABg}; border:1px solid ${btnQABorder}; color:${btnQACol}; font-family:'Plus Jakarta Sans'; font-size:10px; font-weight:700; padding:3px 8px; border-radius:5px; cursor:pointer; transition:all 0.2s; white-space:nowrap;" title="Haga clic para alternar estado de calidad">
+          ${btnQATxt}
+        </button>
+      </td>
     `;
     t.appendChild(tr);
   });
+}
+
+function toggleEstadoQAQC(idReg) {
+  const reg = LOG_REGISTROS.find(r => r.id === idReg);
+  if (reg) {
+    reg.qaqc = reg.qaqc === "PROTOCOLIZADO" ? "PENDIENTE" : "PROTOCOLIZADO";
+    renderizarTabla();
+    actualizarKPIs();
+
+    if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
+      fetch(ENDPOINT_APPS_SCRIPT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          tipoAccion: "ACTUALIZAR_QAQC",
+          idRegistro: reg.id,
+          hoja: reg.hoja,
+          qaqc: reg.qaqc,
+          liberacion: reg.liberacion || ""
+        })
+      });
+    }
+  }
+}
+
+function actualizarFechaLiberacion(idReg, fechaVal) {
+  const reg = LOG_REGISTROS.find(r => r.id === idReg);
+  if (reg) {
+    reg.liberacion = fechaVal;
+    if (ENDPOINT_APPS_SCRIPT.includes("script.google.com")) {
+      fetch(ENDPOINT_APPS_SCRIPT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          tipoAccion: "ACTUALIZAR_QAQC",
+          idRegistro: reg.id,
+          hoja: reg.hoja,
+          qaqc: reg.qaqc || "PENDIENTE",
+          liberacion: reg.liberacion
+        })
+      });
+    }
+  }
 }
 
 function inicializarGraficos() {
@@ -1130,9 +1202,7 @@ function abrirModal() {
 }
 function cerrarModal() { document.getElementById('modalCaptura').classList.remove('open'); }
 
-// =========================================================================
-// CARGA DE CATÁLOGOS CON NOMENCLATURA LIMPIA: "01 JUNTAS ... (30 ml/día)"
-// =========================================================================
+// CARGA DE CATÁLOGOS CON FORMATO LIMPIO ("01 JUNTAS ...")
 function cargarCatalogosModal() {
   const esp = document.getElementById('mEspecialidad').value;
   const cfg = CATALOGO[esp];
@@ -1154,7 +1224,7 @@ function cargarCatalogosModal() {
   recalcularModal();
 }
 
-// CÁLCULO CALIBRADO
+// CÁLCULO CALIBRADO DE EFICIENCIA
 function recalcularModal() {
   const subVal = document.getElementById('mSubproceso').value.split('|');
   const rendNominal = parseFloat(subVal[2]) || 30.0;
@@ -1217,7 +1287,6 @@ function guardarRegistro() {
   const pref = esp === "SCF" ? "SCF-" : "PIN-";
   const idReg = pref + fechaSel.replace(/-/g, '') + "-" + String(now.getHours()).padStart(2,'0') + String(now.getMinutes()).padStart(2,'0') + String(now.getSeconds()).padStart(2,'0');
 
-  // Guardar con formato limpio ordenado: "01 JUNTAS a dos caras..."
   const subprocesoNombreLimpio = `${subData[0]} ${subData[1]}`;
 
   const nuevoItem = {
@@ -1237,7 +1306,9 @@ function guardarRegistro() {
     hhGan: parseFloat(hhGan.toFixed(2)),
     ef: parseFloat(ef.toFixed(1)),
     est: estado,
-    unidad: unidad
+    unidad: unidad,
+    liberacion: "",
+    qaqc: "PENDIENTE"
   };
 
   LOG_REGISTROS.unshift(nuevoItem);
@@ -1255,7 +1326,9 @@ function guardarRegistro() {
     metrado: metrado,
     hhReal: hhReal,
     causa: document.getElementById('mCausa').value,
-    detalle: document.getElementById('mObs').value
+    detalle: document.getElementById('mObs').value,
+    qaqc: "PENDIENTE",
+    liberacion: ""
   };
 
   progBar.style.width = '80%';
@@ -1295,9 +1368,7 @@ function guardarRegistro() {
   }
 }
 
-// =========================================================================
 // GESTIÓN DE RECURSOS (TEXTO VISIBLE, ON/OFF Y BOTÓN ELIMINAR)
-// =========================================================================
 function abrirModalRecurso() {
   document.getElementById('rNombre').value = '';
   renderizarListaRecursos();
@@ -1387,9 +1458,7 @@ function guardarNuevoRecurso() {
   }
 }
 
-// =========================================================================
-// GESTIÓN DE METRADOS CONTRACTUALES & BASE DE CURVA S
-// =========================================================================
+// METRADOS CONTRACTUALES
 function abrirModalMetrados() {
   cambiarTabMetrados(TAB_METRADOS_ACTUAL);
   document.getElementById('modalMetrados').classList.add('open');
@@ -1513,7 +1582,7 @@ function exportarExcelConFormulas() {
     ["CONVECSA S.A.C. - CONTROL DE PRODUCCIÓN LEAN (RDO)"],
     ["PROYECTO: TORRE HOSPITALARIA SAN BORJA", "", "FECHA:", fecha],
     [""],
-    ["ID", "TIMESTAMP", "FECHA", "HOJA", "OPERARIO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO", "UNIDAD", "HH_REAL", "REND_OPT", "HH_GANADAS", "EFICIENCIA", "ESTADO"]
+    ["ID", "TIMESTAMP", "FECHA", "HOJA", "OPERARIO", "NIVEL", "ELEMENTO", "SUBPROCESO", "METRADO", "UNIDAD", "HH_REAL", "REND_OPT", "HH_GANADAS", "EFICIENCIA", "ESTADO", "FECHA_LIBERACION", "ESTADO_QAQC"]
   ];
 
   d.forEach((r, idx) => {
@@ -1523,7 +1592,9 @@ function exportarExcelConFormulas() {
       r.metrado, r.unidad, r.hhReal, r.rendOpt,
       { f: `(I${row}*(8.5/L${row}))` },
       { f: `M${row}/K${row}` },
-      { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` }
+      { f: `IF(N${row}>=1,"GANANCIA","PERDIDA")` },
+      r.liberacion || "",
+      r.qaqc || "PENDIENTE"
     ]);
   });
 
@@ -1533,7 +1604,7 @@ function exportarExcelConFormulas() {
     { f: `SUM(I5:I${last})` }, "m²",
     { f: `SUM(K5:K${last})` }, "",
     { f: `SUM(M5:M${last})` },
-    { f: `AVERAGE(N5:N${last})` }, ""
+    { f: `AVERAGE(N5:N${last})` }, "", "", ""
   ]);
 
   const wb = XLSX.utils.book_new();
